@@ -19,12 +19,14 @@ public class Main {
        JPanel countComboPanel = new JPanel();
        countComboPanel.add(new countComboPanel(frame));
        
-       
+       JPanel freePanel = new JPanel();
+       freePanel.add(new FreePanel(frame));
 
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
+       tabbedPane.addTab("no clue", freePanel);
 
        // Add the tabbedPane to the frame
        frame.add(tabbedPane, BorderLayout.CENTER);

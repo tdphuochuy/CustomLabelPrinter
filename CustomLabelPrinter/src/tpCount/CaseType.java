@@ -18,7 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class CaseType extends JPanel{
+	private JFrame frame;
     public CaseType(JFrame frame) {
+    	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
