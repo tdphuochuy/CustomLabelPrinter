@@ -19,9 +19,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 
 public class countComboPanel extends JPanel{
+	private JFrame frame;
     public countComboPanel(JFrame frame) {
+    	this.frame = frame;
        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Set the main layout to BoxLayout (vertical)
         // Create a panel for the label and text field with FlowLayout (they will be on the same line)
        JPanel inputPanel = new JPanel();
@@ -30,9 +33,10 @@ public class countComboPanel extends JPanel{
        quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Center the label and text field
        JPanel rangePanel = new JPanel();
        rangePanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Center the label and text field
-       
+       rangePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+
        // Create a label
-       JLabel label = new JLabel("Product no");
+       JLabel label = new JLabel("Product #/ name");
 
        // Create a text field (textbox) with 20 columns
        JTextField textField = new JTextField(15);
@@ -41,7 +45,7 @@ public class countComboPanel extends JPanel{
        inputPanel.add(label);
        inputPanel.add(textField);
 
-       JLabel quantityLabel = new JLabel("Quantity");
+       JLabel quantityLabel = new JLabel("Qty");
        // Create a text field (textbox) with 20 columns
        JTextField quantityField = new JTextField(3);
        // Add the label and text field to the input panel
@@ -85,24 +89,43 @@ public class countComboPanel extends JPanel{
            @Override
            public void actionPerformed(ActionEvent e) {
                button.setEnabled(false);
-               if(checkBox.isSelected())
+               try {
+	               if(checkBox.isSelected())
+	               {
+	            	   if(rangeField1.getText().length() > 0 && rangeField2.getText().length() > 0)
+	            	   {
+		                   int range1 = Integer.parseInt(rangeField1.getText());
+		                   int range2 = Integer.parseInt(rangeField2.getText());
+		                   if(range2 - range1 > 0)
+		                   {
+			                   for(int i = range1; i <=  range2;i++)
+			                   {
+			                        printLabel(textField.getText(),String.valueOf(i));
+			                   }
+		                   } else {
+		                       JOptionPane.showMessageDialog(frame, "Invalid range", "Error", JOptionPane.ERROR_MESSAGE);
+		            	   }
+	            	   } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing range value", "Error", JOptionPane.ERROR_MESSAGE);
+	            	   }
+	               } else {
+	            	   if(quantityField.getText().length() > 0)
+	            	   {
+		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 30);
+		                    for(int i = 1;i <= amount;i++)
+		                    {
+		                        printLabel(textField.getText(),String.valueOf(i));
+		                    }
+	            	   } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing quantity value", "Error", JOptionPane.ERROR_MESSAGE);
+	            	   }
+	               }
+               } catch (Exception ex)
                {
-                   int range1 = Integer.parseInt(rangeField1.getText());
-                   int range2 = Integer.parseInt(rangeField2.getText());
-                   for(int i = range1; i <=  range2;i++)
-                   {
-                        printLabel(textField.getText(),String.valueOf(i));
-                   }
-               } else {
-                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 50);
-                    for(int i = 1;i <= amount;i++)
-                    {
-                        printLabel(textField.getText(),String.valueOf(i));
-                    }
+            	   
                }
-               
                // Create a Timer to re-enable the button after a delay
-               Timer timer = new Timer(500, new ActionListener() {
+               Timer timer = new Timer(300, new ActionListener() {
                    @Override
                    public void actionPerformed(ActionEvent evt) {
                        button.setEnabled(true); // Re-enable the button
@@ -111,7 +134,6 @@ public class countComboPanel extends JPanel{
                timer.setRepeats(false); // Make sure the timer only runs once
                timer.start(); // Start the timer
                
-               JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
            }
        });
 
@@ -126,7 +148,7 @@ public class countComboPanel extends JPanel{
        this.add(button);      // Adds the button below
     }
     
-       public static void printLabel(String text1,String text2)
+       public void printLabel(String text1,String text2)
         {
             String printerIP = "167.110.88.226";  // Replace with your printer's IP
             int port = 9100;  // Default port for network printing
@@ -161,12 +183,13 @@ public class countComboPanel extends JPanel{
                 outputStream.write(sbplCommand.getBytes("UTF-8"));
                 outputStream.flush();
                 System.out.println("Label sent to the printer.");
+                JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
        
-        public static int calculateFontSize(String text, int maxWidth, int maxHeight) {
+        public int calculateFontSize(String text, int maxWidth, int maxHeight) {
             // Approximate width per character (in dots)
             int charWidth = 100;
             int charHeight = maxHeight;  // This is an example; you can adjust based on your printer's settings

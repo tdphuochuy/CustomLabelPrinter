@@ -6,7 +6,7 @@ public class main {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setSize(500, 300);
+       frame.setSize(500, 350);
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();
