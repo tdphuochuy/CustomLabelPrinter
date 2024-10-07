@@ -23,9 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-public class comboType extends JPanel{
+public class ComboType extends JPanel{
 	private JFrame frame;
-    public comboType(JFrame frame) {
+    public ComboType(JFrame frame) {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel customerPanel = new JPanel();
@@ -81,7 +81,7 @@ public class comboType extends JPanel{
         rangePanel.add(label3);
         rangePanel.add(rangeField2);
         
-        JLabel weightLabel = new JLabel("Combo weight");
+        JLabel weightLabel = new JLabel("Combo's weight");
         JTextField weightField = new JTextField(7);
         setPlaceholder(weightField,"optional");
         weightPanel.add(weightLabel);

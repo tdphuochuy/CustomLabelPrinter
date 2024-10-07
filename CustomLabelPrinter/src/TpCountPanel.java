@@ -1,17 +1,17 @@
 import javax.swing.*;
 
-import tpCount.caseType;
-import tpCount.comboType;
+import tpCount.CaseType;
+import tpCount.ComboType;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class tpCountPanel extends JPanel {
+public class TpCountPanel extends JPanel {
     private JPanel mainPanel;  // To hold the main panel reference for dynamic updates
     private JPanel contentPanel;  // A panel that will be updated on button clicks
 
-    public tpCountPanel(JFrame frame) {
+    public TpCountPanel(JFrame frame) {
         mainPanel = this;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Set the main layout to BoxLayout (vertical)
 
@@ -29,8 +29,8 @@ public class tpCountPanel extends JPanel {
         typePanel.add(btnCases);
 
         // Create the dynamic panels that will be shown/hidden
-        JPanel comboTypePanel = new comboType(frame);
-        JPanel caseTypePanel = new caseType(frame);
+        JPanel comboTypePanel = new ComboType(frame);
+        JPanel caseTypePanel = new CaseType(frame);
 
         // Create a content panel to add dynamic content to it
         contentPanel = new JPanel();

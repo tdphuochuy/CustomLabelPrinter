@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class main {
+public class Main {
    public static void main(String[] args) {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
@@ -13,7 +13,7 @@ public class main {
 
        // Create panels for each tab
        JPanel tpCountPanel = new JPanel();
-       tpCountPanel.add(new tpCountPanel(frame));
+       tpCountPanel.add(new TpCountPanel(frame));
 
 
        JPanel countComboPanel = new JPanel();
