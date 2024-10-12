@@ -102,6 +102,7 @@ public class countComboPanel extends JPanel{
 			                   {
 			                        printLabel(textField.getText(),String.valueOf(i));
 			                   }
+<<<<<<< HEAD
 		                   } else {
 		                       JOptionPane.showMessageDialog(frame, "Invalid range", "Error", JOptionPane.ERROR_MESSAGE);
 		            	   }
@@ -184,6 +185,94 @@ public class countComboPanel extends JPanel{
                 outputStream.flush();
                 System.out.println("Label sent to the printer.");
                 JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+=======
+			                   JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+		                   } else {
+		                       JOptionPane.showMessageDialog(frame, "Invalid range", "Error", JOptionPane.ERROR_MESSAGE);
+		            	   }
+	            	   } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing range value", "Error", JOptionPane.ERROR_MESSAGE);
+	            	   }
+	               } else {
+	            	   if(quantityField.getText().length() > 0)
+	            	   {
+		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 30);
+		                    for(int i = 1;i <= amount;i++)
+		                    {
+		                        printLabel(textField.getText(),String.valueOf(i));
+		                    }
+		                    JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+	            	   } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing quantity value", "Error", JOptionPane.ERROR_MESSAGE);
+	            	   }
+	               }
+               } catch (Exception ex)
+               {
+            	   
+               }
+               // Create a Timer to re-enable the button after a delay
+               Timer timer = new Timer(300, new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent evt) {
+                       button.setEnabled(true); // Re-enable the button
+                   }
+               });
+               timer.setRepeats(false); // Make sure the timer only runs once
+               timer.start(); // Start the timer
+               
+           }
+       });
+
+       // Center align the button
+       button.setAlignmentX(Component.CENTER_ALIGNMENT);
+       button.setBackground(Color.white);
+       
+       this.add(inputPanel);
+       this.add(Box.createRigidArea(new Dimension(0, 2)));
+       this.add(quantityPanel);// Adds the panel containing label and text field
+       this.add(rangePanel);
+       this.add(button);      // Adds the button below
+    }
+    
+       public void printLabel(String text1,String text2)
+        {
+            String printerIP = "167.110.88.226";  // Replace with your printer's IP
+            int port = 9100;  // Default port for network printing
+            int quantity = 1;
+
+            int fontSize = calculateFontSize(text1,800,200);
+            int textWidth = fontSize * text1.length() / 2;  // Approximate text width
+            String fontSizeString = String.valueOf(fontSize);
+            int startX = 1215 - ((1215 - textWidth) / 2);
+            if(text1.length() < 4)
+            {
+            	startX += 100;
+            }
+            
+            int fontSize2 = calculateFontSize(text2,800,400);
+            int textWidth2 = fontSize2 * text2.length() / 2;  // Approximate text width
+            String fontSizeString2 = String.valueOf(fontSize2);
+            int startX2 = 1215 - ((1215 - textWidth2) / 2);
+            System.out.println(startX2);
+
+            // SBPL command to print "G" in the middle of an empty label
+            String sbplCommand = "\u001BA"      // Initialize SBPL command
+                               + "\u001B%1"
+                                + "\u001BH50"  // Set horizontal position (H)
+                                + "\u001BV" + startX                                                                                           // Set vertical position (V)        // Print "G"
+                               + "\u001BRH0,SATOGAMMA.ttf,0," + fontSizeString + "," + fontSizeString + "," + text1
+                               + "\u001BH360"  // Set horizontal position (H)
+                               + "\u001BV" + startX2                                                                                           // Set vertical position (V)        // Print "G"
+                               + "\u001BRH0,SATO0.ttf,0," + fontSizeString2 + "," + fontSizeString2 + "," + text2
+                              + "\u001BQ" + quantity     // Print one label
+                               + "\u001BZ";     // End SBPL command
+
+            try (Socket socket = new Socket(printerIP, port)) {
+                OutputStream outputStream = socket.getOutputStream();
+                outputStream.write(sbplCommand.getBytes("UTF-8"));
+                outputStream.flush();
+                System.out.println("Label sent to the printer.");
+>>>>>>> branch 'main' of https://github.com/tdphuochuy/CustomLabelPrinter.git
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }

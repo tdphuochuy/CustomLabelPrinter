@@ -98,6 +98,7 @@ public class ComboType extends JPanel{
                 button.setEnabled(false);
                 try {
               	   String customer = customerField.getText();
+<<<<<<< HEAD
               	   String productCode = codeField.getText();
               	   String weight = weightField.getText();
  	               if(checkBox.isSelected())
@@ -212,6 +213,126 @@ public class ComboType extends JPanel{
             //outputStream.flush();
             System.out.println("Label sent to the printer.");
             JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+=======
+              	   String productCode = codeField.getText().equals("optional") ? "" : codeField.getText();
+              	   String weight = weightField.getText().equals("optional") ? "" : weightField.getText();;
+ 	               if(checkBox.isSelected())
+ 	               {
+ 	            	   if(rangeField1.getText().length() > 0 && rangeField2.getText().length() > 0)
+ 	            	   {
+ 		                   int range1 = Integer.parseInt(rangeField1.getText());
+ 		                   int range2 = Integer.parseInt(rangeField2.getText());
+ 		                   if(range2 - range1 > 0)
+ 		                   {
+ 			                   for(int i = range1; i <=  range2;i++)
+ 			                   {
+ 			                        String count = weight.length() > 0 ? i + "/" + weight: String.valueOf(i); 
+ 			                        printLabel(customer,productCode,count);
+ 			                   }
+ 			                  JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+ 		                   } else {
+ 		                       JOptionPane.showMessageDialog(frame, "Invalid range", "Error", JOptionPane.ERROR_MESSAGE);
+ 		            	   }
+ 	            	   } else {
+ 	                       JOptionPane.showMessageDialog(frame, "Missing range value", "Error", JOptionPane.ERROR_MESSAGE);
+ 	            	   }
+ 	               } else {
+ 	            	   if(quantityField.getText().length() > 0)
+ 	            	   {
+ 		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 30);
+ 		                    for(int i = 1;i <= amount;i++)
+ 		                    {
+ 		                    	String count = weight.length() > 0 ? i + "/" + weight: String.valueOf(i); 
+			                    printLabel(customer,productCode,count);
+ 		                    }
+ 		                   JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+ 	            	   } else {
+ 	                       JOptionPane.showMessageDialog(frame, "Missing quantity value", "Error", JOptionPane.ERROR_MESSAGE);
+ 	            	   }
+ 	               }
+                } catch (Exception ex)
+                {
+             	   
+                }
+                // Create a Timer to re-enable the button after a delay
+                Timer timer = new Timer(300, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        button.setEnabled(true); // Re-enable the button
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
+                
+            }
+        });
+        
+        this.add(customerPanel);
+        this.add(quantityPanel);
+        this.add(rangePanel);
+        this.add(codePanel);
+        this.add(weightPanel);
+        this.add(button);
+    }
+    
+    public void printLabel(String customer,String productCode,String count)
+    {
+        String printerIP = "167.110.88.226";  // Replace with your printer's IP
+        int port = 9100;  // Default port for network printing
+        int quantity = 1;
+
+        //customer
+        int customerfontSize = calculateFontSize(customer,800,250);
+        System.out.println(customerfontSize);
+        int customertextWidth = customerfontSize * customer.length() / 2;  // Approximate text width
+        String customerfontSizeString = String.valueOf(customerfontSize);
+        int customerstartX = 1215 - 50 - ((1215 - customertextWidth) / 2);
+        if(customer.length() < 4)
+        {
+        	customerstartX += 100;
+        }
+        //count
+        int countfontSize = 120;
+        System.out.println(countfontSize);
+        int counttextWidth = countfontSize * count.length() / 2;  // Approximate text width
+        String countfontSizeString = String.valueOf(countfontSize);
+        int countstartX = 1250 - ((1215 - counttextWidth) / 2);
+        
+        //productCode
+        int productCodefontSize = 80;
+        System.out.println(productCodefontSize);
+        int productCodetextWidth = productCodefontSize * productCode.length() / 2;  // Approximate text width
+        String productCodefontSizeString = String.valueOf(productCodefontSize);
+        int productCodestartX = 1250 - ((1215 - productCodetextWidth) / 2);
+
+        // SBPL command to print "G" in the middle of an empty label
+        String sbplCommand = "\u001BA"      // Initialize SBPL command
+                           + "\u001B%1"
+                            + "\u001BH30"  
+                            + "\u001BV" + customerstartX                                                                                      
+                           + "\u001BRH0,SATOALPHABC.ttf,0," + customerfontSizeString + "," + customerfontSizeString + "," + customer;
+        
+        sbplCommand = sbplCommand + "\u001BH450"  
+                + "\u001BV" + countstartX                                                                                          
+                + "\u001BRH0,SATOCGStream.ttf,0," + countfontSizeString + "," + countfontSizeString + "," + count;
+        
+        //product code
+        if(productCode.length() > 0)
+        {
+        	sbplCommand = sbplCommand + "\u001BH585"  
+                           + "\u001BV" + productCodestartX                                                                                          
+                           + "\u001BRH0,SATOCGStream.ttf,0," + productCodefontSizeString + "," + productCodefontSizeString + "," + productCode;
+        }
+        
+        
+        sbplCommand = sbplCommand + "\u001BQ" + quantity + "\u001BZ";     // End SBPL command
+
+        try (Socket socket = new Socket(printerIP, port)) {
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write(sbplCommand.getBytes("UTF-8"));
+            outputStream.flush();
+            System.out.println("Label sent to the printer.");
+>>>>>>> branch 'main' of https://github.com/tdphuochuy/CustomLabelPrinter.git
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
