@@ -100,16 +100,18 @@ public class CaseType extends JPanel{
 		                   String casesNumber = caseQtyField.getText().equals("# cases") ? "" : caseQtyField.getText(); 
 		                   if(casesNumber.length() > 0)
 	  	            	   {
-		                	   Map<Integer,Integer> map = getMultiplesOf7(Integer.valueOf(casesNumber));
+		                	   Map<Integer,Integer> map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+		                	   String splitResult = "";
 		                	   for(int caseQuantity : map.keySet())
 		                	   {
+		                		   splitResult += map.get(caseQuantity) + " pallets of " + caseQuantity + "\n";
 		                		   for(int i = 1; i <= map.get(caseQuantity); i++)
 		                		   {
 		  		                    	String count = i + "/" + caseQuantity;
 		 			                    printLabel(customer,productCode,count);
 		                		   }
 		                	   }
-		                       JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+		                       JOptionPane.showMessageDialog(frame, "Label printed!\n" + splitResult, "Alert", JOptionPane.INFORMATION_MESSAGE);
 	  	            	   } else {
 	  	                       JOptionPane.showMessageDialog(frame, "Missing number of cases", "Error", JOptionPane.ERROR_MESSAGE);
 	  	            	   }
@@ -242,50 +244,54 @@ public class CaseType extends JPanel{
     }
 
     
-	 public static Map<Integer,Integer> getMultiplesOf7(int number) {
-		 
-		 Map<Integer,Integer> result = new HashMap<>();
+	 public static Map<Integer,Integer> getMultiplesOf7(Map<Integer,Integer> result,int number) {
+		 if(number == 0)
+		 {
+			 return result;
+		 }
 
         if (number <= 56) {
-            result.put(number, 1);
-            return result;
+    		result.put(number, result.getOrDefault(number, 0) + 1);
+            number -= number;
+            return getMultiplesOf7(result,number);
+        }
+        
+        if (number - 56 > 45 && number - 56 <= 56)
+        {
+        	result.put(56, result.getOrDefault(56, 0) + 1);
+            number -= 56;
+            return getMultiplesOf7(result,number);
+        }
+        
+        if(number % 56 == 0)
+        {
+        	result.put(56, result.getOrDefault(56, 0) + 1);
+            number -= 56;
+            return getMultiplesOf7(result,number);
         }
 		 
 		if(number % 7 == 0 && number % 50 != 0)
 		{
-
-	
 	        // List of priorities in descending order
 	        int[] priorities = {49, 42, 35, 21, 14, 7};
 	
 	        // Subtract the largest multiples first
 	        for (int value : priorities) {
-	        	if(number <= 56 && number != 0)
-	        	{
-	        		result.put(number, result.getOrDefault(number, 0) + 1);
-	                number -= number;
-	                break;
-	        	}
-	        	
-	            while (number >= value) {
+	        	if (number >= value) {
 	                result.put(value, result.getOrDefault(value, 0) + 1);
 	                number -= value;
+	                return getMultiplesOf7(result,number);
 	            }
 	        }
 		} else {
-			 while (number >= 50) {
+			 if (number >= 50) {
 	                result.put(50, result.getOrDefault(50, 0) + 1);
 		            number -= 50;
+	                return getMultiplesOf7(result,number);
 		     }
-			 
-			 if(number != 0)
-			 {
-	                result.put(number, result.getOrDefault(number, 0) + 1);
-		            number -= number;
-			 }
 		}
 
-        return result;
+        return getMultiplesOf7(result,number);
 	}
     
     // Method to set the placeholder text
