@@ -160,7 +160,7 @@ public class CaseType extends JPanel{
     
     public void printLabel(String customer,String productCode,String count)
     {
-        String printerIP = "167.110.88.226";  // Replace with your printer's IP
+        String printerIP = printerInfo.printerIP;  // Replace with your printer's IP
         int port = 9100;  // Default port for network printing
         int quantity = 1;
 
