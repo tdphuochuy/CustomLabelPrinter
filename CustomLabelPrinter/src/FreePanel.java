@@ -7,98 +7,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-<<<<<<< HEAD
-import java.net.Socket;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import javax.swing.border.EmptyBorder;
-
-public class FreePanel extends JPanel{
-	private JFrame frame;
-    public FreePanel(JFrame frame) {
-    	this.frame = frame;
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
-        inputPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
-
-        JLabel label = new JLabel("Text");
-        JTextField textField = new JTextField(15);
-        setPlaceholder(textField,"Any text");
-        inputPanel.add(label);
-        inputPanel.add(textField);
- 
-        JButton button = new JButton("Print");
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setBackground(Color.white);
-        
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                button.setEnabled(false);
-                try {
-              	   
-                } catch (Exception ex)
-                {
-             	   
-                }
-                // Create a Timer to re-enable the button after a delay
-                Timer timer = new Timer(300, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        button.setEnabled(true); // Re-enable the button
-                    }
-                });
-                timer.setRepeats(false); // Make sure the timer only runs once
-                timer.start(); // Start the timer
-                
-            }
-        });
-        
-        this.add(inputPanel);
-
-        this.add(button);
-    }
-    
-    public void printLabel(String text)
-    {
-        String printerIP = "167.110.88.226";  // Replace with your printer's IP
-        int port = 9100;  // Default port for network printing
-        int quantity = 1;
-
-        //text
-        int textfontSize = calculateFontSize(text,800,300);
-        System.out.println(textfontSize);
-        int texttextWidth = textfontSize * text.length() / 2;  // Approximate text width
-        String textfontSizeString = String.valueOf(textfontSize);
-        int textstartX = 1215 - ((1215 - texttextWidth) / 2);
-     
-
-        // SBPL command to print "G" in the middle of an empty label
-        String sbplCommand = "\u001BA"      // Initialize SBPL command
-                           + "\u001B%1"
-                            + "\u001BH50"  
-                            + "\u001BV" + textstartX                                                                                      
-                           + "\u001BRH0,SATOALPHABC.ttf,0," + textfontSizeString + "," + textfontSizeString + "," + text;
-        
-        
-        sbplCommand = sbplCommand + "\u001BQ" + quantity + "\u001BZ";     // End SBPL command
-
-        try (Socket socket = new Socket(printerIP, port)) {
-            //OutputStream outputStream = socket.getOutputStream();
-            //outputStream.write(sbplCommand.getBytes("UTF-8"));
-            //outputStream.flush();
-            System.out.println("Label sent to the printer.");
-            JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
-=======
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -206,7 +114,6 @@ public class FreePanel extends JPanel{
             outputStream.write(sbplCommand.getBytes("UTF-8"));
             outputStream.flush();
             System.out.println("Label sent to the printer.");
->>>>>>> branch 'main' of https://github.com/tdphuochuy/CustomLabelPrinter.git
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
