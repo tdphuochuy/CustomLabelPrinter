@@ -21,11 +21,15 @@ public class Main {
        
        JPanel freePanel = new JPanel();
        freePanel.add(new FreePanel(frame));
+       
+       JPanel gcWeightPanel = new JPanel();
+       gcWeightPanel.add(new GCweights(frame));
 
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
+       tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("no clue", freePanel);
 
        // Add the tabbedPane to the frame

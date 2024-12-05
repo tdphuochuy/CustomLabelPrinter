@@ -123,7 +123,7 @@ public class ComboType extends JPanel{
  	               } else {
  	            	   if(quantityField.getText().length() > 0)
  	            	   {
- 		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 30);
+ 		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 50);
  		                    for(int i = 1;i <= amount;i++)
  		                    {
  		                    	String count = weight.length() > 0 ? i + "/" + weight: String.valueOf(i); 
@@ -166,15 +166,9 @@ public class ComboType extends JPanel{
         int quantity = 1;
 
         //customer
-        int customerfontSize = calculateFontSize(customer,800,250);
-        System.out.println(customerfontSize);
-        int customertextWidth = customerfontSize * customer.length() / 2;  // Approximate text width
-        String customerfontSizeString = String.valueOf(customerfontSize);
-        int customerstartX = 1215 - 50 - ((1215 - customertextWidth) / 2);
-        if(customer.length() < 4)
-        {
-        	customerstartX += 100;
-        }
+        int[] customerfontSize = calculateFontSize(customer,240);
+        String customerfontSizeString = String.valueOf(customerfontSize[0]);
+        int customerstartX = 18 + (1200/2 + customerfontSize[1]/2);
         //count
         int countfontSize = 120;
         System.out.println(countfontSize);
@@ -193,6 +187,7 @@ public class ComboType extends JPanel{
         String sbplCommand = "\u001BA"      // Initialize SBPL command
                            + "\u001B%1"
                             + "\u001BH30"  
+                            + "\u001BL1010"
                             + "\u001BV" + customerstartX                                                                                      
                            + "\u001BRH0,SATOALPHABC.ttf,0," + customerfontSizeString + "," + customerfontSizeString + "," + customer;
         
@@ -221,27 +216,44 @@ public class ComboType extends JPanel{
         }
     }
    
-    public int calculateFontSize(String text, int maxWidth, int maxHeight) {
-        // Approximate width per character (in dots)
-        int charWidth = 100;
-        int charHeight = maxHeight;  // This is an example; you can adjust based on your printer's settings
-
-        // Calculate the required width and height of the text block
-        int requiredWidth = text.length() * charWidth;
-        int requiredHeight = charHeight;
-
-        // Calculate the scaling factor to fit within the 300x300 area
-        double widthScale = (double) maxWidth / requiredWidth;
-        double heightScale = (double) maxHeight / requiredHeight;
-
-        // Choose the smaller scale factor to ensure the text fits both horizontally and vertically
-        double scale = Math.min(widthScale, heightScale);
-
-        // Calculate the adjusted font size
-        int adjustedFontSize = (int) (charHeight * scale);
-
-        // Return the calculated font size
-        return adjustedFontSize;
+    public static int[] calculateFontSize(String text, int maxWidth) {
+    	int [] arr=new int [2];
+    	double textRatio = 2.47422;
+    	double spaceRatio = 13.3333;
+    	if(isAllCapital(text))
+    	{
+    		textRatio = 2.12389;
+    		spaceRatio = 8.57142;
+    	}
+    	int textLength = text.length();
+    	int singleTextRealLength = (int) Math.floor(maxWidth / textRatio); 
+    	int spaceLength = textLength > 1 ? (int) Math.floor(maxWidth / spaceRatio) * (textLength - 1) : 0;
+    	int fullTextLength = (singleTextRealLength * textLength) + spaceLength;
+       	System.out.println("Old text font " + maxWidth);
+    	System.out.println("Old text length " + fullTextLength);
+    	if(fullTextLength < 1200)
+    	{
+    		arr[0] = maxWidth;
+    		arr[1] = fullTextLength;
+    		return arr;
+    	}
+    	
+    	double adjustedFontSizedouble =maxWidth* ((double)1200/fullTextLength);
+    	int adjustedFontSize = (int) Math.floor(adjustedFontSizedouble);
+    	int newSingleTextRealLength = (int) Math.floor(adjustedFontSize / textRatio); 
+    	int newSpaceLength = textLength > 1 ? (int) Math.floor(adjustedFontSize / spaceRatio) * (textLength - 1) : 0;
+    	int newFullTextLength = (newSingleTextRealLength * textLength) + newSpaceLength;
+    	
+    	System.out.println("New text font " + adjustedFontSize);
+    	System.out.println("New text length " + newFullTextLength);
+    	arr[0] = adjustedFontSize;
+		arr[1] = newFullTextLength;
+		return arr;
+    }
+    
+    public static boolean isAllCapital(String text) {
+        // Check if the text is not null and equals its uppercase version
+        return text != null && text.equals(text.toUpperCase());
     }
     
     // Method to set the placeholder text
