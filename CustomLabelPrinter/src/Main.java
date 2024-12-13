@@ -25,10 +25,13 @@ public class Main {
        JPanel gcWeightPanel = new JPanel();
        gcWeightPanel.add(new GCweights(frame));
 
+       JPanel reprintPanel = new JPanel();
+       reprintPanel.add(new reprintPanel(frame));
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
+       tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("no clue", freePanel);
 
