@@ -31,8 +31,8 @@ public class Main {
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
-       tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
+       tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("no clue", freePanel);
 
        // Add the tabbedPane to the frame
