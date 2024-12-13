@@ -1,43 +1,49 @@
-import java.awt.Color;
-
-import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
-class reprintTask implements Runnable {
-    private JButton startStopButton;
+public class reprintTask implements Runnable {
+    private final String ipAddress;
+    private final String type;
+    private final int quantity;
+    private final int delay;
+    private final int interval;
+    private volatile boolean running = true; // To control the task's execution
+    private final Runnable onCompletion;
+    
+    public reprintTask(String ipAddress, String type, int quantity, int delay, int interval, Runnable onCompletion) {
+        this.ipAddress = ipAddress;
+        this.type = type;
+        this.quantity = quantity;
+        this.delay = delay;
+        this.interval = interval;
+        this.onCompletion = onCompletion;
+    }
 
-    public reprintTask(JButton startStopButton) {
-        this.startStopButton = startStopButton;
+    public void stop() {
+        running = false; // Stop the task gracefully
     }
 
     @Override
     public void run() {
         try {
-            // Count from 1 to 10 with a 1-second delay between each
-            for (int i = 1; i <= 10; i++) {
-                System.out.println(i); // Printing the number to the console
-                Thread.sleep(1000); // Delay for 1 second
+            for (int i = 1; i <= quantity && running; i++) {
+                if (!running) break; // Check if the task is still running
 
-                // You can update the GUI in this thread, if needed
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // For example, you can update a label or progress bar here if desired
-                    }
-                });
-            }
+                System.out.println(i);
 
-            // After the counting completes, change the button back to Start
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    startStopButton.setText("Start");
-                    startStopButton.setBackground(new Color(100, 255, 100));  // Green color for Start
+                if (interval > 0 && i % interval == 0) {
+                    Thread.sleep(delay); // Pause for the specified delay
                 }
-            });
-
+                if(i < quantity)
+                {
+                	Thread.sleep(1600);
+                }
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt(); // Restore the interrupt status
+        }finally {
+            if (onCompletion != null) {
+                SwingUtilities.invokeLater(onCompletion); // Notify on completion
+            }
         }
     }
 }

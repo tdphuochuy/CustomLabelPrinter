@@ -9,6 +9,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -26,9 +28,15 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import tpCount.printerInfo;
+
 public class reprintPanel extends JPanel{
 	private JFrame frame;
     boolean running = false;
+    private reprintTask task;
+    private Thread thread;
     public reprintPanel(JFrame frame) {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -49,28 +57,37 @@ public class reprintPanel extends JPanel{
         ipAddressInputPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         
         JLabel label = new JLabel("Printer");
-        String[] items = {"Printer 1", "Printer 2", "Custom"};
-
+        String[] items = {"Printer 2", "Printer 1", "Custom"};
+        Map<String,String> printerMap = new TreeMap<>();
+        printerMap.put("Printer 2",printerInfo.printer2IP);
+        printerMap.put("Printer 1",printerInfo.printerIP);
+        Map<String,String> typeMap = new TreeMap<>();
+        typeMap.put("Printer 2", "SDPL");
+        typeMap.put("Printer 1", "SBPL");
         // Create a JComboBox with the items array
-        JComboBox<String> dropdown = new JComboBox<>(items);
-        dropdown.setPreferredSize(new Dimension(185, dropdown.getPreferredSize().height));
+        JComboBox<String> printerDropDown = new JComboBox<>(items);
+        printerDropDown.setPreferredSize(new Dimension(190, printerDropDown.getPreferredSize().height));
         
         printerInputPanel.add(label);
-        printerInputPanel.add(dropdown);
+        printerInputPanel.add(printerDropDown);
         
         JLabel ipLabel = new JLabel("IP Address");
-        JTextField ipAddressInput = new JTextField(10);
+        String[] types = {"SDPL", "SBPL"};
+        JComboBox<String> typeDropDown = new JComboBox<>(types);
+
+        JTextField ipAddressInput = new JTextField(9);
         ipAddressInputPanel.add(ipLabel);
         ipAddressInputPanel.add(ipAddressInput);
-        
-       dropdown.addItemListener(new ItemListener() {
+        ipAddressInputPanel.add(typeDropDown);
+
+        printerDropDown.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                String selectedItem = (String) dropdown.getSelectedItem();
+                String selectedItem = (String) printerDropDown.getSelectedItem();
                 
                 // Update the UI based on the selected item
                 SwingUtilities.invokeLater(() -> {
-                    if ("Custom".equals(selectedItem)) {
+                    if (selectedItem.equals("Custom")) {
                         if (!printerPanel.isAncestorOf(ipAddressInputPanel)) {
                             printerPanel.add(ipAddressInputPanel);
                             frame.revalidate();
@@ -114,7 +131,7 @@ public class reprintPanel extends JPanel{
        
        setPlaceholder(delayInput,"2200");
        JLabel delayLabel = new JLabel("ms");
-       JLabel delayLabel2 = new JLabel("every");
+       JLabel delayLabel2 = new JLabel("/");
        JLabel delayLabel3 = new JLabel("labels");
        pausePanel.add(checkBox);
        pausePanel.add(delayInput);
@@ -138,11 +155,70 @@ public class reprintPanel extends JPanel{
             		running = true;
             		button.setText("Stop");
                     button.setIcon(new RedStopIcon(10,10));
+                    
+                    try {
+	                    String ipAddress = "";
+	                    String type = "";
+	                    int quantity = 50;
+	                    int delay = 2200;
+	                    int interval = 0;
+	                    
+	                    String printer = (String) printerDropDown.getSelectedItem();
+	                    if(printer.equals("Custom"))
+	                    {
+	                    	if(ipAddressInput.getText().length() > 0)
+	                    	{
+		                    	ipAddress = ipAddressInput.getText();
+	                    	} else {
+	   	                       JOptionPane.showMessageDialog(frame, "Missing IP address", "Error", JOptionPane.ERROR_MESSAGE);
+	   	                       throw new Exception("Missing IP address"); 
+	                    	}
+	                    	type = (String) typeDropDown.getSelectedItem();
+	                    } else {
+	                    	ipAddress = printerMap.get(printer);
+	                    	type = typeMap.get(printer);
+	                    }
+	                    
+	                    if(quantityField.getText().length() > 0)
+	                    {
+	                    	quantity = Integer.parseInt(quantityField.getText());
+	                    }
+	                    
+	                    if(checkBox.isSelected())
+	                    {
+	                    	delay = Integer.parseInt(delayInput.getText());
+	                    	interval = delayInput.getText().length() > 0 ? Integer.parseInt(delayInput.getText()) : 0;
+	                    }
+	                    
+	                    Runnable onCompletion = () -> {
+	                    	running = false;
+	                		button.setText("Start");
+	                        button.setIcon(new GreenPlayIcon(10,10));
+	                    };
+	                    
+	                    task = new reprintTask(ipAddress, type, quantity, delay, interval,onCompletion);
+	
+	                    // Create and start the thread
+	                    thread = new Thread(task);
+	                    thread.setDaemon(true);
+	                    thread.start();
+                    } catch (Exception err)
+                    {
+                    	running = false;
+                		button.setText("Start");
+                        button.setIcon(new GreenPlayIcon(10,10));
+                    }
             	} else {
-            		running = false;
+                    if (task != null) {
+                        task.stop();
+                    }
+                    if (thread != null && thread.isAlive()) {
+                        thread.interrupt();
+                    }
+                    
+                    running = false;
             		button.setText("Start");
                     button.setIcon(new GreenPlayIcon(10,10));
-
             	}
             }
         });
