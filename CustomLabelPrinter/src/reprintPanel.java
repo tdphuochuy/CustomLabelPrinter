@@ -111,8 +111,8 @@ public class reprintPanel extends JPanel{
        
        JTextField delayInput = new JTextField(3);
        delayInput.setEnabled(false);
-       JTextField delayInput2 = new JTextField(2);
-       delayInput2.setEnabled(false);
+       JTextField intervalInput = new JTextField(2);
+       intervalInput.setEnabled(false);
        
        JCheckBox checkBox = new JCheckBox("Pause");
        
@@ -121,10 +121,10 @@ public class reprintPanel extends JPanel{
            public void itemStateChanged(ItemEvent e) {
                if (e.getStateChange() == ItemEvent.SELECTED) {
             	   delayInput.setEnabled(true);
-            	   delayInput2.setEnabled(true);
+            	   intervalInput.setEnabled(true);
                } else {
             	   delayInput.setEnabled(false);
-                   delayInput2.setEnabled(false);
+                   intervalInput.setEnabled(false);
                }
            }
        });
@@ -137,7 +137,7 @@ public class reprintPanel extends JPanel{
        pausePanel.add(delayInput);
        pausePanel.add(delayLabel);
        pausePanel.add(delayLabel2);
-       pausePanel.add(delayInput2);
+       pausePanel.add(intervalInput);
        pausePanel.add(delayLabel3);
 
         printerPanel.add(printerInputPanel);
@@ -150,6 +150,8 @@ public class reprintPanel extends JPanel{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                button.setEnabled(false);
+
             	if(!running)
             	{
             		running = true;
@@ -187,7 +189,7 @@ public class reprintPanel extends JPanel{
 	                    if(checkBox.isSelected())
 	                    {
 	                    	delay = Integer.parseInt(delayInput.getText());
-	                    	interval = delayInput.getText().length() > 0 ? Integer.parseInt(delayInput.getText()) : 0;
+	                    	interval = intervalInput.getText().length() > 0 ? Integer.parseInt(intervalInput.getText()) : 0;
 	                    }
 	                    
 	                    Runnable onCompletion = () -> {
@@ -220,6 +222,16 @@ public class reprintPanel extends JPanel{
             		button.setText("Start");
                     button.setIcon(new GreenPlayIcon(10,10));
             	}
+            	
+            	// Create a Timer to re-enable the button after a delay
+                Timer timer = new Timer(300, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        button.setEnabled(true); // Re-enable the button
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
             }
         });
         

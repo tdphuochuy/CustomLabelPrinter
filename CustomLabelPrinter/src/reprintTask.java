@@ -28,9 +28,9 @@ public class reprintTask implements Runnable {
             for (int i = 1; i <= quantity && running; i++) {
                 if (!running) break; // Check if the task is still running
 
-                System.out.println(i);
+                System.out.println(i + " " + ipAddress + " " + type);
 
-                if (interval > 0 && i % interval == 0) {
+                if (interval > 0 && i % interval == 0 && i < quantity) {
                     Thread.sleep(delay); // Pause for the specified delay
                 }
                 if(i < quantity)
