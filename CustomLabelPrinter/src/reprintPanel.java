@@ -28,8 +28,6 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import tpCount.printerInfo;
 
 public class reprintPanel extends JPanel{
@@ -129,7 +127,7 @@ public class reprintPanel extends JPanel{
            }
        });
        
-       setPlaceholder(delayInput,"2200");
+       setPlaceholder(delayInput,"1000");
        JLabel delayLabel = new JLabel("ms");
        JLabel delayLabel2 = new JLabel("/");
        JLabel delayLabel3 = new JLabel("labels");
@@ -162,7 +160,7 @@ public class reprintPanel extends JPanel{
 	                    String ipAddress = "";
 	                    String type = "";
 	                    int quantity = 50;
-	                    int delay = 2200;
+	                    int delay = 1000;
 	                    int interval = 0;
 	                    
 	                    String printer = (String) printerDropDown.getSelectedItem();
