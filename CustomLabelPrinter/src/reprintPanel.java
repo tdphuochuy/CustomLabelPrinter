@@ -55,13 +55,13 @@ public class reprintPanel extends JPanel{
         ipAddressInputPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         
         JLabel label = new JLabel("Printer");
-        String[] items = {"Printer 2", "Printer 1", "Custom"};
+        String[] items = {"Printer R", "Printer L", "Custom"};
         Map<String,String> printerMap = new TreeMap<>();
-        printerMap.put("Printer 2",printerInfo.printer2IP);
-        printerMap.put("Printer 1",printerInfo.printerIP);
+        printerMap.put("Printer R",printerInfo.printer2IP);
+        printerMap.put("Printer L",printerInfo.printerIP);
         Map<String,String> typeMap = new TreeMap<>();
-        typeMap.put("Printer 2", "SDPL");
-        typeMap.put("Printer 1", "SBPL");
+        typeMap.put("Printer R", "SDPL");
+        typeMap.put("Printer L", "SBPL");
         // Create a JComboBox with the items array
         JComboBox<String> printerDropDown = new JComboBox<>(items);
         printerDropDown.setPreferredSize(new Dimension(190, printerDropDown.getPreferredSize().height));
