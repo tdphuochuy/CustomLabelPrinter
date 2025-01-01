@@ -55,7 +55,7 @@ public class reprintPanel extends JPanel{
         ipAddressInputPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         
         JLabel label = new JLabel("Printer");
-        String[] items = {"Printer R", "Printer L", "Custom"};
+        String[] items = {"Right", "Left", "Custom"};
         Map<String,String> printerMap = new TreeMap<>();
         printerMap.put("Printer R",printerInfo.printer2IP);
         printerMap.put("Printer L",printerInfo.printerIP);
