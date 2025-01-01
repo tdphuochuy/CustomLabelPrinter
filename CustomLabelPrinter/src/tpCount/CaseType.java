@@ -100,7 +100,13 @@ public class CaseType extends JPanel{
 		                   String casesNumber = caseQtyField.getText().equals("# cases") ? "" : caseQtyField.getText(); 
 		                   if(casesNumber.length() > 0)
 	  	            	   {
-		                	   Map<Integer,Integer> map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+		                	   Map<Integer,Integer> map;
+		                	   if(productCode.length() > 0 && productCode.equals("21108"))
+		                	   {
+		                		   map = getMultiplesOf80(new HashMap<>(),Integer.valueOf(casesNumber));
+		                	   } else {
+		                		   map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+		                	   }
 		                	   String splitResult = "";
 		                	   for(int caseQuantity : map.keySet())
 		                	   {
@@ -312,6 +318,27 @@ public class CaseType extends JPanel{
 
         return getMultiplesOf7(result,number);
 	}
+	 
+	 public static Map<Integer,Integer> getMultiplesOf80(Map<Integer,Integer> result,int number) {
+		 if(number == 0)
+		 {
+			 return result;
+		 }
+		 
+		 if (number <= 80) {
+	    		result.put(number, result.getOrDefault(number, 0) + 1);
+	            number -= number;
+	            return getMultiplesOf80(result,number);
+	     }
+		 
+		 
+		 result.put(80, result.getOrDefault(80, 0) + 1);
+		 number -= 80;
+
+		 
+	     return getMultiplesOf80(result,number);
+
+	 }
     
     // Method to set the placeholder text
     public static void setPlaceholder(JTextField textField, String placeholderText) {
