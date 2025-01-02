@@ -97,7 +97,7 @@ public class CaseType extends JPanel{
             		String customer = customerField.getText();
                	   String productCode = codeField.getText().equals("optional") ? "" : codeField.getText();
             		if(checkBox.isSelected()) {
-		                   String casesNumber = caseQtyField.getText().equals("# cases") ? "" : caseQtyField.getText(); 
+		                   String casesNumber = caseQtyField.getText().equals("# of cases") ? "" : caseQtyField.getText(); 
 		                   if(casesNumber.length() > 0)
 	  	            	   {
 		                	   Map<Integer,Integer> map;
