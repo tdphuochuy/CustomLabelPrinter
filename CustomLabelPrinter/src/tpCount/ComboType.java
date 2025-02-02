@@ -98,12 +98,6 @@ public class ComboType extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 button.setEnabled(false);
                 try {
-                	/*LocalTime now = LocalTime.now();
-                    LocalTime limit = LocalTime.of(18, 30); // 6:30 PM
-
-                    if (now.isAfter(limit)) {
-                        System.exit(0);
-                    }*/
               	   String customer = customerField.getText();
               	   String productCode = codeField.getText().equals("optional") ? "" : codeField.getText();
               	   String weight = weightField.getText().equals("optional") ? "" : weightField.getText();;

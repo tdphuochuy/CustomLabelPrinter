@@ -42,13 +42,5 @@ public class Main {
 
        // Set the frame visibility
        frame.setVisible(true);
-       
-       
-       /*LocalTime now = LocalTime.now();
-       LocalTime limit = LocalTime.of(18, 30); // 6:30 PM
-
-       if (now.isAfter(limit)) {
-           System.exit(0);
-       }*/
    }
 }
