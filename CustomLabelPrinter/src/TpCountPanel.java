@@ -51,7 +51,7 @@ public class TpCountPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
             	pressCount++;
-                resetTimer.restart(); // Restart reset timer to allow consecutive presses
+                resetTimer.restart();
 
                 if (pressCount == 3) {
                 	activated = true;
@@ -89,10 +89,8 @@ public class TpCountPanel extends JPanel {
         LocalTime currentTime = LocalTime.now();
         
         if (currentTime.isAfter(shutdownStartTime)) {
-            // If it's already after 5:15 PM, start the shutdown timer immediately
             startShutdownTimer();
         } else {
-            // Schedule the shutdown timer to start at 5:15 PM
             scheduleShutdownAt(shutdownStartTime);
         }
     }
@@ -108,7 +106,7 @@ public class TpCountPanel extends JPanel {
                 	System.exit(0);
             	}
             }
-        }, 3000); // 10 seconds delay
+        }, 3000);
     }
 
     private void scheduleShutdownAt(LocalTime shutdownStartTime) {
