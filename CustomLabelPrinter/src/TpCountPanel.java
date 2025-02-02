@@ -6,13 +6,19 @@ import tpCount.ComboType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class TpCountPanel extends JPanel {
     private JPanel mainPanel;  // To hold the main panel reference for dynamic updates
     private JPanel contentPanel;  // A panel that will be updated on button clicks
-
+    private int pressCount = 0;
+    private boolean activated;
     public TpCountPanel(JFrame frame) {
         mainPanel = this;
+        activated = false;
+        
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Set the main layout to BoxLayout (vertical)
 
         JPanel typePanel = new JPanel();
@@ -36,11 +42,22 @@ public class TpCountPanel extends JPanel {
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout());  // You can change the layout as needed
         this.add(contentPanel);  // Add the content panel to the main panel
+        
+        javax.swing.Timer resetTimer = new javax.swing.Timer(1000, e -> pressCount = 0); // Reset after 1 second of inactivity
+        resetTimer.setRepeats(false);
 
         // Add ActionListeners to switch between panels
         btnCombo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	pressCount++;
+                resetTimer.restart(); // Restart reset timer to allow consecutive presses
+
+                if (pressCount == 3) {
+                	activated = true;
+                	System.out.println("Shutdown cancelled");
+                }
+            	
             	btnCombo.setBackground(Color.decode("#b8cfe5"));
                 btnCases.setBackground(Color.white);
                 // Remove all existing components from the content panel
@@ -67,5 +84,41 @@ public class TpCountPanel extends JPanel {
                 contentPanel.repaint();
             }
         });
+        
+        LocalTime shutdownStartTime = LocalTime.of(17, 15);
+        LocalTime currentTime = LocalTime.now();
+        
+        if (currentTime.isAfter(shutdownStartTime)) {
+            // If it's already after 5:15 PM, start the shutdown timer immediately
+            startShutdownTimer();
+        } else {
+            // Schedule the shutdown timer to start at 5:15 PM
+            scheduleShutdownAt(shutdownStartTime);
+        }
+    }
+    
+    private void startShutdownTimer() {
+    	System.out.println("Shutdown timer started");
+    	Timer shutdownTimer = new Timer();
+        shutdownTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+            	if(!activated)
+            	{
+                	System.exit(0);
+            	}
+            }
+        }, 3000); // 10 seconds delay
+    }
+
+    private void scheduleShutdownAt(LocalTime shutdownStartTime) {
+        long delay = java.time.Duration.between(LocalTime.now(), shutdownStartTime).toMillis();
+        Timer scheduleTimer = new Timer();
+        scheduleTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                startShutdownTimer();
+            }
+        }, delay);
     }
 }
