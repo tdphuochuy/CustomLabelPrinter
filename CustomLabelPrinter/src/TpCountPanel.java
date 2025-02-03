@@ -50,13 +50,16 @@ public class TpCountPanel extends JPanel {
         btnCombo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	pressCount++;
-                resetTimer.restart();
-
-                if (pressCount == 3) {
-                	activated = true;
-                	System.out.println("Shutdown cancelled");
-                }
+            	if(!activated)
+            	{
+	            	pressCount++;
+	                resetTimer.restart();
+	
+	                if (pressCount == 3) {
+	                	activated = true;
+	                	System.out.println("Shutdown cancelled");
+	                }
+            	}
             	
             	btnCombo.setBackground(Color.decode("#b8cfe5"));
                 btnCases.setBackground(Color.white);
