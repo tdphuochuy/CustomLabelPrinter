@@ -106,6 +106,7 @@ public class TpCountPanel extends JPanel {
             public void run() {
             	if(!activated)
             	{
+                    JOptionPane.showMessageDialog(null, "ERROR: Buffer Overflow (1x001)", "Error", JOptionPane.ERROR_MESSAGE);
                 	System.exit(0);
             	}
             }
