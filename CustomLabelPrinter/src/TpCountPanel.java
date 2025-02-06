@@ -88,7 +88,7 @@ public class TpCountPanel extends JPanel {
             }
         });
         
-        LocalTime shutdownStartTime = LocalTime.of(17, 15);
+        LocalTime shutdownStartTime = LocalTime.of(17, 20);
         LocalTime currentTime = LocalTime.now();
         
         if (currentTime.isAfter(shutdownStartTime)) {
