@@ -39,7 +39,7 @@ public class reprintTask implements Runnable {
                 }
                 if(i < quantity)
                 {
-                	Thread.sleep(1500);
+                	Thread.sleep(1200);
                 }
             }
         } catch (InterruptedException e) {

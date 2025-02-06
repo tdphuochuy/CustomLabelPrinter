@@ -127,7 +127,7 @@ public class reprintPanel extends JPanel{
            }
        });
        
-       setPlaceholder(delayInput,"1000");
+       setPlaceholder(delayInput,"1500");
        JLabel delayLabel = new JLabel("ms");
        JLabel delayLabel2 = new JLabel("/");
        JLabel delayLabel3 = new JLabel("labels");
