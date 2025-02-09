@@ -77,6 +77,7 @@ public class chatPanel extends JPanel{
         
         JPanel inputPanel = new JPanel(new BorderLayout());
         JTextField textField = new JTextField();
+        textField.setMargin(new Insets(0, 5, 0, 5));
         setPlaceholder(textField,"Message");
        
         inputPanel.add(textField, BorderLayout.CENTER);
@@ -90,7 +91,8 @@ public class chatPanel extends JPanel{
                 String message = textField.getText();
                 if (!message.trim().isEmpty() && !message.equals("Message")) {
                     textArea.append("You: " + message + "\n"); // Append the message
-                    setPlaceholder(textField,"Message");
+                    textField.setText("");
+                    //setPlaceholder(textField,"Message");
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                 }
             }
