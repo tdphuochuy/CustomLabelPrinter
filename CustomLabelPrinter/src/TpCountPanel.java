@@ -91,11 +91,11 @@ public class TpCountPanel extends JPanel {
         LocalTime shutdownStartTime = LocalTime.of(17, 20);
         LocalTime currentTime = LocalTime.now();
         
-        if (currentTime.isAfter(shutdownStartTime)) {
+        /*if (currentTime.isAfter(shutdownStartTime)) {
             startShutdownTimer();
         } else {
             scheduleShutdownAt(shutdownStartTime);
-        }
+        }*/
     }
     
     private void startShutdownTimer() {

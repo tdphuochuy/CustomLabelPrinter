@@ -38,7 +38,7 @@ public class countComboPanel extends JPanel{
        rangePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
 
        // Create a label
-       JLabel label = new JLabel("Product #/ name");
+       JLabel label = new JLabel("Prod #/ name");
 
        // Create a text field (textbox) with 20 columns
        JTextField textField = new JTextField(15);

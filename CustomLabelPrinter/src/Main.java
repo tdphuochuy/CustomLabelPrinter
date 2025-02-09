@@ -7,7 +7,7 @@ public class Main {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setSize(500, 350);
+       frame.setSize(550, 400);
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();
@@ -34,9 +34,11 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
+       tabbedPane.addTab("Chat", new chatPanel(frame));
        tabbedPane.addTab("no clue", freePanel);
 
        // Add the tabbedPane to the frame
+       frame.setLayout(new BorderLayout());
        frame.add(tabbedPane, BorderLayout.CENTER);
        frame.setLocationRelativeTo(null);
 
