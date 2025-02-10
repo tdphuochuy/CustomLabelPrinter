@@ -16,6 +16,18 @@ public class Main {
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();
+       
+       tabbedPane.addChangeListener(new ChangeListener() {
+           public void stateChanged(ChangeEvent e) {
+               JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+               int selectedIndex = sourceTabbedPane.getSelectedIndex();
+               String selectedTabTitle = sourceTabbedPane.getTitleAt(selectedIndex);
+               if(selectedTabTitle.equals("Chat"))
+               {
+            	   tabbedPane.setBackgroundAt(selectedIndex, null);
+               }
+           }
+       });
 
        // Create panels for each tab
        JPanel tpCountPanel = new JPanel();
@@ -41,17 +53,6 @@ public class Main {
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
        tabbedPane.addTab("no clue", freePanel);
-       tabbedPane.addChangeListener(new ChangeListener() {
-           public void stateChanged(ChangeEvent e) {
-               JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
-               int selectedIndex = sourceTabbedPane.getSelectedIndex();
-               String selectedTabTitle = sourceTabbedPane.getTitleAt(selectedIndex);
-               if(selectedTabTitle.equals("Chat"))
-               {
-            	   tabbedPane.setBackgroundAt(selectedIndex, null);
-               }
-           }
-       });
 
        // Add the tabbedPane to the frame
        frame.setLayout(new BorderLayout());
