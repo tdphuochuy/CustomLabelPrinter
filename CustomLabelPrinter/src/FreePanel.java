@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-import tpCount.printerInfo;
+import config.Config;
 
 public class FreePanel extends JPanel{
 	private JFrame frame;
@@ -89,7 +89,7 @@ public class FreePanel extends JPanel{
     
     public void printLabel(String text)
     {
-        String printerIP = printerInfo.printerIP;  // Replace with your printer's IP
+        String printerIP = Config.printerIP;  // Replace with your printer's IP
         int port = 9100;  // Default port for network printing
         int quantity = 1;
 

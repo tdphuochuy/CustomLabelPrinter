@@ -28,7 +28,7 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import tpCount.printerInfo;
+import config.Config;
 
 public class reprintPanel extends JPanel{
 	private JFrame frame;
@@ -57,8 +57,8 @@ public class reprintPanel extends JPanel{
         JLabel label = new JLabel("Printer");
         String[] items = {"Right", "Left", "Custom"};
         Map<String,String> printerMap = new TreeMap<>();
-        printerMap.put("Right",printerInfo.printer2IP);
-        printerMap.put("Left",printerInfo.printerIP);
+        printerMap.put("Right",Config.printer2IP);
+        printerMap.put("Left",Config.printerIP);
         Map<String,String> typeMap = new TreeMap<>();
         typeMap.put("Right", "SDPL");
         typeMap.put("Left", "SBPL");

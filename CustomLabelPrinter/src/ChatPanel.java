@@ -18,6 +18,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -35,11 +38,16 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-import tpCount.printerInfo;
+import org.json.simple.JSONObject;
 
-public class chatPanel extends JPanel{
+import chatSystem.ChatClient;
+import chatSystem.ChatServer;
+import config.Config;
+
+public class ChatPanel extends JPanel{
 	private JFrame frame;
-    public chatPanel(JFrame frame) {
+	private ChatClient clientWS;
+    public ChatPanel(JFrame frame) throws UnknownHostException, URISyntaxException {
     	this.frame = frame;
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -71,7 +79,7 @@ public class chatPanel extends JPanel{
 
             @Override
             protected void configureScrollBarColors() {
-                this.thumbColor = new Color(212, 212, 212);
+                this.thumbColor = new Color(200, 200, 200);
             }
         });
         
@@ -90,10 +98,10 @@ public class chatPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 String message = textField.getText();
                 if (!message.trim().isEmpty() && !message.equals("Message")) {
-                    textArea.append("You: " + message + "\n"); // Append the message
-                    textField.setText("");
-                    //setPlaceholder(textField,"Message");
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                	JSONObject obj = new JSONObject();
+    				obj.put("type", "message");
+    				obj.put("message", message);
+    				clientWS.send(obj.toJSONString());
                 }
             }
         });
@@ -109,6 +117,17 @@ public class chatPanel extends JPanel{
         
         this.add(scrollPane,BorderLayout.CENTER);
         this.add(inputPanel,BorderLayout.SOUTH);
+        
+        if(Config.chatServer)
+        {
+	        ChatServer serverWS = new ChatServer(8887);
+	        serverWS.start();
+		    clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea);
+		    clientWS.connect();
+        } else {
+        	clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea);
+		    clientWS.connect();
+        }
     }
 
     

@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
+import config.Config;
+
 public class CaseType extends JPanel{
 	private JFrame frame;
     public CaseType(JFrame frame) {
@@ -173,7 +175,7 @@ public class CaseType extends JPanel{
     
     public void printLabel(String customer,String productCode,String count)
     {
-        String printerIP = printerInfo.printerIP;  // Replace with your printer's IP
+        String printerIP = Config.printerIP;  // Replace with your printer's IP
         int port = 9100;  // Default port for network printing
         int quantity = 1;
 

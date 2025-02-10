@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.time.LocalTime;
 
 public class Main {
-   public static void main(String[] args) {
+   public static void main(String[] args) throws UnknownHostException, URISyntaxException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,7 +36,7 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
-       tabbedPane.addTab("Chat", new chatPanel(frame));
+       tabbedPane.addTab("Chat", new ChatPanel(frame));
        tabbedPane.addTab("no clue", freePanel);
 
        // Add the tabbedPane to the frame
