@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -47,7 +48,7 @@ import config.Config;
 public class ChatPanel extends JPanel{
 	private JFrame frame;
 	private ChatClient clientWS;
-    public ChatPanel(JFrame frame) throws UnknownHostException, URISyntaxException {
+    public ChatPanel(JFrame frame,JTabbedPane tabbedPane) throws UnknownHostException, URISyntaxException {
     	this.frame = frame;
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -103,6 +104,7 @@ public class ChatPanel extends JPanel{
     				obj.put("message", message);
     				clientWS.send(obj.toJSONString());
                 }
+                textField.setText("");
             }
         });
         
@@ -122,10 +124,10 @@ public class ChatPanel extends JPanel{
         {
 	        ChatServer serverWS = new ChatServer(8887);
 	        serverWS.start();
-		    clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea);
+		    clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea,tabbedPane);
 		    clientWS.connect();
         } else {
-        	clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea);
+        	clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea,tabbedPane);
 		    clientWS.connect();
         }
     }

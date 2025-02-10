@@ -1,11 +1,14 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.time.LocalTime;
 
 public class Main {
-   public static void main(String[] args) throws UnknownHostException, URISyntaxException {
+   public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,8 +39,19 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
-       tabbedPane.addTab("Chat", new ChatPanel(frame));
+       tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
        tabbedPane.addTab("no clue", freePanel);
+       tabbedPane.addChangeListener(new ChangeListener() {
+           public void stateChanged(ChangeEvent e) {
+               JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+               int selectedIndex = sourceTabbedPane.getSelectedIndex();
+               String selectedTabTitle = sourceTabbedPane.getTitleAt(selectedIndex);
+               if(selectedTabTitle.equals("Chat"))
+               {
+            	   tabbedPane.setBackgroundAt(selectedIndex, null);
+               }
+           }
+       });
 
        // Add the tabbedPane to the frame
        frame.setLayout(new BorderLayout());

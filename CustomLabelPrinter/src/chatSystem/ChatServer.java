@@ -42,10 +42,13 @@ public class ChatServer extends WebSocketServer {
 	
 	  @Override
 	  public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-		    JSONObject obj = new JSONObject();
-			obj.put("type", "system");
-			obj.put("message", nameMap.get(conn) + " has left the room!");
-		    broadcast(obj.toJSONString());
+		    if(nameMap.get(conn) != null)
+		    {
+			    JSONObject obj = new JSONObject();
+				obj.put("type", "system");
+				obj.put("message", nameMap.get(conn) + " has left the room!");
+			    broadcast(obj.toJSONString());
+		  	}
 		    nameMap.remove(conn);
 	  }
 	
@@ -93,8 +96,7 @@ public class ChatServer extends WebSocketServer {
 	  @Override
 	  public void onStart() {
 	    System.out.println("Server started!");
-	    setConnectionLostTimeout(0);
-	    setConnectionLostTimeout(100);
+	    setConnectionLostTimeout(10);
 	  }
 
 }
