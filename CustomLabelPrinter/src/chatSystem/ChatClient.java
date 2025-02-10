@@ -110,9 +110,6 @@ public class ChatClient extends WebSocketClient {
 		          flashInfo.dwTimeout = 0;
 		
 		          user32.FlashWindowEx(flashInfo);
-		          System.out.println("Flashing taskbar icon...");
-		      } else {
-		          System.out.println("No active window found!");
 		      }
 		      
 			  SystemTray tray = SystemTray.getSystemTray();
