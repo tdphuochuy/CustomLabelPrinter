@@ -124,10 +124,10 @@ public class ChatPanel extends JPanel{
         {
 	        ChatServer serverWS = new ChatServer(8887);
 	        serverWS.start();
-		    clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea,tabbedPane);
+		    clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane);
 		    clientWS.connect();
         } else {
-        	clientWS = new ChatClient(new URI("ws://localhost:8887"),textField,textArea,tabbedPane);
+        	clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane);
 		    clientWS.connect();
         }
     }
