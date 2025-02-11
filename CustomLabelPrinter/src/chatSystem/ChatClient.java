@@ -100,7 +100,7 @@ public class ChatClient extends WebSocketClient {
 	  if(!isApplicationFocused())
 	  {
 		  User32 user32 = User32.INSTANCE;
-	      WinDef.HWND hWnd = user32.GetForegroundWindow(); // Get the current window handle
+		  WinDef.HWND hWnd = User32.INSTANCE.FindWindow(null, "Custom Label Printer");
 	      
 		      if (hWnd != null) {
 		          WinUser.FLASHWINFO flashInfo = new WinUser.FLASHWINFO();
