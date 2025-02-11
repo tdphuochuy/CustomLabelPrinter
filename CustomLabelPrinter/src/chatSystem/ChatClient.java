@@ -34,9 +34,7 @@ import org.json.simple.parser.ParseException;
 import config.Config;
 
 public class ChatClient extends WebSocketClient {
-  private JTextField textField;
-  private JTextArea textArea;
-  private JTabbedPane tabbedPane;
+  private ChatPanel cp;
   public ChatClient(URI serverUri, Draft draft) {
     super(serverUri, draft);
   }
@@ -45,11 +43,9 @@ public class ChatClient extends WebSocketClient {
     super(serverURI);
   }
   
-  public ChatClient(URI serverURI,JTextField textField,JTextArea textArea,JTabbedPane tabbedPane) {
+  public ChatClient(URI serverURI,JTextField textField,JTextArea textArea,JTabbedPane tabbedPane,ChatPanel cp) {
     super(serverURI);
-    this.textField = textField;
-    this.textArea = textArea;
-    this.tabbedPane = tabbedPane;
+    this.cp = cp;
   }
 
   public ChatClient(URI serverUri, Map<String, String> httpHeaders) {
@@ -68,94 +64,22 @@ public class ChatClient extends WebSocketClient {
 			JSONObject obj = (JSONObject)parser.parse(msg);
 			String type = obj.get("type").toString();
 			String message = obj.get("message").toString();
-			appendChat(message);
-			if(type.equals("message"))
-			{
-			      notifyUser(message);
-			}
+			cp.appendChat(type, message);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
   }
-  
-  public void appendChat(String message)
-  {
-	  SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-      String currentTime = timeFormat.format(new Date());
-	  textArea.append("[" + currentTime + "] " + message + "\n"); // Append the message
-      //setPlaceholder(textField,"Message");
-      textArea.setCaretPosition(textArea.getDocument().getLength());
-  }
-  
-  public void notifyUser(String message)
-  {
-      int selectedIndex = tabbedPane.getSelectedIndex();
-      String selectedTabTitle = tabbedPane.getTitleAt(selectedIndex);
-      if(!selectedTabTitle.equals("Chat"))
-      {
-   	   	tabbedPane.setBackgroundAt(tabbedPane.indexOfTab("Chat"), new Color(255, 192, 105));
-      }
-	  
-	  if(!isApplicationFocused())
-	  {
-		  User32 user32 = User32.INSTANCE;
-		  WinDef.HWND hWnd = User32.INSTANCE.FindWindow(null, "Custom Label Printer");
-	      
-		      if (hWnd != null) {
-		          WinUser.FLASHWINFO flashInfo = new WinUser.FLASHWINFO();
-		          flashInfo.hWnd = hWnd;
-		          flashInfo.uCount = WinUser.FLASHW_TIMERNOFG; // Flash until window is focused
-		          flashInfo.dwFlags = WinUser.FLASHW_ALL; // Flash title bar & taskbar button
-		          flashInfo.dwTimeout = 0;
-		
-		          user32.FlashWindowEx(flashInfo);
-		      }
-		      
-			  SystemTray tray = SystemTray.getSystemTray();
-		      Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
-		
-		      // Create tray icon
-		      TrayIcon trayIcon = new TrayIcon(image, "New message");
-		      trayIcon.setImageAutoSize(true);
-		      
-		      try {
-		          tray.add(trayIcon);
-		          trayIcon.displayMessage("New Message",message, MessageType.INFO);
-		      } catch (AWTException e) {
-		          e.printStackTrace();
-		      }
-	  }
-  }
-  
-  public static boolean isApplicationFocused() {
-      Frame focusedFrame = (Frame) KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
-      return focusedFrame != null;
-  }
 
   @Override
   public void onClose(int code, String reason, boolean remote) {
-	  new Thread(() -> {
-		    try {
-		        Thread.sleep(10000); // Optional delay to allow cleanup
-		        reconnect();
-		    } catch (InterruptedException e) {
-		        e.printStackTrace();
-		    }
-		}).start();
+	  cp.reconnectWS();
   }
 
   @Override
   public void onError(Exception ex) {
     ex.printStackTrace();
-    new Thread(() -> {
-        try {
-            Thread.sleep(10000); // Optional delay to allow cleanup
-            reconnect();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }).start();
+	  cp.reconnectWS();
   }
 
 

@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import chatSystem.ChatPanel;
+
 import java.awt.*;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
