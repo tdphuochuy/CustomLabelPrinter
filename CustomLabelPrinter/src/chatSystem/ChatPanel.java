@@ -111,7 +111,6 @@ public class ChatPanel extends JPanel{
         inputPanel.add(textField, BorderLayout.CENTER);
 
         JButton sendButton = new JButton("Send");
-        inputPanel.add(sendButton, BorderLayout.EAST);
         sendButton.setBackground(Color.white);
         sendButton.addActionListener(new ActionListener() {
             @Override
@@ -126,6 +125,21 @@ public class ChatPanel extends JPanel{
                 textField.setText("");
             }
         });
+        
+        JButton clearButton = new JButton("Clear");
+        clearButton.setBackground(Color.white);
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea.setText("");
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(sendButton);
+        buttonPanel.add(clearButton);
+
+        inputPanel.add(buttonPanel, BorderLayout.EAST);        
         
         textField.addKeyListener(new KeyAdapter() {
             @Override
