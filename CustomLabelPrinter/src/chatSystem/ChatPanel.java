@@ -170,8 +170,11 @@ public class ChatPanel extends JPanel{
     {
     	new Thread(() -> {
 		    try {
-		        Thread.sleep(10000); // Optional delay to allow cleanup
-		        clientWS.reconnect();
+		    	if(!clientWS.isOpen())
+		    	{
+		    		Thread.sleep(10000); // Optional delay to allow cleanup
+		    		clientWS.reconnect();
+		    	}
 		    } catch (InterruptedException e) {
 		        e.printStackTrace();
 		    }

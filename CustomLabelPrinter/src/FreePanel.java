@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -30,14 +31,21 @@ import jiconfont.swing.IconFontSwing;
 
 public class FreePanel extends JPanel{
 	private JFrame frame;
+	private boolean multipleLines;
     public FreePanel(JFrame frame) {
     	this.frame = frame;
+    	this.multipleLines = false;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); 
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel quantityPanel = new JPanel();
         quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        quantityPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
+        quantityPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
         
         JLabel label = new JLabel("Text");
         JTextField textField = new JTextField(15);
@@ -46,19 +54,24 @@ public class FreePanel extends JPanel{
 
         Icon icon = IconFontSwing.buildIcon(FontAwesome.REFRESH, 10);
         JButton switchBtn = new JButton(icon);
+        switchBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         switchBtn.setBackground(getBackground());
         switchBtn.setOpaque(false); // Makes background transparent
         switchBtn.setContentAreaFilled(false); // No default fill
         //switchBtn.setBorderPainted(false); // Hides border
         inputPanel.add(label);
         inputPanel.add(textField);
-        inputPanel.add(switchBtn);
         
         JLabel quantityLabel = new JLabel("Qty");
         JTextField quantityField = new JTextField(3);
         quantityPanel.add(quantityLabel);
         quantityPanel.add(quantityField);
  
+        JTextArea textArea = new JTextArea(12,22);
+        setPlaceholderArea(textArea,"Separated by new lines, # for quantity");
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);        
+        
         JButton button = new JButton("Print");
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
@@ -68,18 +81,44 @@ public class FreePanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 button.setEnabled(false);
                 try {
-              	   String text = textField.equals("Any text") ? "" : textField.getText();
-              	   if(text.length() > 0)
-              	   {
-              		 int quantity = quantityField.getText().length() > 0 ? Integer.valueOf(quantityField.getText()) : 1;
-              		 for(int i = 0; i < quantity;i++)
-              		 {
-              			 printLabel(text);
-              		 }
-                     JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
-              	   } else {
+                	System.out.println(multipleLines);
+                	if(multipleLines)
+                	{
+ 	              	   String text = textArea.getText().equals("Separated by new lines, # for quantity") ? "" : textArea.getText();
+	              	   if(text.length() > 0)
+	              	   {
+	              		   String[] lines = text.split("\n");
+	              		   for (String line : lines) {
+	              			   System.out.println(line);
+	              			   int quantity = 1;
+	              			   String[] lineText = line.split("#");
+	              			   if(lineText.length > 1)
+	              			   {
+	              				 quantity = Integer.parseInt(lineText[1]);
+	              			   }
+	              			   for(int i = 0; i < quantity;i++)
+	              			   {
+	  	              			 printLabel(lineText[0]);
+	              			   }
+	              		   }
+	              	   }else 
+	              	   {
 	                       JOptionPane.showMessageDialog(frame, "Missing text", "Error", JOptionPane.ERROR_MESSAGE);
-              	   }
+	              	   }
+                	} else {
+	              	   String text = textField.getText().equals("Any text") ? "" : textField.getText();
+	              	   if(text.length() > 0)
+	              	   {
+	              		 int quantity = quantityField.getText().length() > 0 ? Integer.valueOf(quantityField.getText()) : 1;
+	              		 for(int i = 0; i < quantity;i++)
+	              		 {
+	              			 printLabel(text);
+	              		 }
+	                     JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+	              	   } else {
+		                       JOptionPane.showMessageDialog(frame, "Missing text", "Error", JOptionPane.ERROR_MESSAGE);
+	              	   }
+                	}
                 } catch (Exception ex)
                 {
              	   
@@ -99,17 +138,31 @@ public class FreePanel extends JPanel{
         switchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
+            	contentPanel.removeAll();
+               if(multipleLines)
+               {
+            	   multipleLines = false;
+            	   contentPanel.add(inputPanel);
+            	   contentPanel.add(quantityPanel);
+               } else {
+            	   multipleLines = true;
+            	   contentPanel.add(scrollPane);
+               }
+               contentPanel.revalidate();
+               contentPanel.repaint();
             }
         });
         
-        JTextArea textArea = new JTextArea(10,14);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-                
-        this.add(inputPanel);
-        this.add(quantityPanel);
-        this.add(button);
+        contentPanel.add(inputPanel);
+        contentPanel.add(quantityPanel);
+        
+        buttonPanel.add(Box.createVerticalStrut(5));
+        buttonPanel.add(switchBtn);
+        buttonPanel.add(Box.createVerticalStrut(5));
+        buttonPanel.add(button);
+        
+        this.add(contentPanel);
+        this.add(buttonPanel);
     }
     
     public void printLabel(String text)
@@ -189,6 +242,33 @@ public class FreePanel extends JPanel{
     
     // Method to set the placeholder text
     public static void setPlaceholder(JTextField textField, String placeholderText) {
+        // Set initial placeholder
+        textField.setText(placeholderText);
+        textField.setForeground(Color.GRAY); // Set the placeholder text color
+
+        // Add FocusListener to manage the prompt behavior
+        textField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // When the user clicks on the text field, clear the placeholder if it's still there
+                if (textField.getText().equals(placeholderText)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK); // Set the text color to normal when typing
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // When the text field loses focus, reset the placeholder if the field is empty
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholderText);
+                    textField.setForeground(Color.GRAY); // Set the placeholder text color back
+                }
+            }
+        });
+    }
+    
+    public static void setPlaceholderArea(JTextArea textField, String placeholderText) {
         // Set initial placeholder
         textField.setText(placeholderText);
         textField.setForeground(Color.GRAY); // Set the placeholder text color
