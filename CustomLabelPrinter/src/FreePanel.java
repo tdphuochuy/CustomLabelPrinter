@@ -11,17 +11,22 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import config.Config;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 
 public class FreePanel extends JPanel{
 	private JFrame frame;
@@ -32,13 +37,22 @@ public class FreePanel extends JPanel{
         inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
         JPanel quantityPanel = new JPanel();
         quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        quantityPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
-
+        quantityPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
+        
         JLabel label = new JLabel("Text");
         JTextField textField = new JTextField(15);
         setPlaceholder(textField,"Any text");
+        IconFontSwing.register(FontAwesome.getIconFont());
+
+        Icon icon = IconFontSwing.buildIcon(FontAwesome.REFRESH, 10);
+        JButton switchBtn = new JButton(icon);
+        switchBtn.setBackground(getBackground());
+        switchBtn.setOpaque(false); // Makes background transparent
+        switchBtn.setContentAreaFilled(false); // No default fill
+        //switchBtn.setBorderPainted(false); // Hides border
         inputPanel.add(label);
         inputPanel.add(textField);
+        inputPanel.add(switchBtn);
         
         JLabel quantityLabel = new JLabel("Qty");
         JTextField quantityField = new JTextField(3);
@@ -82,6 +96,17 @@ public class FreePanel extends JPanel{
             }
         });
         
+        switchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
+        
+        JTextArea textArea = new JTextArea(10,14);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                
         this.add(inputPanel);
         this.add(quantityPanel);
         this.add(button);
