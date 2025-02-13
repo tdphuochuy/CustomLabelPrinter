@@ -73,15 +73,13 @@ public class ChatClient extends WebSocketClient {
 
   @Override
   public void onClose(int code, String reason, boolean remote) {
-  	//System.out.println("Closed Reconnecting chat server...");
-	//cp.reconnectWS();
+	  System.out.println("Reconnecting chat server...");
+	  cp.reconnectWS();
   }
 
   @Override
   public void onError(Exception ex) {
-	 System.out.println("Reconnecting chat server...");
 	 ex.printStackTrace();
-	 cp.reconnectWS();
   }
 
 
