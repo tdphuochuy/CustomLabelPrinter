@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.OutputStream;
@@ -31,6 +33,8 @@ public class countComboPanel extends JPanel{
         // Create a panel for the label and text field with FlowLayout (they will be on the same line)
        JPanel inputPanel = new JPanel();
        inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Center the label and text field
+       JPanel optionalPanel = new JPanel();
+       optionalPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Center
        JPanel quantityPanel = new JPanel();
        quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Center the label and text field
        JPanel rangePanel = new JPanel();
@@ -38,7 +42,7 @@ public class countComboPanel extends JPanel{
        rangePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
 
        // Create a label
-       JLabel label = new JLabel("Prod #/ name");
+       JLabel label = new JLabel("Name");
 
        // Create a text field (textbox) with 20 columns
        JTextField textField = new JTextField(15);
@@ -46,6 +50,14 @@ public class countComboPanel extends JPanel{
        // Add the label and text field to the input panel
        inputPanel.add(label);
        inputPanel.add(textField);
+       
+       JLabel prodNumlabel = new JLabel("Product #");
+       // Create a text field (textbox) with 20 columns
+       JTextField prodNumField = new JTextField(5);
+       setPlaceholder(prodNumField,"optional");
+
+       optionalPanel.add(prodNumlabel);
+       optionalPanel.add(prodNumField);
 
        JLabel quantityLabel = new JLabel("Qty");
        // Create a text field (textbox) with 20 columns
@@ -91,6 +103,7 @@ public class countComboPanel extends JPanel{
            @Override
            public void actionPerformed(ActionEvent e) {
                button.setEnabled(false);
+           	   String productCode = prodNumField.getText().equals("optional") ? "" : prodNumField.getText();
                try {
 	               if(checkBox.isSelected())
 	               {
@@ -102,7 +115,7 @@ public class countComboPanel extends JPanel{
 		                   {
 			                   for(int i = range1; i <=  range2;i++)
 			                   {
-			                        printLabel(textField.getText(),String.valueOf(i));
+			                        printLabel(textField.getText(),String.valueOf(i),productCode);
 			                   }
 			                   JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
 		                   } else {
@@ -117,7 +130,7 @@ public class countComboPanel extends JPanel{
 		                   int amount = Math.min(Integer.parseInt(quantityField.getText()), 45);
 		                    for(int i = 1;i <= amount;i++)
 		                    {
-		                        printLabel(textField.getText(),String.valueOf(i));
+		                        printLabel(textField.getText(),String.valueOf(i),productCode);
 		                    }
 		                    JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
 	            	   } else {
@@ -147,12 +160,13 @@ public class countComboPanel extends JPanel{
        
        this.add(inputPanel);
        this.add(Box.createRigidArea(new Dimension(0, 2)));
+       this.add(optionalPanel);
        this.add(quantityPanel);// Adds the panel containing label and text field
        this.add(rangePanel);
        this.add(button);      // Adds the button below
     }
     
-       public void printLabel(String text1,String text2)
+       public void printLabel(String text1,String text2,String productCode)
         {
             String printerIP = Config.printerIP;  // Replace with your printer's IP
             int port = 9100;  // Default port for network printing
@@ -176,11 +190,26 @@ public class countComboPanel extends JPanel{
             // SBPL command to print "G" in the middle of an empty label
             String sbplCommand = "\u001BA"      // Initialize SBPL command
                                + "\u001B%1"
-                                + "\u001BH20"  // Set horizontal position (H)
+                                + "\u001BH1"  // Set horizontal position (H)
                                 + "\u001BL1010"
                                 + "\u001BV" + startX                                                                                           // Set vertical position (V)        // Print "G"
-                               + "\u001BRH0,SATOALPHABC.ttf,0," + fontSizeString + "," + fontSizeString + "," + text1
-                               + "\u001BH360"  // Set horizontal position (H)
+                               + "\u001BRH0,SATOALPHABC.ttf,0," + fontSizeString + "," + fontSizeString + "," + text1;
+            if(productCode.length() > 0)
+            {
+            	int productCodefontSize = 120;
+                System.out.println(productCodefontSize);
+                int productCodetextWidth = productCodefontSize * productCode.length() / 2;  // Approximate text width
+                String productCodefontSizeString = String.valueOf(productCodefontSize);
+                int productCodestartX = 1250 - ((1215 - productCodetextWidth) / 2);
+            
+                sbplCommand = sbplCommand + "\u001BH285"  
+                        + "\u001BV" + productCodestartX
+                        + "\u001BL1010"
+                        + "\u001BRH0,SATOALPHABC.ttf,0," + productCodefontSizeString + "," + productCodefontSizeString + "," + productCode;
+             
+            }
+            
+            sbplCommand = sbplCommand + (productCode.length() > 0? "\u001BH410":"\u001BH360")  // Set horizontal position (H)
                                + "\u001BV" + startX2                                                                                           // Set vertical position (V)        // Print "G"
                                + "\u001BRH0,SATO0.ttf,0," + fontSizeString2 + "," + fontSizeString2 + "," + text2
                               + "\u001BQ" + quantity     // Print one label
@@ -252,6 +281,33 @@ public class countComboPanel extends JPanel{
 
            // Return the calculated font size
            return adjustedFontSize;
+       }
+       
+       public static void setPlaceholder(JTextField textField, String placeholderText) {
+           // Set initial placeholder
+           textField.setText(placeholderText);
+           textField.setForeground(Color.GRAY); // Set the placeholder text color
+
+           // Add FocusListener to manage the prompt behavior
+           textField.addFocusListener(new FocusListener() {
+               @Override
+               public void focusGained(FocusEvent e) {
+                   // When the user clicks on the text field, clear the placeholder if it's still there
+                   if (textField.getText().equals(placeholderText)) {
+                       textField.setText("");
+                       textField.setForeground(Color.BLACK); // Set the text color to normal when typing
+                   }
+               }
+
+               @Override
+               public void focusLost(FocusEvent e) {
+                   // When the text field loses focus, reset the placeholder if the field is empty
+                   if (textField.getText().isEmpty()) {
+                       textField.setText(placeholderText);
+                       textField.setForeground(Color.GRAY); // Set the placeholder text color back
+                   }
+               }
+           });
        }
 
        
