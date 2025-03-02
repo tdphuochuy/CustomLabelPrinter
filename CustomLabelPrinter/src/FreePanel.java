@@ -157,7 +157,7 @@ public class FreePanel extends JPanel{
             }
         });
         
-        JButton buttonNhan = new JButton("Click this :)");
+        JButton buttonNhan = new JButton("Click here :)");
         buttonNhan.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonNhan.setBackground(Color.white);
         buttonNhan.setCursor(new Cursor(Cursor.HAND_CURSOR));
