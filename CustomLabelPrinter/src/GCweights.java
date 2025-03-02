@@ -214,8 +214,8 @@ public class GCweights extends JPanel{
         System.out.println("List size: " + list.size());
         while(lines.size() < list.size())
         {
-        	//lines.add(randomWeight());
-        	lines.add("2146");
+        	lines.add(randomWeight());
+        	//lines.add("2146");
         }
 		int chunkSize = 19;
 		 for (int i = 0; i < list.size(); i += chunkSize) {
@@ -284,8 +284,8 @@ public class GCweights extends JPanel{
 	public String randomWeight()
 	{
 		Random random = new Random();
-        int min = 2150;
-        int max = 2158;
+        int min = 2146;
+        int max = 2154;
         int randomEvenNumber;
 
         do {

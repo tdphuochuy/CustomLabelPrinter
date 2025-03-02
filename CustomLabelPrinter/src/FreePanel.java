@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -9,7 +11,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.OutputStream;
 import java.net.Socket;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.awt.font.TextAttribute;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -153,6 +157,32 @@ public class FreePanel extends JPanel{
             }
         });
         
+        JButton buttonNhan = new JButton("Click this :)");
+        buttonNhan.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonNhan.setBackground(Color.white);
+        buttonNhan.setCursor(new Cursor(Cursor.HAND_CURSOR));
+     // Make the button transparent
+        buttonNhan.setContentAreaFilled(false);
+        buttonNhan.setBorder(null);
+
+        // Set an underlined font
+        Font font = new Font("Arial", Font.PLAIN, 12);
+        Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        Font underlinedFont = font.deriveFont(attributes);
+        //buttonNhan.setFont(underlinedFont);
+        
+        buttonNhan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int quantity = quantityField.getText().length() > 0 ? Integer.valueOf(quantityField.getText()) : 1;
+         		 for(int i = 0; i < quantity;i++)
+         		 {
+         			 printNhan();
+         		 }
+            }
+        });
+        
         contentPanel.add(inputPanel);
         contentPanel.add(quantityPanel);
         
@@ -160,6 +190,8 @@ public class FreePanel extends JPanel{
         buttonPanel.add(switchBtn);
         buttonPanel.add(Box.createVerticalStrut(5));
         buttonPanel.add(button);
+        buttonPanel.add(Box.createVerticalStrut(150));
+        buttonPanel.add(buttonNhan);
         
         this.add(contentPanel);
         this.add(buttonPanel);
@@ -198,6 +230,68 @@ public class FreePanel extends JPanel{
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+    
+    public void printNhan()
+    {
+        String printerIP = Config.printerIP;  // Replace with your printer's IP
+        int port = 9100;  // Default port for network printing
+        int quantity = 1;
+        
+    	 String text1 = "1st shift - ERP";
+         String text2 = "Please don't throw";
+         String text3 = "it away :)";
+         
+         int[] arr = calculateFontSize(text1,240);
+         int fontSize = arr[0];
+         int[] arr2 = calculateFontSize(text2,240);
+         int fontSize2 = arr2[0];
+         int[] arr3 = calculateFontSize(text3,240);
+         int fontSize3 = arr2[0];
+
+         String fontSizeString = String.valueOf(fontSize);
+         String fontSizeString2 = String.valueOf(fontSize2);
+         String fontSizeString3 = String.valueOf(fontSize3);
+
+         int textWidth = arr[1];
+         int startX = 18 + (1200/2 + textWidth/2);
+         
+         int textWidth2 = arr2[1];
+         int startX2 = 18 + (1200/2 + textWidth2/2);
+
+         int textWidth3 = arr3[1];
+         int startX3 = 18 + (1200/2 + textWidth3/2) - 250;
+         
+         System.out.println(startX);
+         // SBPL command to print "G" in the middle of an empty label
+         String sbplCommand = "\u001BA"      // Initialize SBPL command
+                            + "\u001B%1"
+                            + "\u001BH100"  // Set horizontal position (H)
+                            + "\u001BV" + startX                                                                                           // Set vertical position (V)        // Print "G"
+                            + "\u001BL1010"
+                            + "\u001BRH0,SATO0.ttf,0," + fontSizeString + "," + fontSizeString + "," + text1
+                            
+                            + "\u001BH350"  // Set horizontal position (H)
+                            + "\u001BV" + startX2                                                                                           // Set vertical position (V)        // Print "G"
+                            + "\u001BL1010"
+                            + "\u001BRH0,SATO0.ttf,0," + fontSizeString2 + "," + fontSizeString2 + "," + text2
+                            
+                            + "\u001BH550"  // Set horizontal position (H)
+                            + "\u001BV" + startX3                                                                                           // Set vertical position (V)        // Print "G"
+                            + "\u001BL1010"
+                            + "\u001BRH0,SATO0.ttf,0," + fontSizeString3 + "," + fontSizeString3 + "," + text3
+                            
+                           + "\u001BQ" + quantity     // Print one label
+                            + "\u001BZ";     // End SBPL command
+
+         try (Socket socket = new Socket(printerIP, port)) {
+             OutputStream outputStream = socket.getOutputStream();
+             outputStream.write(sbplCommand.getBytes("UTF-8"));
+             outputStream.flush();
+             System.out.println("Label sent to the printer.");
+         } catch (Exception e) {
+             System.out.println("Error: " + e.getMessage());
+         }
     }
     
     public static int[] calculateFontSize(String text, int maxWidth) {
