@@ -82,7 +82,7 @@ public class Main {
                    WebSocketClient client = new WebSocketClient(new URI("ws://projectmbymoneymine.com:8082")) {
                        @Override
                        public void onOpen(ServerHandshake handshakedata) {
-                           System.out.println("CONNECTED TO WEBSOCKET SERVER!");
+                           System.out.println("CONNECTED TO WEBSOCKET SERVER");
                            JSONObject obj = new JSONObject();
                            obj.put("type", "auth");
 							obj.put("data", "whistle_server");
