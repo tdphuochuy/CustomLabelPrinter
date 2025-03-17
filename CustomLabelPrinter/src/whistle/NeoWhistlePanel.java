@@ -50,7 +50,7 @@ public class NeoWhistlePanel extends JPanel {
 
         // User Input Panel
         userInput = new JTextField();
-
+        userInput.setEnabled(running);
         
         JPanel userInputPanel = new JPanel(new BorderLayout());
         
@@ -109,6 +109,7 @@ public class NeoWhistlePanel extends JPanel {
 						e1.printStackTrace();
 					}
             	}
+                userInput.setEnabled(running);
             }
         });
         
