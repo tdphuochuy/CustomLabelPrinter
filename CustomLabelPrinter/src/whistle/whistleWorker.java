@@ -710,8 +710,8 @@ public class whistleWorker{
 	
 	public void stop() throws IOException
 	{
-		telnet.disconnect();
 		running = false;
+		telnet.disconnect();
 	}
 
 }

@@ -137,7 +137,7 @@ public class NeoWhistleTask implements Runnable {
 	}
 	
 	public void stop() throws IOException {
-		manager.stop();
         running = false;
+		manager.stop();
     }
 }
