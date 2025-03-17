@@ -99,7 +99,12 @@ public class NeoWhistlePanel extends JPanel {
 	                      JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
 	         		 }
             	} else {
-            		whistleTask.stop();
+            		try {
+						whistleTask.stop();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                     startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLAY,12,Color.GREEN));
                     autoSequencecb.setEnabled(true);
         	        running = false;

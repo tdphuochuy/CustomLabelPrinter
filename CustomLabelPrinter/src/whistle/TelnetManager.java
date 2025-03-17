@@ -1,5 +1,6 @@
 package whistle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -43,5 +44,11 @@ public class TelnetManager{
 	                break;
 	            }
 	        }
-	    }
+	 }
+	 
+	 public void stop() throws IOException
+	 {
+		 worker.stop();
+		 executor.shutdown();
+	 }
 }

@@ -1,5 +1,6 @@
 package whistle;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class NeoWhistleTask implements Runnable {
     private volatile boolean running = true;
     private JTextArea systemConsole;
     private JTextArea userConsole;
+    private TelnetManager manager;
 	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole) {
         this.username = username;
         this.password = password;
@@ -42,12 +44,12 @@ public class NeoWhistleTask implements Runnable {
 			Scanner scanner = new Scanner(System.in);
 			String orderNum = scanner.nextLine();
 			System.out.println(orderNum);
-			TelnetManager manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
+			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
 			
 			ExecutorService executor = Executors.newSingleThreadExecutor();
 			// Start WebSocket Client in a separate thread with auto-reconnect
 	        executor.submit(() -> {
-	            while (true) {
+	            while (running) {
 	                try {
 	                    WebSocketClient client = new WebSocketClient(new URI("ws://projectmbymoneymine.com:8082")) {
 	                        @Override
@@ -134,7 +136,8 @@ public class NeoWhistleTask implements Runnable {
 		}
 	}
 	
-	public void stop() {
+	public void stop() throws IOException {
+		manager.stop();
         running = false;
     }
 }

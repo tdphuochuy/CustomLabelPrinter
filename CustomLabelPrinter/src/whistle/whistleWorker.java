@@ -32,6 +32,7 @@ public class whistleWorker{
     private Telnet telnet;
 	private boolean backflush;
 	private boolean notfound;
+	private boolean running;
     public SequenceGetter sequenceGetter;
     private JTextArea systemConsole;
     public whistleWorker(String orderNum,String username,String password,SequenceGetter sequenceGetter,boolean autoSequence,JTextArea systemConsole) throws InterruptedException{
@@ -61,6 +62,7 @@ public class whistleWorker{
 		myThread.start();
 		initialize(telnet);
 		Thread.sleep(1000);
+		running = true;
     }
     
 	public void process(Command command)
@@ -68,7 +70,7 @@ public class whistleWorker{
 	   setData(command);
 	   backflush = false;
 	   notfound = false;
-       outer:while(true)
+       outer:while(running)
        {
     	   if(Integer.parseInt(quantity) > 5000)
     	   {
@@ -88,7 +90,7 @@ public class whistleWorker{
         		   Thread.sleep(300);
         		   continue outer;
         	   }
-	           while(true)
+	           while(running)
 	           {
 	   				String response = telnet.getResponse();
 	   				if(response.contains("Prod [[0;7m"))
@@ -105,7 +107,7 @@ public class whistleWorker{
 	           }
 		       systemConsole.append("Filling product number\n");
 		       telnet.sendCommand(prodNum + "\n");
-		       while(true)
+		       while(running)
 	           {
 	   				String response = telnet.getResponse();
 	   				if(response.contains("Item [[0;7m"))
@@ -252,7 +254,7 @@ public class whistleWorker{
 	public boolean verifyOrder(Telnet telnet) throws InterruptedException
 	{
 		int count = 0;
- 	   while(true)
+ 	   while(running)
  	   {
  		   	count++;
 				systemConsole.append("Verifying order number filled...\n");
@@ -263,9 +265,10 @@ public class whistleWorker{
 				Thread.sleep(300);
 				if(count > 10)
 				{
-					return false;
+					break;
 				}
  	   }
+ 	   return false;
 	}
 	
 	public boolean setKillDate(Telnet telnet) throws InterruptedException, IOException
@@ -286,7 +289,7 @@ public class whistleWorker{
 			}
 			systemConsole.append("Kill date set!\n");
 			int count = 0;
-			while(true)
+			while(running)
 			{
 				count++;
 				systemConsole.append("Confirming kill date...\n");
@@ -319,7 +322,7 @@ public class whistleWorker{
 	public String checkBuildResponse(Telnet telnet) throws InterruptedException, IOException, ParseException
 	{
 		int count = 0;
-		while(true)
+		while(running)
 		{
 			count++;
 			systemConsole.append("Checking build response...\n");
@@ -341,6 +344,7 @@ public class whistleWorker{
 				return "timeout";
 			}
 		}
+		return "timeout";
 	}
 	
 	
@@ -489,7 +493,7 @@ public class whistleWorker{
 	{
 		systemConsole.append("Setting quantity\n");
 		int count = 0;
-		while(true)
+		while(running)
 		{
 			if(checkCondition(telnet,"Quantity [[0;7m") && !checkCondition(telnet,"Track #"))
 			{
@@ -588,7 +592,7 @@ public class whistleWorker{
 	
 	public void waitResponse(Telnet telnet,String condition) throws InterruptedException
 	{
-		outer:while(true)
+		outer:while(running)
         {
 				String response = telnet.getResponse();
 				if(response.contains(condition))
@@ -602,7 +606,7 @@ public class whistleWorker{
 	public boolean waitResponseCount(Telnet telnet,String condition) throws InterruptedException, IOException
 	{
 		int count = 0;
-		while(true)
+		while(running)
         {
 				count++;
 				String response = telnet.getResponse();
@@ -614,9 +618,10 @@ public class whistleWorker{
 	    	   if(count > 30)
 	    	   {		
 					reset(telnet);
-					return false;
+					break;
 	    	   }
         }
+		return false;
 	}
 	
 	public String getArrowKey(String arrowKey) throws IOException {
@@ -701,6 +706,12 @@ public class whistleWorker{
 		this.prodNum = command.getProdNum();
 		this.quantity = command.getQuantity();
 		this.sequenceInput = command.getSequence();
+	}
+	
+	public void stop() throws IOException
+	{
+		telnet.disconnect();
+		running = false;
 	}
 
 }
