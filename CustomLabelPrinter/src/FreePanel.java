@@ -190,7 +190,7 @@ public class FreePanel extends JPanel{
         buttonPanel.add(switchBtn);
         buttonPanel.add(Box.createVerticalStrut(5));
         buttonPanel.add(button);
-        buttonPanel.add(Box.createVerticalStrut(150));
+        buttonPanel.add(Box.createVerticalStrut(200));
         buttonPanel.add(buttonNhan);
         
         this.add(contentPanel);
