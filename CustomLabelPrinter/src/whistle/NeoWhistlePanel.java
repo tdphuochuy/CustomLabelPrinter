@@ -148,7 +148,6 @@ public class NeoWhistlePanel extends JPanel {
                 pipedOut.write((input + "\n").getBytes());
                 pipedOut.flush();
                 userConsole.append(input + "\n");
-                userConsole.setCaretPosition(userConsole.getDocument().getLength());
             } catch (IOException e) {
                 e.printStackTrace();
             }

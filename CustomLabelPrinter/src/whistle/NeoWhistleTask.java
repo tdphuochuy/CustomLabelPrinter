@@ -108,6 +108,7 @@ public class NeoWhistleTask implements Runnable {
 			while(running)
 			{
 				userConsole.append("Enter product code\n");
+                userConsole.setCaretPosition(userConsole.getDocument().getLength());
 				String prodNum = scanner.nextLine();
 				userConsole.append("Enter quantity\n");
 				String quantity = scanner.nextLine();
