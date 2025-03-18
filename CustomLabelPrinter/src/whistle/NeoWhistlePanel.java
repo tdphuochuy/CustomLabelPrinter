@@ -25,7 +25,7 @@ public class NeoWhistlePanel extends JPanel {
         setLayout(new BorderLayout());
 
         // User Input Console
-        userConsole = new JTextArea(19, 22);
+        userConsole = new JTextArea(15, 20);
         userConsole.setEditable(false);
         JScrollPane userScrollPane = new JScrollPane(userConsole);
         userConsole.setLineWrap(true);
@@ -33,7 +33,7 @@ public class NeoWhistlePanel extends JPanel {
         userConsole.setMargin(new Insets(5, 5, 5, 5));
         
         // System Message Console
-        systemConsole = new JTextArea(19, 22);
+        systemConsole = new JTextArea(15, 20);
         systemConsole.setEditable(false);
         JScrollPane systemScrollPane = new JScrollPane(systemConsole);
         systemConsole.setLineWrap(true);
@@ -78,6 +78,7 @@ public class NeoWhistlePanel extends JPanel {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                startButton.setEnabled(false);
             	if(!running)
             	{
 	            	if(usernameField.getText().length() > 0)
@@ -109,6 +110,14 @@ public class NeoWhistlePanel extends JPanel {
 						e1.printStackTrace();
 					}
             	}
+            	 Timer timer = new Timer(300, new ActionListener() {
+                     @Override
+                     public void actionPerformed(ActionEvent evt) {
+                         startButton.setEnabled(true); // Re-enable the button
+                     }
+                 });
+                 timer.setRepeats(false); // Make sure the timer only runs once
+                 timer.start(); // Start the timer
                 userInput.setEnabled(running);
             }
         });

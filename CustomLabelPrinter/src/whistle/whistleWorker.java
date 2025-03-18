@@ -48,6 +48,7 @@ public class whistleWorker{
     public void initialize() throws InterruptedException
     {
     	//take 10-20 secs to start
+		running = true;
     	telnet = new Telnet("167.110.212.137", 23, System.out);
 		Thread myThread = new Thread(new Runnable() {
            @Override
@@ -62,7 +63,6 @@ public class whistleWorker{
 		myThread.start();
 		initialize(telnet);
 		Thread.sleep(1000);
-		running = true;
     }
     
 	public void process(Command command)
@@ -74,14 +74,14 @@ public class whistleWorker{
        {
     	   if(Integer.parseInt(quantity) > 5000)
     	   {
-    		   systemConsole.append("Invalid quantity, skipping...\n");
+    		   appendConsole("Invalid quantity, skipping...\n");
     		   break;
     	   }
     	   if(checkCondition(telnet,"Order # [[0;7m") && !checkCondition(telnet,"Prod [[0;7m"))
     	   {
     		   telnet.sendCommand(orderNum + "\n");
     	   }
-    	   systemConsole.append("Waiting for order to be ready...\n");
+    	   appendConsole("Waiting for order to be ready...\n");
     	    //waitResponse(telnet,"Prod [[0;7m");
            try {
         	   if(!verifyOrder(telnet))
@@ -98,14 +98,14 @@ public class whistleWorker{
 	   					break;
 	   				} else if (response.contains("ReportProd"))
 	   				{
-	   					systemConsole.append("OOPS!! returning to production...\n");
+	   					appendConsole("OOPS!! returning to production...\n");
 	   					reset(telnet);
 	   					Thread.sleep(300);
 	   					continue outer;
 	   				}
 	   	    	   Thread.sleep(300);
 	           }
-		       systemConsole.append("Filling product number\n");
+		       appendConsole("Filling product number\n");
 		       telnet.sendCommand(prodNum + "\n");
 		       while(running)
 	           {
@@ -115,14 +115,14 @@ public class whistleWorker{
 	   					break;
 	   				} else if (response.contains("Product not found on order"))
 	   				{
-	   					systemConsole.append("Product not found!\n");
+	   					appendConsole("Product not found!\n");
 	   					notfound = true;
 	   					reset(telnet);
 	   					break;
 	   				} else if (response.contains("Invalid Order Number")) {
 	   					notfound = true;
 	   					reset(telnet);
-	   					systemConsole.append("Invalid Order Number!\n");
+	   					appendConsole("Invalid Order Number!\n");
 	   					break;
 	   				}
 	   	    	   Thread.sleep(300);
@@ -135,14 +135,14 @@ public class whistleWorker{
 		       String itemPackNum = itemPack[0].trim() + itemPack[1].trim();
 		       if(autoSequence)
 		       {
-			       systemConsole.append("Item: " + itemPack[0] + "\n");
-			       systemConsole.append("Pack: " + itemPack[1] + "\n");
+			       appendConsole("Item: " + itemPack[0] + "\n");
+			       appendConsole("Pack: " + itemPack[1] + "\n");
 			       sequenceInput =String.valueOf(sequenceGetter.getSequence(orderNum,itemPack[0].trim(),itemPack[1].trim()));
 		       }
 		       int sequenceInteger = 1000 + Integer.parseInt(sequenceInput);
 		       String sequence = String.valueOf(sequenceInteger);
 		       
-		       systemConsole.append("Setting quantity\n");
+		       appendConsole("Setting quantity\n");
 		       if(!setQuantity(telnet,quantity))
 		       {
 		    	   continue;   
@@ -169,12 +169,12 @@ public class whistleWorker{
 		    	   setCopiesQuantity(telnet,copiesNum);
 		    	   Thread.sleep(300);
 		       }
-		       systemConsole.append("Bulding label\n");
+		       appendConsole("Bulding label\n");
 		       boolean success = buildLabel(telnet);
 		       if(success)
 		       {
 		    	   sequenceGetter.updateSequence(itemPackNum, Integer.valueOf(hour) , Integer.valueOf(sequenceInput));
-		    	   systemConsole.append(sequenceGetter.getSequenceMap().toString() + "\n");
+		    	   appendConsole(sequenceGetter.getSequenceMap().toString() + "\n");
 		    	   break;
 		       } else {
 	    		   reset(telnet);
@@ -212,11 +212,11 @@ public class whistleWorker{
 		Thread.sleep(300);
 		telnet.sendCommand("\n");
 		Thread.sleep(300);
-		systemConsole.append("Checking ready\n");
+		appendConsole("Checking ready\n");
 		String buildResponse = checkBuildResponse(telnet);
 		if(buildResponse.equals("ready"))
 		{
-			systemConsole.append("Ready!\n");
+			appendConsole("Ready!\n");
 			telnet.sendCommand("\n");
 			if(!setKillDate(telnet))
 			{
@@ -226,7 +226,7 @@ public class whistleWorker{
    			{
 				if(checkCondition(telnet,"Lot Table"))
 				{
-					systemConsole.append("Updating lot table...\n");
+					appendConsole("Updating lot table...\n");
 				} else if (checkCondition(telnet,"Entry must appear"))
 				{
 					telnet.sendCommand("\n");
@@ -234,19 +234,19 @@ public class whistleWorker{
 					Thread.sleep(500);
 					setKillDate(telnet);
 				}
-				systemConsole.append("Looking for new order\n");
+				appendConsole("Looking for new order\n");
    		    	telnet.sendCommand("\n");
    		    	Thread.sleep(300);
    			}
-			systemConsole.append("Done!!!\n");
+			appendConsole("Done!!!\n");
 			count = count + 1;
-		    systemConsole.append("Successful builds: " + count + "\n");
+		    appendConsole("Successful builds: " + count + "\n");
 		    return true;
 		} else if (buildResponse.equals("Backflush")){
 			backflush = true;
 			return false;
 		} else {
-			systemConsole.append(buildResponse + "\n");
+			appendConsole(buildResponse + "\n");
 			return false;
 		}
 	}
@@ -257,7 +257,7 @@ public class whistleWorker{
  	   while(running)
  	   {
  		   	count++;
-				systemConsole.append("Verifying order number filled...\n");
+				appendConsole("Verifying order number filled...\n");
 				if(checkCondition(telnet,"[" + orderNum))
 				{
 					return true;
@@ -273,7 +273,7 @@ public class whistleWorker{
 	
 	public boolean setKillDate(Telnet telnet) throws InterruptedException, IOException
 	{
-		systemConsole.append("Setting kill date\n");
+		appendConsole("Setting kill date\n");
 		waitResponse(telnet,"Kill Date");
 		if(checkCondition(telnet,"Enter kill date"))
 		{
@@ -287,12 +287,12 @@ public class whistleWorker{
 				telnet.sendCommand(getDate("yyyy-MM-dd"));
 				Thread.sleep(200);
 			}
-			systemConsole.append("Kill date set!\n");
+			appendConsole("Kill date set!\n");
 			int count = 0;
 			while(running)
 			{
 				count++;
-				systemConsole.append("Confirming kill date...\n");
+				appendConsole("Confirming kill date...\n");
 				if(checkCondition(telnet,"Kill Date [[0;7m" + getDate("yyyy-MM-dd") + " "))
 				{
 					break;
@@ -309,10 +309,10 @@ public class whistleWorker{
 	
 	public void setCopiesQuantity(Telnet telnet,String copiesNum) throws IOException, InterruptedException
 	{
-		systemConsole.append("Setting copies quantity\n");
+		appendConsole("Setting copies quantity\n");
 		while(!checkCondition(telnet,"Copies [[0;7m"))
 		{
-			systemConsole.append("Looking for copies quantity input\n");
+			appendConsole("Looking for copies quantity input\n");
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 		}
@@ -325,7 +325,7 @@ public class whistleWorker{
 		while(running)
 		{
 			count++;
-			systemConsole.append("Checking build response...\n");
+			appendConsole("Checking build response...\n");
 			String response = telnet.getResponse();
 			if(response.contains("Ready to build"))
 			{
@@ -350,7 +350,7 @@ public class whistleWorker{
 	
 	public boolean setSequence(Telnet telnet,String sequence) throws InterruptedException, IOException
 	{
-		systemConsole.append("Setting sequence\n");
+		appendConsole("Setting sequence\n");
 		if(prodNum.equals("12623"))
 		{
 			telnet.sendCommand("0");
@@ -361,7 +361,7 @@ public class whistleWorker{
 	    int count = 0;
 	    while(!checkCondition(telnet,"([0;7mOkay"))
 		{
-	    	systemConsole.append("Confirming sequence\n");
+	    	appendConsole("Confirming sequence\n");
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 			count++;
@@ -373,7 +373,7 @@ public class whistleWorker{
 		}
 		telnet.sendCommand("\n");
 		Thread.sleep(300);
-		systemConsole.append("Finalizing sequence\n");
+		appendConsole("Finalizing sequence\n");
 		if(checkCondition(telnet,"Sequence ["))
 		{
 			//issue
@@ -385,7 +385,7 @@ public class whistleWorker{
 	public String setHour(Telnet telnet) throws InterruptedException
 	{
 		String hour = getHour();
-		systemConsole.append("Setting hour\n");
+		appendConsole("Setting hour\n");
 		if(prodNum.equals("12623"))
 		{
 			telnet.sendCommand("98\n");
@@ -434,16 +434,16 @@ public class whistleWorker{
 	
 	public boolean setDate(Telnet telnet) throws InterruptedException, IOException
 	{
-		systemConsole.append("Setting prod date\n");
+		appendConsole("Setting prod date\n");
 		int count = 0;
 		while(!checkCondition(telnet,"Prod Date [[0;7m"))
 		{
-			systemConsole.append("Looking for prod date\n");
+			appendConsole("Looking for prod date\n");
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 			if(checkCondition(telnet,"Full pallet is"))
 		    {
-		    	systemConsole.append("CONFIRMING PALLET QUANTITY...\n");
+		    	appendConsole("CONFIRMING PALLET QUANTITY...\n");
 		    	 while(!checkCondition(telnet,"([0;7m  Yes"))
 		 		{
 		 		    telnet.sendCommand(getArrowKey("up"));
@@ -491,7 +491,7 @@ public class whistleWorker{
 	
 	public boolean setQuantity(Telnet telnet,String quantity) throws InterruptedException, IOException
 	{
-		systemConsole.append("Setting quantity\n");
+		appendConsole("Setting quantity\n");
 		int count = 0;
 		while(running)
 		{
@@ -499,7 +499,7 @@ public class whistleWorker{
 			{
 				break;
 			}
-			systemConsole.append("Looking for quantity input\n");
+			appendConsole("Looking for quantity input\n");
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 			count++;
@@ -509,12 +509,12 @@ public class whistleWorker{
 				return false;
 			}
 		}
-		systemConsole.append("Setting quantity input of " + quantity + "\n");
+		appendConsole("Setting quantity input of " + quantity + "\n");
 	    telnet.sendCommand(quantity + "\n");
 	    Thread.sleep(300);
 	    if(checkCondition(telnet,"Full pallet is"))
 	    {
-	    	systemConsole.append("CONFIRMING PALLET QUANTITY...\n");
+	    	appendConsole("CONFIRMING PALLET QUANTITY...\n");
 	    	 while(!checkCondition(telnet,"([0;7m  Yes"))
 	 		{
 	 		    telnet.sendCommand(getArrowKey("up"));
@@ -556,7 +556,7 @@ public class whistleWorker{
 	
 	public void initialize(Telnet telnet) throws InterruptedException
 	{
-		   systemConsole.append("Loggining in telnet\n");
+		   appendConsole("Loggining in telnet\n");
 	       Thread.sleep(1000);
 	       telnet.sendCommand("pdgwinterm7\n");
 	       Thread.sleep(300);
@@ -565,7 +565,7 @@ public class whistleWorker{
 	       telnet.sendCommand("poultry\n");
 	       waitResponse(telnet,"Logon");
 	       Thread.sleep(1000);
-		   systemConsole.append("Loggining in user: " + username + "\n");
+		   appendConsole("Loggining in user: " + username + "\n");
 	       telnet.sendCommand(username + "\n");
 	       Thread.sleep(300);
 	       telnet.sendCommand(password + "\n");
@@ -577,7 +577,7 @@ public class whistleWorker{
 	       Thread.sleep(300);
 	       telnet.sendCommand("1");
 	       waitResponse(telnet,"Order #");
-	       systemConsole.append("Worker ready!\n");
+	       appendConsole("Worker ready!\n");
 	}
 	
 	public boolean checkCondition(Telnet telnet,String condition)
@@ -671,7 +671,7 @@ public class whistleWorker{
         }
         
         for (double number : largeNumbers) {
-        	systemConsole.append("BACKFLUSH: " + number + "\n");
+        	appendConsole("BACKFLUSH: " + number + "\n");
         	saveBackflush(String.valueOf(number));
         }
 	}
@@ -706,6 +706,12 @@ public class whistleWorker{
 		this.prodNum = command.getProdNum();
 		this.quantity = command.getQuantity();
 		this.sequenceInput = command.getSequence();
+	}
+	
+	public void appendConsole(String text)
+	{
+		systemConsole.append(text);
+		systemConsole.setCaretPosition(systemConsole.getDocument().getLength());
 	}
 	
 	public void stop() throws IOException
