@@ -207,7 +207,7 @@ public class whistleWorker{
 					telnet.sendCommand(getArrowKey("up"));
 				}
 			}
-			Thread.sleep(300);
+			Thread.sleep(500);
 		}
 		Thread.sleep(300);
 		telnet.sendCommand("\n");
