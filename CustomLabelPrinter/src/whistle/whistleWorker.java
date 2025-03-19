@@ -194,6 +194,7 @@ public class whistleWorker{
 	
 	public boolean buildLabel(Telnet telnet) throws InterruptedException, IOException, ParseException
 	{
+		Thread.sleep(300);
 		while(!checkCondition(telnet,"([0;7m  OK"))
 		{
 			if(checkCondition(telnet,"([0;7m  Yes"))
@@ -207,7 +208,7 @@ public class whistleWorker{
 					telnet.sendCommand(getArrowKey("up"));
 				}
 			}
-			Thread.sleep(500);
+			Thread.sleep(300);
 		}
 		Thread.sleep(300);
 		telnet.sendCommand("\n");
