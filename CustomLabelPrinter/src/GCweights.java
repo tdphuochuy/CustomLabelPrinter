@@ -61,12 +61,12 @@ public class GCweights extends JPanel{
         inputPanel.add(textField);
         
         JLabel userLabel = new JLabel("username");
-        JTextField userField = new JTextField(8);
+        JTextField userField = new JTextField("pmambo",8);
         userPanel.add(userLabel);
         userPanel.add(userField);
         
         JLabel passLabel = new JLabel("pass");
-        JPasswordField  passField = new JPasswordField(5);
+        JPasswordField  passField = new JPasswordField("4292",5);
         passPanel.add(passLabel);
         passPanel.add(passField);
  
