@@ -201,6 +201,10 @@ public class whistleWorker{
 			{
 				telnet.sendCommand("\n");
 			} else {
+				if(checkCondition(telnet,"([0;7m  OK"))
+				{
+					break;
+				}
 				if(prodNum.equals("22486"))
 				{
 					telnet.sendCommand(getArrowKey("down"));
@@ -208,6 +212,12 @@ public class whistleWorker{
 					telnet.sendCommand(getArrowKey("up"));
 				}
 			}
+			Thread.sleep(300);
+		}
+		if(checkCondition(telnet,"[0;7m Back"))
+		{
+			appendConsole("Passed Ok, getting back...\n");
+			telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 		}
 		Thread.sleep(300);
