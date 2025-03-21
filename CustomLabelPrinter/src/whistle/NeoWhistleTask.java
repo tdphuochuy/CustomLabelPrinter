@@ -113,6 +113,11 @@ public class NeoWhistleTask implements Runnable {
 				userConsole.append("Enter quantity\n");
 				String quantity = scanner.nextLine();
 				String sequence = "1";
+				if(prodNum.equals("skip") || quantity.equals("skip"))
+				{
+					userConsole.append("Skipping...\n");
+					continue;
+				}
 				if(!autoSequence)
 				{
 					userConsole.append("Enter sequence\n");
