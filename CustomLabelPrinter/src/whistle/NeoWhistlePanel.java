@@ -4,8 +4,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.stream.Collectors;
+
 import javax.swing.*;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import config.Config;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
@@ -19,13 +26,13 @@ public class NeoWhistlePanel extends JPanel {
     private boolean running;
     private NeoWhistleTask whistleTask;
     private Thread thread;
-    public NeoWhistlePanel(JFrame frame) {
+    public NeoWhistlePanel(JFrame frame) throws ParseException {
         this.frame = frame;
         this.running = false;
         setLayout(new BorderLayout());
 
         // User Input Console
-        userConsole = new JTextArea(15, 20);
+        userConsole = new JTextArea(14, 20);
         userConsole.setEditable(false);
         JScrollPane userScrollPane = new JScrollPane(userConsole);
         userConsole.setLineWrap(true);
@@ -33,7 +40,7 @@ public class NeoWhistlePanel extends JPanel {
         userConsole.setMargin(new Insets(5, 5, 5, 5));
         
         // System Message Console
-        systemConsole = new JTextArea(15, 20);
+        systemConsole = new JTextArea(14, 20);
         systemConsole.setEditable(false);
         JScrollPane systemScrollPane = new JScrollPane(systemConsole);
         systemConsole.setLineWrap(true);
@@ -122,6 +129,45 @@ public class NeoWhistlePanel extends JPanel {
             }
         });
         
+        JPanel commandPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        
+        InputStream inputStream = Config.class.getClassLoader().getResourceAsStream("config/commands.json");
+        String content = new BufferedReader(new InputStreamReader(inputStream))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+    	JSONParser jsonParser = new JSONParser();
+	    JSONObject commandsObj = (JSONObject) jsonParser.parse(content);
+	    for(Object key : commandsObj.keySet())
+	    {
+	    	String quantity = commandsObj.get(key).toString();
+	    	JButton commandbtn = new JButton(key + " (" + quantity + ")");
+	    	commandbtn.setBackground(Color.white);
+	    	commandPanel.add(commandbtn);
+	    	
+	    	commandbtn.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if(whistleTask != null)
+	                {
+	                	if(whistleTask.isRunning())
+	                	{
+	                		commandbtn.setEnabled(false);
+	                		whistleTask.addCommand(key.toString(), quantity, "1");
+	                		
+	                		 Timer timer = new Timer(300, new ActionListener() {
+	                             @Override
+	                             public void actionPerformed(ActionEvent evt) {
+	                            	 commandbtn.setEnabled(true); // Re-enable the button
+	                             }
+	                         });
+	                         timer.setRepeats(false); // Make sure the timer only runs once
+	                         timer.start(); // Start the timer
+	                	}
+	                }
+	            }
+	        });
+	    }
+        
         loginPanel.add(usernamelbl);
         loginPanel.add(usernameField);
         loginPanel.add(passwordlbl);
@@ -130,6 +176,7 @@ public class NeoWhistlePanel extends JPanel {
         loginPanel.add(startButton);
         
         add(consolePanel, BorderLayout.SOUTH);
+        add(commandPanel, BorderLayout.CENTER);
         add(loginPanel, BorderLayout.NORTH);
         
         // Press Enter to execute command

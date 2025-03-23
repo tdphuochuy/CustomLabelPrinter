@@ -6,6 +6,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import chatSystem.ChatPanel;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -22,11 +23,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-   public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException {
+   public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setSize(550, 400);
+       frame.setSize(550, 420);
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();

@@ -66,7 +66,7 @@ public class NeoWhistleTask implements Runnable {
 	                			try {
 	                            	JSONParser parser = new JSONParser();
 									JSONObject obj = (JSONObject)parser.parse(message);
-									System.out.println(obj);								String type = obj.get("type").toString();
+									String type = obj.get("type").toString();
 									if(type.equals("whistle_command"))
 									{
 										JSONObject data = (JSONObject) obj.get("data");
@@ -131,6 +131,14 @@ public class NeoWhistleTask implements Runnable {
 		}
 	}
 	
+	public void addCommand(String prodNum,String quantity,String sequence)
+	{
+		if(manager != null)
+		{
+			manager.addCommand(new Command(prodNum,quantity,sequence));
+		}
+	}
+	
 	public void stop() throws IOException {
         running = false;
         if(manager != null)
@@ -138,4 +146,9 @@ public class NeoWhistleTask implements Runnable {
         	manager.stop();
         }
     }
+	
+	public boolean isRunning()
+	{
+		return running;
+	}
 }
