@@ -41,6 +41,9 @@ public class Main {
                if(selectedTabTitle.equals("Chat"))
                {
             	   tabbedPane.setBackgroundAt(selectedIndex, null);
+               } else if (selectedIndex == 2)
+               {
+            	   neoWhistle.focusInput();
                }
            }
        });

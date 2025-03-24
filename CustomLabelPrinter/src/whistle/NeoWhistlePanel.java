@@ -217,4 +217,9 @@ public class NeoWhistlePanel extends JPanel {
     		startButton.doClick();
     	}
     }
+    
+    public void focusInput()
+    {
+    	userInput.requestFocusInWindow();
+    }
 }
