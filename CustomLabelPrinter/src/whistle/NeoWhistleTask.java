@@ -22,6 +22,7 @@ import org.json.simple.parser.ParseException;
 public class NeoWhistleTask implements Runnable {
 	private String username;
     private String password;
+    private String orderNum;
     private boolean autoSequence;
     private volatile boolean running = true;
     private JTextArea systemConsole;
@@ -35,15 +36,27 @@ public class NeoWhistleTask implements Runnable {
         this.userConsole = userConsole;
     }
 	
+	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole,String orderNum) {
+        this.username = username;
+        this.password = password;
+        this.autoSequence = autoSequence;
+        this.systemConsole = systemConsole;
+        this.userConsole = userConsole;
+        this.orderNum = orderNum;
+    }
+	
 	@Override
     public void run()
 	{
 		
 		try {
-			userConsole.append("Enter order number:\n");
 			Scanner scanner = new Scanner(System.in);
-			String orderNum = scanner.nextLine();
-			System.out.println(orderNum);
+			if(orderNum == null)
+			{
+				userConsole.append("Enter order number:\n");
+				orderNum = scanner.nextLine();
+			}
+			systemConsole.append("Starting with order #" + orderNum + "\n");
 			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
 			
 			ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -111,6 +124,7 @@ public class NeoWhistleTask implements Runnable {
                 userConsole.setCaretPosition(userConsole.getDocument().getLength());
 				String prodNum = scanner.nextLine();
 				userConsole.append("Enter quantity\n");
+                userConsole.setCaretPosition(userConsole.getDocument().getLength());
 				String quantity = scanner.nextLine();
 				String sequence = "1";
 				if(prodNum.equals("skip") || quantity.equals("skip"))

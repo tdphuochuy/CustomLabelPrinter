@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
+   private static NeoWhistlePanel neoWhistle;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
@@ -64,7 +65,8 @@ public class Main {
        reprintPanel.add(new reprintPanel(frame));
        
        JPanel neoWhistlePanel = new JPanel();
-       neoWhistlePanel.add(new NeoWhistlePanel(frame));
+       neoWhistle = new NeoWhistlePanel(frame);
+       neoWhistlePanel.add(neoWhistle);
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
@@ -104,9 +106,10 @@ public class Main {
                        @Override
                        public void onMessage(String message) {
                			try {
-                           	JSONParser parser = new JSONParser();
+                           		JSONParser parser = new JSONParser();
 								JSONObject obj = (JSONObject)parser.parse(message);
-								System.out.println(obj);								String type = obj.get("type").toString();
+								System.out.println(obj);
+								String type = obj.get("type").toString();
 								if (type.equals("whistle_order_request"))
 								{
 									JSONObject data = (JSONObject) obj.get("data");
@@ -118,6 +121,11 @@ public class Main {
 									responseObj.put("data",html);
 									System.out.println(html.substring(0,200));
 									send(responseObj.toJSONString());
+								} else if (type.equals("whistle_start_request"))
+								{
+									JSONObject data = (JSONObject) obj.get("data");
+									String orderNum = data.get("orderNum").toString();
+									neoWhistle.startNeoWhistle(orderNum);
 								}
 							} catch (Exception e) {
 								// TODO Auto-generated catch block

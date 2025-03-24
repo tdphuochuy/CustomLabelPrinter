@@ -26,6 +26,8 @@ public class NeoWhistlePanel extends JPanel {
     private boolean running;
     private NeoWhistleTask whistleTask;
     private Thread thread;
+    private JButton startButton;
+    private String orderNum;
     public NeoWhistlePanel(JFrame frame) throws ParseException {
         this.frame = frame;
         this.running = false;
@@ -77,7 +79,7 @@ public class NeoWhistlePanel extends JPanel {
         
         JCheckBox autoSequencecb = new JCheckBox("Auto sequence",true);
         
-        JButton startButton = new JButton("");
+        startButton = new JButton("");
         startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLAY,12,Color.GREEN));
         startButton.setBackground(Color.white);
         startButton.setPreferredSize(new Dimension(35, 20));
@@ -94,7 +96,12 @@ public class NeoWhistlePanel extends JPanel {
 	     				 {
 	             			 String username = usernameField.getText();
 	             			 String password = passwordField.getText();
-	             			 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole);
+	             			 if(orderNum != null)
+	             			 {
+	             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,orderNum);
+	             			 } else {
+	             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole);
+	             			 }
 	             			 thread = new Thread(whistleTask);
 	             	         thread.start();
 	             	         running = true;
@@ -200,5 +207,14 @@ public class NeoWhistlePanel extends JPanel {
             }
             userInput.setText("");
         }
+    }
+    
+    public void startNeoWhistle(String orderNum)
+    {
+    	if(!running)
+    	{
+    		this.orderNum = orderNum;
+    		startButton.doClick();
+    	}
     }
 }
