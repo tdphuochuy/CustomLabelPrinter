@@ -205,14 +205,12 @@ public class whistleWorker{
 				{
 					break;
 				}
-				/*
 				if(prodNum.equals("22486"))
 				{
 					telnet.sendCommand(getArrowKey("down"));
 				} else {
 					telnet.sendCommand(getArrowKey("up"));
-				}*/
-				telnet.sendCommand(getArrowKey("down"));
+				}
 			}
 			Thread.sleep(300);
 		}
