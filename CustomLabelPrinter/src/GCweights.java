@@ -8,6 +8,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -120,6 +121,17 @@ public class GCweights extends JPanel{
         this.add(userPanel);
         this.add(passPanel);
         this.add(button);
+        
+        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
+
+        try (FileWriter writer = new FileWriter(file)) {
+            // Opening the file in write mode will automatically overwrite the contents, 
+            // so the file will be cleared.
+            writer.write(""); // Clear the file by writing an empty string
+            System.out.println("File has been cleared.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public void run(String username,String pass,String orderNum)
