@@ -165,6 +165,7 @@ public class NeoWhistlePanel extends JPanel {
 	                             @Override
 	                             public void actionPerformed(ActionEvent evt) {
 	                            	 commandbtn.setEnabled(true); // Re-enable the button
+	                             	 userInput.requestFocusInWindow();
 	                             }
 	                         });
 	                         timer.setRepeats(false); // Make sure the timer only runs once
