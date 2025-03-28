@@ -523,6 +523,10 @@ public class whistleWorker{
 		appendConsole("Setting quantity input of " + quantity + "\n");
 	    telnet.sendCommand(quantity + "\n");
 	    Thread.sleep(300);
+	    if(!confirmQuantity(telnet,quantity))
+	    {
+	    	return setQuantity(telnet,quantity);
+	    }
 	    if(checkCondition(telnet,"Full pallet is"))
 	    {
 	    	appendConsole("CONFIRMING PALLET QUANTITY...\n");
@@ -533,7 +537,26 @@ public class whistleWorker{
 	 		}
 		    telnet.sendCommand("\n");
 	    }
-	    return true;
+    	return true;
+
+	}
+	
+	public boolean confirmQuantity(Telnet telnet, String quantity) throws InterruptedException
+	{
+		appendConsole("Confirm quantity...\n");
+		int count = 0;
+		while(count < 10)
+		{
+			count++;
+			String response = telnet.getResponse();			
+			if(response.contains("Quantity [" + quantity))
+			{
+				return true;
+			}
+			Thread.sleep(200);
+		}
+		
+		return false;
 	}
 	
 	public void reset(Telnet telnet) throws IOException, InterruptedException
