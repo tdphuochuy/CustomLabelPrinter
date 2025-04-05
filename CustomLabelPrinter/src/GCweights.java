@@ -114,7 +114,6 @@ public class GCweights extends JPanel{
 	              			 String password = passField.getText();
 	              			 String orderNum = textField.getText();
 	              			 run(username,password,orderNum);
-                         JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
@@ -180,7 +179,6 @@ public class GCweights extends JPanel{
             if (response.code() == 200) {
             	String body = response.body().string();
             	String session = body.substring(body.indexOf("?session=")+9,body.indexOf("&cmp="));
-            	System.out.println(session);
             	getTrackingNum(client,session,orderNum,username);
             } else {
             	System.out.println(response.code());
@@ -280,7 +278,7 @@ public class GCweights extends JPanel{
 	            System.err.println("An error occurred while writing to the file.");
 	            e.printStackTrace();
 	        }
-
+         JOptionPane.showMessageDialog(frame, "Label printed!", "Alert", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void printList(List<String> trackingList,List<String> weightList,int listNum)
@@ -392,7 +390,7 @@ public class GCweights extends JPanel{
 	}
 	
 	   public void sendEmail()
-	    {
+	   {
 	    	
 	    	Properties props = new Properties();
 	        props.put("mail.smtp.auth", "true");
@@ -426,12 +424,12 @@ public class GCweights extends JPanel{
 
 	            Transport.send(message);
 
-	            System.out.println("Email sent!");
+                JOptionPane.showMessageDialog(frame, "Email sent!", "Alert", JOptionPane.INFORMATION_MESSAGE);
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	    }
+	   }
 	
 	public String randomWeight()
 	{
