@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,10 +17,23 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,6 +50,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.AreaBreakType;
+
 import config.Config;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -44,6 +66,7 @@ import okhttp3.Response;
 
 public class GCweights extends JPanel{
 	private JFrame frame;
+	private String recipient = "tdphuochuy@gmail.com";
     public GCweights(JFrame frame) {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -86,7 +109,7 @@ public class GCweights extends JPanel{
               		 if(userField.getText().length() > 0)
               		 {
               			if(passField.getText().length() > 0)
-                 		 {
+                 		{
 	              			 String username = userField.getText();
 	              			 String password = passField.getText();
 	              			 String orderNum = textField.getText();
@@ -110,6 +133,8 @@ public class GCweights extends JPanel{
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         button.setEnabled(true); // Re-enable the button
+                        userField.setText("pmambo");
+                        passField.setText("4292");
                     }
                 });
                 timer.setRepeats(false); // Make sure the timer only runs once
@@ -196,7 +221,7 @@ public class GCweights extends JPanel{
             			for(Element tr : table.getElementsByTag("tr"))
             			{
             				String content = tr.html();
-            				if(content.contains("105884") && content.toLowerCase().contains("pmambo"))
+            				if(content.contains("105884") && content.toLowerCase().contains(username.toLowerCase()))
             				{
             					String trackingNum = tr.getElementsByTag("a").get(0).text();
             					if(list.contains(trackingNum))
@@ -207,7 +232,12 @@ public class GCweights extends JPanel{
             					}
             				}
             			}
-            			splitList(list);
+            			if(username.toLowerCase().equals("npham"))
+            			{
+            				generatePdf(list);
+            			} else {
+            				splitList(list);
+            			}
             			break;
             		}
             	}
@@ -292,6 +322,116 @@ public class GCweights extends JPanel{
             System.out.println("Error: " + e.getMessage());
         }
 	}
+	
+	public void generatePdf(List<String> list) throws FileNotFoundException
+	{
+		String dest = "GoldCreek_TareWeightLog.pdf";
+        PdfDocument pdf = new PdfDocument(new PdfWriter(dest));
+        com.itextpdf.layout.Document document = new  com.itextpdf.layout.Document(pdf);        
+
+        int chunkSize = 35;
+		for (int i = 0; i < list.size(); i += chunkSize) {
+			Paragraph title = new Paragraph("Gold Creek tare weight recording log")
+	                .setFontSize(10)
+	                .setMarginLeft(30);
+	        document.add(title);
+	        
+	        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	        String formattedDate = dateFormat.format(new Date());
+	        // Date
+	        document.add(new Paragraph("Date: " + formattedDate).setFontSize(10).setMarginLeft(30));
+			
+            int end = Math.min(i + chunkSize, list.size());
+            List<String> trackingChunk = list.subList(i, end);
+            document.add(pdfTableGen(trackingChunk));
+            if(end < list.size())
+            {
+                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            }
+        }
+        
+       // document.add(table);
+        document.close();
+
+        System.out.println("PDF created: " + new File(dest).getAbsolutePath());
+        sendEmail();
+	}
+	
+	public Table pdfTableGen(List<String> list)
+	{
+        float[] columnWidths = {100, 150, 100, 150};  // customize as needed
+		Table table = new Table(columnWidths);
+		        
+		        table.setMarginLeft(30);
+		        table.setMarginRight(30);
+		        // Add headers
+		        table.addHeaderCell(new Cell().add(new Paragraph("Product code").setFontSize(10).setMarginLeft(5)).setPadding(2).setHeight(14));
+		        table.addHeaderCell(new Cell().add(new Paragraph("Tracking number").setFontSize(10).setMarginLeft(5)).setPadding(2).setHeight(14));
+		        table.addHeaderCell(new Cell().add(new Paragraph("Total weight").setFontSize(10).setMarginLeft(5)).setPadding(2).setHeight(14));
+		        table.addHeaderCell(new Cell().add(new Paragraph("Comment").setFontSize(10).setMarginLeft(5)).setPadding(2).setHeight(14));
+		
+		        // Add empty rows (e.g., 30 rows like the image)
+		        int rowCount = 35;
+		        for (int i = 0; i < rowCount; i++) {
+		        	if(i < list.size())
+		        	{
+			        	String trackingNum = list.get(i);
+			            table.addCell(new Cell().add(new Paragraph("20177").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph(trackingNum).setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph("2140").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph(" ").setFontSize(10).setMarginLeft(5)));
+		        	} else {
+		        		table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph(" ").setFontSize(10).setMarginLeft(5)));
+		        	}
+		        }
+		        
+		return table;
+	}
+	
+	   public void sendEmail()
+	    {
+	    	
+	    	Properties props = new Properties();
+	        props.put("mail.smtp.auth", "true");
+	        props.put("mail.smtp.starttls.enable", "true");
+	        props.put("mail.smtp.host", "smtp.gmail.com");
+	        props.put("mail.smtp.port", "587");
+
+	        Session session = Session.getInstance(props,
+	                new Authenticator() {
+	                    protected PasswordAuthentication getPasswordAuthentication() {
+	                        return new PasswordAuthentication("letitburn0001@gmail.com", "qybb syeg yief bphz");
+	                    }
+	                });
+
+	        try {
+	            Message message = new MimeMessage(session);
+	            message.setFrom(new InternetAddress("letitburn0001@gmail.com"));
+	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+	            message.setSubject("Gold Creek Tare Weight Log");
+
+	            MimeBodyPart messageBodyPart = new MimeBodyPart();
+
+	            MimeBodyPart attachmentPart = new MimeBodyPart();
+	            attachmentPart.attachFile(new File("GoldCreek_TareWeightLog.pdf"));
+
+	            Multipart multipart = new MimeMultipart();
+	            //multipart.addBodyPart(messageBodyPart);
+	            multipart.addBodyPart(attachmentPart);
+
+	            message.setContent(multipart);
+
+	            Transport.send(message);
+
+	            System.out.println("Email sent!");
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	
 	public String randomWeight()
 	{
