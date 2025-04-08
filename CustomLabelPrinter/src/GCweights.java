@@ -19,6 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -384,10 +387,8 @@ public class GCweights extends JPanel{
 	                .setMarginLeft(30);
 	        document.add(title);
 	        
-	        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	        String formattedDate = dateFormat.format(new Date());
 	        // Date
-	        document.add(new Paragraph("Date: " + formattedDate).setFontSize(10).setMarginLeft(30));
+	        document.add(new Paragraph("Date: " + getDate("MM/dd/yyyy")).setFontSize(10).setMarginLeft(30));
 			
             int end = Math.min(i + chunkSize, trackingList.size());
             List<String> trackingChunk = trackingList.subList(i, end);
@@ -508,6 +509,27 @@ public class GCweights extends JPanel{
 	            e.printStackTrace();
 	        }
 	   }
+	   
+	   public String getDate(String dateFormat)
+		{
+			LocalDate today;
+			LocalTime currentTime = LocalTime.now();
+	        int currentHour = currentTime.getHour();
+			if(currentHour < 5)
+			{
+				today = LocalDate.now().minusDays(1);
+			} else {
+				today= LocalDate.now();
+			}
+			
+	        // Define the formatter for MMDD
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+
+	        // Format the date
+	        String formattedDate = today.format(formatter);
+	        
+	        return formattedDate;
+		}
 	
 	public String randomWeight()
 	{
