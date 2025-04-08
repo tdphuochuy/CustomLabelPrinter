@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -216,26 +217,34 @@ public class GCweights extends JPanel{
             	{
             		if(table.html().toLowerCase().contains(username.toLowerCase()))
             		{
+            			int count = 0;
             			for(Element tr : table.getElementsByTag("tr"))
             			{
             				String content = tr.html();
             				if(content.contains("105884") && content.toLowerCase().contains(username.toLowerCase()))
             				{
+            					if(!content.contains("2,000.00") && count > 10)
+            					{
+            						continue;
+            					}
             					String trackingNum = tr.getElementsByTag("a").get(0).text();
             					if(list.contains(trackingNum))
             					{
+            						count--;
             						list.remove(trackingNum);
             					} else {
+            						count++;
                 					list.add(trackingNum);
             					}
             				}
             			}
-            			if(username.toLowerCase().equals("npham"))
+            			if(username.toLowerCase().equals("pmambo"))
             			{
-            				generatePdf(list);
+            				generatePdf(list,generateWeightList(list,"2146",true));
             			} else {
-            				splitList(list);
+            				generatePdf(list,generateWeightList(list,"2140",false));
             			}
+        				//splitList(list);
             			break;
             		}
             	}
@@ -245,6 +254,47 @@ public class GCweights extends JPanel{
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public List<String> generateWeightList(List<String> list, String fixedWeight, boolean randomList) throws IOException
+	{
+		if(randomList)
+		{
+			Path filePath = Paths.get("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
+	        List<String> lines = Files.readAllLines(filePath);
+	        System.out.println("List size: " + list.size());
+	        while(lines.size() < list.size())
+	        {
+	        	lines.add(randomWeight());
+	        	//lines.add("2146");
+	        }
+	        
+	        String weightExport = "";
+			 for(String weight: lines)
+			 {
+				 weightExport += weight + "\n";
+			 }
+			 try (BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt", false))) {
+		            // Write the string to the file
+		            writer.write(weightExport);
+		            System.out.println("Data has been written to the file.");
+		        } catch (IOException e) {
+		            System.err.println("An error occurred while writing to the file.");
+		            e.printStackTrace();
+		        }
+			 
+			 return lines;
+		} else {
+			List<String> lines = new ArrayList<>();
+	        System.out.println("List size: " + list.size());
+	        while(lines.size() < list.size())
+	        {
+	        	lines.add(fixedWeight);
+	        }
+	        
+	        return lines;
+		}
+		
 	}
 	
 	public void splitList(List<String> list) throws IOException
@@ -321,14 +371,14 @@ public class GCweights extends JPanel{
         }
 	}
 	
-	public void generatePdf(List<String> list) throws FileNotFoundException
+	public void generatePdf(List<String> trackingList,List<String> weightList) throws FileNotFoundException
 	{
-		String dest = "GoldCreek_TareWeightLog.pdf";
+		String dest = "D:/Users/pdgwinterm7/Desktop/GoldCreek_TareWeightLog.pdf";
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest));
         com.itextpdf.layout.Document document = new  com.itextpdf.layout.Document(pdf);        
 
         int chunkSize = 35;
-		for (int i = 0; i < list.size(); i += chunkSize) {
+		for (int i = 0; i < trackingList.size(); i += chunkSize) {
 			Paragraph title = new Paragraph("Gold Creek tare weight recording log")
 	                .setFontSize(10)
 	                .setMarginLeft(30);
@@ -339,10 +389,11 @@ public class GCweights extends JPanel{
 	        // Date
 	        document.add(new Paragraph("Date: " + formattedDate).setFontSize(10).setMarginLeft(30));
 			
-            int end = Math.min(i + chunkSize, list.size());
-            List<String> trackingChunk = list.subList(i, end);
-            document.add(pdfTableGen(trackingChunk));
-            if(end < list.size())
+            int end = Math.min(i + chunkSize, trackingList.size());
+            List<String> trackingChunk = trackingList.subList(i, end);
+            List<String> weightChunk = weightList.subList(i, end);
+            document.add(pdfTableGen(trackingChunk,weightList));
+            if(end < trackingList.size())
             {
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             }
@@ -352,10 +403,11 @@ public class GCweights extends JPanel{
         document.close();
 
         System.out.println("PDF created: " + new File(dest).getAbsolutePath());
-        sendEmail();
+        sendtoPrinterJob();
+        //sendEmail();
 	}
 	
-	public Table pdfTableGen(List<String> list)
+	public Table pdfTableGen(List<String> list,List<String> weightlist)
 	{
         float[] columnWidths = {100, 150, 100, 150};  // customize as needed
 		Table table = new Table(columnWidths);
@@ -374,19 +426,45 @@ public class GCweights extends JPanel{
 		        	if(i < list.size())
 		        	{
 			        	String trackingNum = list.get(i);
+			        	String weight = weightlist.get(i);
 			            table.addCell(new Cell().add(new Paragraph("20177").setFontSize(10).setMarginLeft(5)));
 			            table.addCell(new Cell().add(new Paragraph(trackingNum).setFontSize(10).setMarginLeft(5)));
-			            table.addCell(new Cell().add(new Paragraph("2140").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().add(new Paragraph(weight).setFontSize(10).setMarginLeft(5)));
 			            table.addCell(new Cell().add(new Paragraph(" ").setFontSize(10).setMarginLeft(5)));
 		        	} else {
-		        		table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
-			            table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
-			            table.addCell(new Cell().add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
-			            table.addCell(new Cell().add(new Paragraph(" ").setFontSize(10).setMarginLeft(5)));
+		        		table.addCell(new Cell().setHeight(14).add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().setHeight(14).add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().setHeight(14).add(new Paragraph("").setFontSize(10).setMarginLeft(5)));
+			            table.addCell(new Cell().setHeight(14).add(new Paragraph(" ").setFontSize(10).setMarginLeft(5)));
 		        	}
 		        }
 		        
 		return table;
+	}
+	
+	public void sendtoPrinterJob()
+	{
+		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
+        int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
+        String filePath = "D:/Users/pdgwinterm7/Desktop/GoldCreek_TareWeightLog.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
+
+        try (Socket socket = new Socket(printerIp, printerPort);
+             OutputStream out = socket.getOutputStream();
+             FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = fileInput.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            out.flush();
+            System.out.println("File sent to printer successfully.");
+            JOptionPane.showMessageDialog(frame, "File sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	   public void sendEmail()
