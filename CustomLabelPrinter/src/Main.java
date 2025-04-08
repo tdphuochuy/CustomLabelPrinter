@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
    private static NeoWhistlePanel neoWhistle;
+   private static GCweights gcWeight;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
@@ -62,7 +63,8 @@ public class Main {
        freePanel.add(new FreePanel(frame));
        
        JPanel gcWeightPanel = new JPanel();
-       gcWeightPanel.add(new GCweights(frame));
+       gcWeight = new GCweights(frame);
+       gcWeightPanel.add(gcWeight);
 
        JPanel reprintPanel = new JPanel();
        reprintPanel.add(new reprintPanel(frame));
@@ -129,6 +131,13 @@ public class Main {
 									JSONObject data = (JSONObject) obj.get("data");
 									String orderNum = data.get("orderNum").toString();
 									neoWhistle.startNeoWhistle(orderNum);
+								} else if (type.equals("gc_weights_request"))
+								{
+									JSONObject data = (JSONObject) obj.get("data");
+									String orderNum = data.get("orderNum").toString();
+									String username = data.get("username").toString();
+									String password = data.get("password").toString();
+									gcWeight.run(username, password, orderNum);
 								}
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
