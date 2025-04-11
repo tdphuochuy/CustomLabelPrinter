@@ -222,16 +222,17 @@ public class GCweights extends JPanel{
             		if(table.html().toLowerCase().contains(username.toLowerCase()))
             		{
             			int count = 0;
+            			List<String> splitPalletlist = new ArrayList<>();
             			for(Element tr : table.getElementsByTag("tr"))
             			{
             				String content = tr.html();
             				if(content.contains("105884") && content.toLowerCase().contains(username.toLowerCase()))
             				{
-            					if(!content.contains("2,000.00") && count > 10)
-            					{
-            						continue;
-            					}
             					String trackingNum = tr.getElementsByTag("a").get(0).text();
+            					if(!content.contains("2,000.00"))
+            					{
+            						splitPalletlist.add(trackingNum);
+            					}
             					if(list.contains(trackingNum))
             					{
             						count--;
@@ -239,6 +240,17 @@ public class GCweights extends JPanel{
             					} else {
             						count++;
                 					list.add(trackingNum);
+            					}
+            				}
+            			}
+            			for(String trackingNum : splitPalletlist)
+            			{
+            				if(list.contains(trackingNum))
+            				{
+            					int trackingNumIndex = list.indexOf(trackingNum);
+            					if(trackingNumIndex > (list.size() - 5))
+            					{
+            						list.remove(trackingNum);
             					}
             				}
             			}
