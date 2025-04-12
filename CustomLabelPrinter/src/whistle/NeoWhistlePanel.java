@@ -133,6 +133,7 @@ public class NeoWhistlePanel extends JPanel {
                  timer.setRepeats(false); // Make sure the timer only runs once
                  timer.start(); // Start the timer
                 userInput.setEnabled(running);
+            	 userInput.requestFocusInWindow();
             }
         });
         

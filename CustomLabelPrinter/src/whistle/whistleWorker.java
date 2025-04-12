@@ -537,6 +537,15 @@ public class whistleWorker{
 	 		}
 		    telnet.sendCommand("\n");
 	    }
+	    int quantityInt = Integer.parseInt(quantity);
+	    if(quantityInt > 49 && quantityInt < 100)
+	    {
+		    Thread.sleep(300);
+	    	if(checkCondition(telnet,"Quantity [[0;7m49.00"))
+	    	{
+	    		return setQuantity(telnet,quantity);
+	    	}
+	    }
     	return true;
 
 	}
