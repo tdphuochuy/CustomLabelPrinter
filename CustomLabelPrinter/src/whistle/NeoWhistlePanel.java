@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.*;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -144,10 +145,12 @@ public class NeoWhistlePanel extends JPanel {
                             .lines()
                             .collect(Collectors.joining("\n"));
     	JSONParser jsonParser = new JSONParser();
-	    JSONObject commandsObj = (JSONObject) jsonParser.parse(content);
-	    for(Object key : commandsObj.keySet())
+	    JSONArray commandsArray = (JSONArray) jsonParser.parse(content);
+	    for(Object obj : commandsArray)
 	    {
-	    	String quantity = commandsObj.get(key).toString();
+	    	JSONObject jsonObject = (JSONObject) obj;
+	    	String key = jsonObject.get("product").toString();
+	    	String quantity = jsonObject.get("quantity").toString();
 	    	JButton commandbtn = new JButton(key + " (" + quantity + ")");
 	    	commandbtn.setBackground(Color.white);
 	    	commandPanel.add(commandbtn);
