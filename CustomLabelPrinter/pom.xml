@@ -47,6 +47,11 @@
     <artifactId>jiconfont-swing</artifactId>
     <version>1.0.0</version>
 </dependency>
+   <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.2.3</version> <!-- use the latest version -->
+    </dependency>
 <dependency>
     <groupId>com.github.jiconfont</groupId>
     <artifactId>jiconfont-font_awesome</artifactId>
