@@ -309,7 +309,7 @@ public class whistleWorker{
 					break;
 				}
 				Thread.sleep(300);
-				if(count > 30)
+				if(count > 15)
 				{
 					return false;
 				}
@@ -350,7 +350,7 @@ public class whistleWorker{
 				telnet.sendCommand("\n");
 			}
 			Thread.sleep(300);
-			if(count > 30)
+			if(count > 15)
 			{
 				return "timeout";
 			}
@@ -376,7 +376,7 @@ public class whistleWorker{
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 			count++;
-			if(count > 30)
+			if(count > 15)
 			{
 				reset(telnet);
 				return false;
@@ -467,7 +467,7 @@ public class whistleWorker{
 	 			Thread.sleep(500);
 		    }
 			count++;
-			if(count > 30)
+			if(count > 15)
 			{
 				reset(telnet);
 				return false;
@@ -514,7 +514,7 @@ public class whistleWorker{
 		    telnet.sendCommand(getArrowKey("up"));
 			Thread.sleep(300);
 			count++;
-			if(count > 30)
+			if(count > 20)
 			{
 				reset(telnet);
 				return false;
@@ -658,7 +658,7 @@ public class whistleWorker{
 					return true;
 				}
 	    	   Thread.sleep(300);
-	    	   if(count > 30)
+	    	   if(count > 15)
 	    	   {		
 					reset(telnet);
 					break;

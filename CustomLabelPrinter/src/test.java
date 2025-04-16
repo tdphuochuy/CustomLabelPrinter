@@ -9,7 +9,8 @@ import java.time.format.DateTimeFormatter;
 public class test {
 
     public static void main(String[] args) {
-        String filePath = "breast.xlsx";
+        String filePath = "recap/carcass.xlsx";
+        String outputPath = "recap_output/carcass.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -17,11 +18,10 @@ public class test {
             Sheet sheet = workbook.getSheetAt(0); // First sheet
 
             // Example usage: write "Test value" to cell C2
-            setCellValue(sheet, "C", 2, "2nd");
-            setCellValue(sheet, "M", 2, getDate("MM/dd/yyyy"));
-
+            setDate(sheet);
+            clearValue(sheet);
             // Save changes
-            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 workbook.write(fos);
             }
 
@@ -29,6 +29,28 @@ public class test {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    
+    public static void setDate(Sheet sheet)
+    {
+    	setCellValue(sheet, "N", 2, getDate("MM/dd/yyyy"));
+    }
+    
+    public static void clearValue(Sheet sheet)
+    {
+    	// E5 = row 4, col 4; N15 = row 14, col 13
+        for (int rowIndex = 4; rowIndex <= 14; rowIndex++) {
+            Row row = sheet.getRow(rowIndex);
+            if (row == null) continue;
+
+            for (int colIndex = 4; colIndex <= 13; colIndex++) {
+                Cell cell = row.getCell(colIndex);
+                if (cell != null) {
+                    cell.setBlank(); // Clears the value
+                    // Alternatively, you can do: row.removeCell(cell);
+                }
+            }
         }
     }
 
