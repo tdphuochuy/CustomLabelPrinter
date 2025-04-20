@@ -41,7 +41,7 @@ public class paperworkGen{
 		
 	}
 	
-	public void start() throws ParseException
+	public void start() throws ParseException, InterruptedException
 	{
 		Map<String,Product> productMap = new TreeMap<>();
 
@@ -169,7 +169,7 @@ public class paperworkGen{
 		}
 	}
 	
-	public void evaluateData(Map<String,Product> map)
+	public void evaluateData(Map<String,Product> map) throws InterruptedException
 	{
 		breastGen breastExcel = new breastGen();
 		tenderGen tenderExcel = new tenderGen();
@@ -200,7 +200,9 @@ public class paperworkGen{
 		}
 		
 		breastExcel.generateExcel();
+		Thread.sleep(10000);
 		tenderExcel.generateExcel();
+		Thread.sleep(10000);
 		carcassExcel.generateExcel();
 	}
 	

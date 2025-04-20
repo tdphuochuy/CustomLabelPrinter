@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import paperwork.Product;
 
@@ -19,7 +20,7 @@ abstract class excelGen {
 	public Map<String,Map<Integer,List<Product>>> productMap = new TreeMap<>();
 	abstract public void setDate(Sheet sheet);
 	
-	abstract public void clear(Sheet sheet);
+	abstract public void clear(Workbook workbook,Sheet sheet);
 	
 	abstract public void generateExcel();
 	
@@ -128,6 +129,21 @@ abstract class excelGen {
 		 }
 		 
 		 return totalWeight;
+	 }
+	 
+	 public int getTotalCaseByProduct(Map<Integer,List<Product>> map)
+	 {
+		 int totalcase = 0;
+		 for(Integer key : map.keySet())
+		 {
+			 List<Product> list = map.get(key);
+			 for(Product product: list)
+			 {
+				 totalcase += product.getQuantity();
+			 }
+		 }
+		 
+		 return totalcase;
 	 }
 	 
 	 public String formatDouble(double value) {

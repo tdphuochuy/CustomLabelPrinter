@@ -30,7 +30,7 @@ public class carcassGen extends excelGen{
 
             // Example usage: write "Test value" to cell C2
             setDate(sheet);
-            clear(sheet);
+            clear(workbook,sheet);
             
             for(String key : productMap.keySet()) //for each productCode
             {
@@ -69,9 +69,10 @@ public class carcassGen extends excelGen{
     	setCellValue(sheet, "N", 2, getDate("MM/dd/yyyy"));
     }
     
-    public void clear(Sheet sheet)
+    public void clear(Workbook workbook,Sheet sheet)
     {
     	// E5 = row 4, col 4; N15 = row 14, col 13
+
         for (int rowIndex = 4; rowIndex <= 14; rowIndex++) {
             Row row = sheet.getRow(rowIndex);
             if (row == null) continue;
