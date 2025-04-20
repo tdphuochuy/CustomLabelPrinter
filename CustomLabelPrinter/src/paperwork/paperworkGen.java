@@ -29,22 +29,31 @@ import paperwork.gen.carcassGen;
 import paperwork.gen.tenderGen;
 
 public class paperworkGen{
-	private String username,password,orderNum;
+	private String username,password,orderNum,reworkOrderNum;
 	private String sessionId = "";
-	public paperworkGen(String username,String password,String orderNum)
+	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum)
 	{
 		this.username = username;
 		this.password = password;
 		this.orderNum = orderNum;
+		this.reworkOrderNum = reworkOrderNum;
 		//sessionId = getSessionId(); TO-DO uncomment
 		
 	}
 	
 	public void start() throws ParseException
 	{
-		Element dataTable = getData();
-		Map<String,Product> map = extractData(dataTable);
-		evaluateData(map);
+		Map<String,Product> productMap = new TreeMap<>();
+
+		Element dataTable = getData(orderNum);
+		extractData(productMap,dataTable);
+		if(reworkOrderNum.length() > 0)
+		{
+			Element dataTableRework = getData(reworkOrderNum);
+			extractData(productMap,dataTableRework);
+		}
+		
+		evaluateData(productMap);
 	}
 	
 	public String getSessionId()
@@ -79,7 +88,7 @@ public class paperworkGen{
 		return null;
 	}
 	
-	public Element getData()
+	public Element getData(String orderNum)
 	{
 		OkHttpClient client = new OkHttpClient();
 
@@ -122,9 +131,8 @@ public class paperworkGen{
 		return null;
 	}
 	
-	public Map<String,Product> extractData(Element table) throws ParseException
+	public void extractData(Map<String,Product> map,Element table) throws ParseException
 	{
-		Map<String,Product> map = new TreeMap<>();
 		InputStream inputStream = paperworkGen.class.getClassLoader().getResourceAsStream("paperwork/product_data.json");
         String inputData = new BufferedReader(new InputStreamReader(inputStream))
                             .lines()
@@ -148,6 +156,10 @@ public class paperworkGen{
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();
 				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
+				if(hour > 29 && hour < 54)
+				{
+					hour = hour - 30;
+				}
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
 				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
@@ -155,8 +167,6 @@ public class paperworkGen{
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
 			}
 		}
-		
-		return map;
 	}
 	
 	public void evaluateData(Map<String,Product> map)

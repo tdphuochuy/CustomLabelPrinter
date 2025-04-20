@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class test {
 
@@ -26,8 +27,10 @@ public class test {
     	{
     		if(table.html().toLowerCase().contains("pmambo"))
     		{
-    			paperworkGen ppw = new paperworkGen("pmambo","4292","test");
-    			Map<String,Product> map = ppw.extractData(table);
+    			Map<String,Product> map = new TreeMap<>();
+
+    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","test");
+    			ppw.extractData(map,table);
     			ppw.evaluateData(map);
     			break;
     		}
