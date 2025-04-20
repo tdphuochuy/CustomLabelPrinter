@@ -189,7 +189,9 @@ public class paperworkGen{
 			}
 		}
 		
-		System.out.println(carcassExcel.productMap);
+		breastExcel.generateExcel();
+		tenderExcel.generateExcel();
+		carcassExcel.generateExcel();
 	}
 	
 	public String getType(String description)
@@ -212,6 +214,8 @@ public class paperworkGen{
 		} else if (description.contains("SKN ")) {
 			type = "skin";
 		}
+		
+		
 
 		return type;
 	}

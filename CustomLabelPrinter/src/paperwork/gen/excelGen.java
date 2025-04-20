@@ -21,6 +21,8 @@ abstract class excelGen {
 	
 	abstract public void clear(Sheet sheet);
 	
+	abstract public void generateExcel();
+	
 	public void addProduct(Product product)
 	{
 		String productCode = product.getCode();
@@ -64,7 +66,7 @@ abstract class excelGen {
 	
 	public static void exportPDF(String excelFilePath)
 	{
-        String outputDir = "C:\\Users\\tdphu\\git\\customlabelprinter\\CustomLabelPrinter\\recap\\";
+        String outputDir = "C:\\Users\\tdphu\\git\\customlabelprinter\\CustomLabelPrinter\\recap_output\\";
 
         // Full path to LibreOffice Portable or installed soffice.exe
         String libreOfficePath = "D:\\Download\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
@@ -91,23 +93,48 @@ abstract class excelGen {
 	}
 	
 	 public static String getDate(String dateFormat)
+	{
+		LocalDate today;
+		LocalTime currentTime = LocalTime.now();
+        int currentHour = currentTime.getHour();
+		if(currentHour < 5)
 		{
-			LocalDate today;
-			LocalTime currentTime = LocalTime.now();
-	        int currentHour = currentTime.getHour();
-			if(currentHour < 5)
-			{
-				today = LocalDate.now().minusDays(1);
-			} else {
-				today= LocalDate.now();
-			}
-			
-	        // Define the formatter for MMDD
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
-
-	        // Format the date
-	        String formattedDate = today.format(formatter);
-	        
-	        return formattedDate;
+			today = LocalDate.now().minusDays(1);
+		} else {
+			today= LocalDate.now();
 		}
+		
+        // Define the formatter for MMDD
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+
+        // Format the date
+        String formattedDate = today.format(formatter);
+        
+        return formattedDate;
+	}
+	 
+	 abstract public String hourToLetter(int hour);
+	 
+	 public double getTotalWeightByProduct(Map<Integer,List<Product>> map)
+	 {
+		 double totalWeight = 0;
+		 for(Integer key : map.keySet())
+		 {
+			 List<Product> list = map.get(key);
+			 for(Product product: list)
+			 {
+				 totalWeight += product.getWeight();
+			 }
+		 }
+		 
+		 return totalWeight;
+	 }
+	 
+	 public String formatDouble(double value) {
+	        if (value == (long) value) {
+	            return String.format("%d", (long) value);  // Remove .0 if whole number
+	        } else {
+	            return String.valueOf(value);             // Keep decimal if needed
+	        }
+	    }
 }
