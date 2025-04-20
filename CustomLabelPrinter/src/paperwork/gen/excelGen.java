@@ -63,35 +63,6 @@ abstract class excelGen {
         }
         return index - 1;
     }
-    
-	
-	public static void exportPDF(String excelFilePath)
-	{
-        String outputDir = "C:\\Users\\tdphu\\git\\customlabelprinter\\CustomLabelPrinter\\recap_output\\";
-
-        // Full path to LibreOffice Portable or installed soffice.exe
-        String libreOfficePath = "D:\\Download\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
-
-        // Construct the command to run LibreOffice headless
-        String command = libreOfficePath + " --headless --convert-to pdf --outdir " + outputDir + " " + excelFilePath;
-
-        try {
-            // Run the process
-            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-            Process process = processBuilder.start();
-
-            // Wait for the process to finish
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                System.out.println("Conversion successful!");
-            } else {
-                System.out.println("Error during conversion. Exit code: " + exitCode);
-            }
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-	}
 	
 	 public static String getDate(String dateFormat)
 	{

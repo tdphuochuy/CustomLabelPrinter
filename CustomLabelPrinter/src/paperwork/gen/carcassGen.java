@@ -20,15 +20,14 @@ public class carcassGen extends excelGen{
 	
 	public void generateExcel()
 	{
-		String filePath = "recap/carcass.xlsx";
-        String outputPath = "recap_output/carcass.xlsx";
+		String filePath = "recap_output/recap.xlsx";
+        String outputPath = "recap_output/recap.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0); // First sheet
+            Sheet sheet = workbook.getSheetAt(2); // First sheet
 
-            // Example usage: write "Test value" to cell C2
             setDate(sheet);
             clear(workbook,sheet);
             
@@ -57,8 +56,8 @@ public class carcassGen extends excelGen{
 
             System.out.println("Cell updated successfully!");
             
-            File file = new File("recap_output/carcass.xlsx");
-            exportPDF(file.getAbsolutePath());
+            //File file = new File("recap_output/carcass.xlsx");
+            //exportPDF(file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

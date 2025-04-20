@@ -1,6 +1,7 @@
 package paperwork;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -159,6 +160,9 @@ public class paperworkGen{
 				if(hour > 29 && hour < 54)
 				{
 					hour = hour - 30;
+				} else if (hour > 26 && hour < 29)
+				{
+					hour = 26;
 				}
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
@@ -200,10 +204,11 @@ public class paperworkGen{
 		}
 		
 		breastExcel.generateExcel();
-		Thread.sleep(10000);
 		tenderExcel.generateExcel();
-		Thread.sleep(10000);
 		carcassExcel.generateExcel();
+		
+        File file = new File("recap_output/recap.xlsx");
+        exportExceltoPDF(file.getAbsolutePath());
 	}
 	
 	public String getType(String description)
@@ -230,5 +235,33 @@ public class paperworkGen{
 		
 
 		return type;
+	}
+	
+	public static void exportExceltoPDF(String excelFilePath)
+	{
+        String outputDir = "C:\\Users\\tdphu\\git\\customlabelprinter\\CustomLabelPrinter\\recap_output\\";
+
+        // Full path to LibreOffice Portable or installed soffice.exe
+        String libreOfficePath = "D:\\Download\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
+
+        // Construct the command to run LibreOffice headless
+        String command = libreOfficePath + " --headless --convert-to pdf --outdir " + outputDir + " " + excelFilePath;
+
+        try {
+            // Run the process
+            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+            Process process = processBuilder.start();
+
+            // Wait for the process to finish
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Conversion successful!");
+            } else {
+                System.out.println("Error during conversion. Exit code: " + exitCode);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
 	}
 }

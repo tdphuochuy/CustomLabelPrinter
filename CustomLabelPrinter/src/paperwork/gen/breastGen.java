@@ -55,53 +55,19 @@ public class breastGen extends excelGen{
 	
 	public void generateExcel()
 	{
-		String filePath = "recap/breast.xlsx";
-        String outputPath = "recap_output/breast.xlsx";
+		String filePath = "recap/recap.xlsx";
+        String outputPath = "recap_output/recap.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0); // First sheet
 
-            // Example usage: write "Test value" to cell C2
             setDate(sheet);
             clear(workbook,sheet);
-            
-            for(String key : productMap.keySet()) //for each productCode
-            {
-            	System.out.println(key);
-            	Map<Integer,List<Product>> map = productMap.get(key);
-            	for(Integer hour : map.keySet()) //for each hour
-            	{
-            		String columnLetter = hourToLetter(hour);
-            		List<Product> list = map.get(hour); 
-            		for(int i = 0; i < list.size();i++) { //for each product
-            			Product product = list.get(i);
-            	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
-            		}
-            	}
-            	
-            	int height = getHeight(map);
-            	
-                setBorderAroundProductCell(workbook,sheet,height);
-            	setProductCodeCell(workbook,sheet,height,key);
-            	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
-            	Product firstProduct = map.values().stream()
-            		    .filter(list -> list != null && !list.isEmpty())
-            		    .map(list -> list.get(0))
-            		    .findFirst()
-            		    .orElse(null);
-            	System.out.println(firstProduct.isCombo());
-            	if(!firstProduct.isCombo())
-            	{
-            		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
-            	}
-            	setTotalCell(workbook,sheet,height,total);
+            caseToExcel(workbook,sheet);
+            comboToExcel(workbook,sheet);
 
-            	currentRow += height;
-            	System.out.println(currentRow);
-            }
-            
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 workbook.write(fos);
@@ -109,10 +75,96 @@ public class breastGen extends excelGen{
 
             System.out.println("Cell updated successfully!");
             
-            File file = new File("recap_output/breast.xlsx");
-            exportPDF(file.getAbsolutePath());
+            //File file = new File("recap_output/breast.xlsx");
+            //exportPDF(file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+	}
+	
+	public void caseToExcel(Workbook workbook,Sheet sheet)
+	{
+		for(String key : productMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = productMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+        	if(firstProduct.isCombo())
+        	{
+        		continue;
+        	}
+        	
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		String columnLetter = hourToLetter(hour);
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        	System.out.println(currentRow);
+        }
+	}
+	
+	public void comboToExcel(Workbook workbook,Sheet sheet)
+	{
+		for(String key : productMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = productMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+        	if(!firstProduct.isCombo())
+        	{
+        		continue;
+        	}
+        	
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		String columnLetter = hourToLetter(hour);
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        	System.out.println(currentRow);
         }
 	}
 	

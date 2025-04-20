@@ -38,52 +38,25 @@ public class tenderGen extends excelGen{
 	
 	public void generateExcel()
 	{
-		String filePath = "recap/tender.xlsx";
-        String outputPath = "recap_output/tender.xlsx";
+		String filePath = "recap_output/recap.xlsx";
+        String outputPath = "recap_output/recap.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0); // First sheet
+            Sheet sheet = workbook.getSheetAt(1); // First sheet
 
-            // Example usage: write "Test value" to cell C2
             setDate(sheet);
             clear(workbook,sheet);
-            
-            for(String key : productMap.keySet()) //for each productCode
-            {
-            	Map<Integer,List<Product>> map = productMap.get(key);
-            	for(Integer hour : map.keySet()) //for each hour
-            	{
-            		String columnLetter = hourToLetter(hour);
-            		List<Product> list = map.get(hour); 
-            		for(int i = 0; i < list.size();i++) { //for each product
-            			Product product = list.get(i);
-            	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
-            		}
-            	}
-            	
-            	int height = getHeight(map);
-            	
-                setBorderAroundProductCell(workbook,sheet,height);
-            	setProductCodeCell(workbook,sheet,height,key);
-            	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
-            	Product firstProduct = map.values().stream()
-            		    .filter(list -> list != null && !list.isEmpty())
-            		    .map(list -> list.get(0))
-            		    .findFirst()
-            		    .orElse(null);
-            	System.out.println(firstProduct.isCombo());
-            	if(!firstProduct.isCombo())
-            	{
-            		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
-            	}
-            	setTotalCell(workbook,sheet,height,total);
+            setDate(sheet);
+            clear(workbook,sheet);
+            caseToExcel(workbook,sheet);
+            comboToExcel(workbook,sheet);
+            otherToExcel(workbook,sheet,skinMap);
+            otherToExcel(workbook,sheet,keelboneMap);
+            otherToExcel(workbook,sheet,trimMap);
+            otherToExcel(workbook,sheet,kneeboneMap);
 
-            	currentRow += height;
-            	System.out.println(currentRow);
-            }
-            
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 workbook.write(fos);
@@ -91,10 +64,134 @@ public class tenderGen extends excelGen{
 
             System.out.println("Cell updated successfully!");
             
-            File file = new File("recap_output/tender.xlsx");
-            exportPDF(file.getAbsolutePath());
+            //File file = new File("recap_output/tender.xlsx");
+            //exportPDF(file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+	}
+	
+	public void caseToExcel(Workbook workbook,Sheet sheet)
+	{
+		for(String key : productMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = productMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+        	if(firstProduct.isCombo())
+        	{
+        		continue;
+        	}
+        	
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		String columnLetter = hourToLetter(hour);
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        	System.out.println(currentRow);
+        }
+	}
+	
+	public void comboToExcel(Workbook workbook,Sheet sheet)
+	{
+		for(String key : productMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = productMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+        	if(!firstProduct.isCombo())
+        	{
+        		continue;
+        	}
+        	
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		String columnLetter = hourToLetter(hour);
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        	System.out.println(currentRow);
+        }
+	}
+	
+	public void otherToExcel(Workbook workbook,Sheet sheet,Map<String,Map<Integer,List<Product>>> productMap)
+	{
+		for(String key : productMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = productMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		String columnLetter = hourToLetter(hour);
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        	    	setCellValue(sheet, columnLetter, currentRow + i, String.valueOf(product.getQuantity()));
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        	System.out.println(currentRow);
         }
 	}
 	
@@ -106,7 +203,7 @@ public class tenderGen extends excelGen{
    	 	CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 14, 15);
         sheet.addMergedRegion(mergedRegion);
         
-     // Create font: size 28, underline
+        // Create font: size 28, underline
         Font font = workbook.createFont();
         font.setFontHeightInPoints((short) 22);
 
@@ -235,7 +332,7 @@ public class tenderGen extends excelGen{
 	
 	public int getHeight(Map<Integer,List<Product>> map)
 	{
-		int height = 0;
+		int height = 2;
 		for(List<Product> list : map.values())
 		{
 			if(list.size() > height)
@@ -342,7 +439,7 @@ public class tenderGen extends excelGen{
 
         // Ensure result is a valid uppercase letter
         if (ascii < 'A' || ascii > 'Z') {
-            throw new IllegalArgumentException("Resulting letter is out of A-Z range for input: " + number);
+        	ascii = 25 + 52;
         }
 
         return String.valueOf((char) ascii);
