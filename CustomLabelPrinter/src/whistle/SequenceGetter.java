@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import config.Config;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -242,7 +243,7 @@ public class SequenceGetter{
 
         // Get the current hour in 24-hour format
         //int currentHour = currentTime.getHour();
-        int currentHour = currentTime.getHour() + 1;
+        int currentHour = currentTime.getHour() + Config.dayTimeSaving;
 
         // Adjust the hour by adding 24
         if(currentHour < 4)

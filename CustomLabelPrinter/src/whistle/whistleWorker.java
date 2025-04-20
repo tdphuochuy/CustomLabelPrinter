@@ -20,6 +20,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import config.Config;
+
 public class whistleWorker{
 	public int count = 0;
 	public boolean autoSequence;
@@ -414,7 +416,7 @@ public class whistleWorker{
 
         // Get the current hour in 24-hour format
         int currentHour = currentTime.getHour();
-        currentHour = currentTime.getHour() + 1; //adjust day time saving
+        currentHour = currentTime.getHour() + Config.dayTimeSaving; //adjust day time saving
 
         // Adjust the hour by adding 24
         if(currentHour < 4)
