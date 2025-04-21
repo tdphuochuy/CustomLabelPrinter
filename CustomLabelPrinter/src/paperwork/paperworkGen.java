@@ -12,8 +12,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +51,7 @@ public class paperworkGen{
 	private int[] times;
 	private List<Integer> condemnList;
 	private String sessionId = "";
+	private String recipient = "tdphuochuy@gmail.com";
 	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
 	{
 		this.username = username;
@@ -242,6 +256,8 @@ public class paperworkGen{
         exportExceltoPDF(file.getAbsolutePath());
         
         sendtoPrinterJob();
+        
+        //sendEmail();
 	}
 	
 	public String getType(String description)
@@ -339,4 +355,43 @@ public class paperworkGen{
             e.printStackTrace();
         }
 	}
+	
+	   public void sendEmail()
+	   {
+	    	Properties props = new Properties();
+	        props.put("mail.smtp.auth", "true");
+	        props.put("mail.smtp.starttls.enable", "true");
+	        props.put("mail.smtp.host", "smtp.gmail.com");
+	        props.put("mail.smtp.port", "587");
+
+	        Session session = Session.getInstance(props,
+	                new Authenticator() {
+	                    protected PasswordAuthentication getPasswordAuthentication() {
+	                        return new PasswordAuthentication("letitburn0001@gmail.com", "qybb syeg yief bphz");
+	                    }
+	                });
+
+	        try {
+	            Message message = new MimeMessage(session);
+	            message.setFrom(new InternetAddress("letitburn0001@gmail.com"));
+	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+	            message.setSubject("Debone recap");
+
+	            MimeBodyPart messageBodyPart = new MimeBodyPart();
+
+	            MimeBodyPart attachmentPart = new MimeBodyPart();
+	            attachmentPart.attachFile(new File("recap_output/recap.pdf"));
+
+	            Multipart multipart = new MimeMultipart();
+	            //multipart.addBodyPart(messageBodyPart);
+	            multipart.addBodyPart(attachmentPart);
+
+	            message.setContent(multipart);
+
+	            Transport.send(message);
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	   }
 }

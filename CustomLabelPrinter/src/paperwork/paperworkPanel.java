@@ -152,6 +152,7 @@ public class paperworkPanel extends JPanel{
 	              	         for (String s : array) {
 	              	        	comdemnList.add(Integer.parseInt(s));
 	              	         }
+	              	         System.out.println(comdemnList);
 	             			 paperworkGen ppw = new paperworkGen(username,password,orderNum,reworkOrderNum,name,times,comdemnList);
 	             			 ppw.start();
 	              			 
