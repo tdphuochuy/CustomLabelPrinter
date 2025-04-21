@@ -36,8 +36,9 @@ import paperwork.gen.tenderGen;
 public class paperworkGen{
 	private String username,password,orderNum,reworkOrderNum,name;
 	private int[] times;
+	private List<Integer> condemnList;
 	private String sessionId = "";
-	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum,String name,int[] times)
+	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
 	{
 		this.username = username;
 		this.password = password;
@@ -45,6 +46,7 @@ public class paperworkGen{
 		this.reworkOrderNum = reworkOrderNum;
 		this.name = name;
 		this.times = times;
+		this.condemnList = condemnList;
 		//sessionId = getSessionId(); TO-DO uncomment
 		
 	}
@@ -233,7 +235,7 @@ public class paperworkGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList);
 		recapExcel.generateExcel();
 		
         File file = new File("recap_output/recap.xlsx");

@@ -17,12 +17,14 @@ public class recapGen extends excelGen{
 	private breastGen breast;
 	private tenderGen tender;
 	private carcassGen carcass;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass)
+	private List<Integer> condemnList;
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> condemnList)
 	{
 		this.name = name;
 		this.breast = breast;
 		this.tender = tender;
 		this.carcass = carcass;
+		this.condemnList = condemnList;
 	}
 
 	@Override
@@ -136,10 +138,25 @@ public class recapGen extends excelGen{
 	        			currentColumn = "C";
 	        			currentRow = 36;
 	        		}
-		        	setCellValue(sheet, currentColumn, 36, formatDouble(product.getWeight()) + " lbs");
+		        	setCellValue(sheet, currentColumn, currentRow, formatDouble(product.getWeight()) + " lbs");
 		        	currentRow++;
 	        	}
 	        	
+	        	currentColumn = "G";
+	        	currentRow = 30;
+	        	for(Integer condemnWeight : condemnList)
+	        	{
+	        		if(currentRow > 40)
+	        		{
+	        			currentColumn = "I";
+	        			currentRow = 30;
+	        		}
+	        		setCellValue(sheet, currentColumn, currentRow, String.valueOf(condemnWeight) + " lbs");
+		        	currentRow++;
+	        	}
+        		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
+
+
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
 	                workbook.write(fos);
@@ -152,6 +169,17 @@ public class recapGen extends excelGen{
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
+	}
+	
+	public int getCondemnWeight()
+	{
+		int weight = 0;
+		for(Integer condemnWeight : condemnList)
+    	{
+			weight += condemnWeight;
+    	}
+		
+		return weight;
 	}
 	
 }

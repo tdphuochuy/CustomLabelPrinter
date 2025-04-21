@@ -12,6 +12,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -29,7 +31,12 @@ public class test {
     		{
     			Map<String,Product> map = new TreeMap<>();
     			int[] times = {20,23};
-    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","","Huy",times);
+    			List<Integer> comdemnlist = new ArrayList<>();
+    			comdemnlist.add(100);
+    			comdemnlist.add(400);
+    			comdemnlist.add(200);
+    			comdemnlist.add(100);
+    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","","Huy",times,comdemnlist);
     			ppw.extractData(map,table);
     			ppw.evaluateData(map);
     			break;
