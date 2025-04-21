@@ -47,7 +47,7 @@ public class paperworkGen{
 		this.name = name;
 		this.times = times;
 		this.condemnList = condemnList;
-		//sessionId = getSessionId(); TO-DO uncomment
+		sessionId = getSessionId();
 		
 	}
 	

@@ -11,6 +11,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -92,6 +95,32 @@ public class paperworkPanel extends JPanel{
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
         
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(inputPanel);
+        mainPanel.add(inputPanel2);
+        mainPanel.add(userPanel);
+        mainPanel.add(passPanel);
+        mainPanel.add(namePanel);
+        mainPanel.add(timePanel);
+        mainPanel.add(button);
+        
+        JPanel textareaPanel = new JPanel();
+        textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
+        JTextArea textArea = new JTextArea(12,12);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
+        
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(new JLabel("Trim condemned:"));
+        textareaPanel.add(labelPanel);
+        textareaPanel.add(scrollPane);
+        
+        JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
+        splitPanel.add(mainPanel);
+        splitPanel.add(textareaPanel);
+        
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,6 +136,24 @@ public class paperworkPanel extends JPanel{
 	              			 String username = userField.getText();
 	              			 String password = passField.getText();
 	              			 String orderNum = orderField.getText();
+	              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+	              			 String name = nameField.getText();
+	              			 int break1 = Integer.parseInt(break1Field.getText());
+	              			 int break2 = Integer.parseInt(break2Field.getText());
+	              			 if(!break2cb.isSelected())
+	              			 {
+	              				 break2 = 26;
+	              			 }
+	              			 int[] times = {break1,break2};
+	              			 
+	              			 String condemnText = textArea.getText();
+	              			 String[] array = condemnText.split("\n");
+	              			 List<Integer> comdemnList = new ArrayList<>();
+	              	         for (String s : array) {
+	              	        	comdemnList.add(Integer.parseInt(s));
+	              	         }
+	             			 paperworkGen ppw = new paperworkGen(username,password,orderNum,reworkOrderNum,name,times,comdemnList);
+	             			 ppw.start();
 	              			 
 	                         JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
@@ -135,32 +182,6 @@ public class paperworkPanel extends JPanel{
                 timer.start(); // Start the timer
             }
         });
-        
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.add(inputPanel);
-        mainPanel.add(inputPanel2);
-        mainPanel.add(userPanel);
-        mainPanel.add(passPanel);
-        mainPanel.add(namePanel);
-        mainPanel.add(timePanel);
-        mainPanel.add(button);
-        
-        JPanel textareaPanel = new JPanel();
-        textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
-        JTextArea textArea = new JTextArea(12,12);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
-        
-        JPanel labelPanel = new JPanel();
-        labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        labelPanel.add(new JLabel("Trim condemned:"));
-        textareaPanel.add(labelPanel);
-        textareaPanel.add(scrollPane);
-        
-        JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
-        splitPanel.add(mainPanel);
-        splitPanel.add(textareaPanel);
         
         this.add(splitPanel);
 	}
