@@ -3,6 +3,8 @@ package paperwork;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -18,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
@@ -40,7 +44,7 @@ public class paperworkPanel extends JPanel{
         namePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel timePanel = new JPanel();
         timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        timePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+        timePanel.setBorder(new EmptyBorder(0, 0, 5, 0));
         
         JLabel label = new JLabel("Order #");
         JTextField orderField = new JTextField(15);
@@ -132,13 +136,33 @@ public class paperworkPanel extends JPanel{
             }
         });
         
-        this.add(inputPanel);
-        this.add(inputPanel2);
-        this.add(userPanel);
-        this.add(passPanel);
-        this.add(namePanel);
-        this.add(timePanel);
-        this.add(button);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(inputPanel);
+        mainPanel.add(inputPanel2);
+        mainPanel.add(userPanel);
+        mainPanel.add(passPanel);
+        mainPanel.add(namePanel);
+        mainPanel.add(timePanel);
+        mainPanel.add(button);
+        
+        JPanel textareaPanel = new JPanel();
+        textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
+        JTextArea textArea = new JTextArea(12,12);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
+        
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(new JLabel("Trim condemned:"));
+        textareaPanel.add(labelPanel);
+        textareaPanel.add(scrollPane);
+        
+        JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
+        splitPanel.add(mainPanel);
+        splitPanel.add(textareaPanel);
+        
+        this.add(splitPanel);
 	}
 	
     // Method to set the placeholder text

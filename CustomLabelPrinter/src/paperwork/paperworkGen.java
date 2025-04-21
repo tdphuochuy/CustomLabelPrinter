@@ -2,9 +2,12 @@ package paperwork;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +51,7 @@ public class paperworkGen{
 	
 	public void start() throws ParseException, InterruptedException
 	{
+		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
 
 		Element dataTable = getData(orderNum);
@@ -59,6 +63,21 @@ public class paperworkGen{
 		}
 		
 		evaluateData(productMap);
+	}
+	
+	public void deleteOldRecap()
+	{
+		File file = new File("recap_output/recap.pdf");
+
+        if (!file.exists()) {
+            System.out.println("File does not exist.");
+        } else {
+            if (file.delete()) {
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+        }
 	}
 	
 	public String getSessionId()
@@ -271,6 +290,30 @@ public class paperworkGen{
             }
 
         } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public void sendtoPrinterJob()
+	{
+		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
+        int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
+        String filePath = "recap_output/recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
+
+        try (Socket socket = new Socket(printerIp, printerPort);
+             OutputStream out = socket.getOutputStream();
+             FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = fileInput.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            out.flush();
+            System.out.println("File sent to printer successfully.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 	}
