@@ -7,9 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,8 +38,10 @@ public class paperworkPanel extends JPanel{
         passPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        namePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
-
+        JPanel timePanel = new JPanel();
+        timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        timePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+        
         JLabel label = new JLabel("Order #");
         JTextField orderField = new JTextField(15);
         setPlaceholder(orderField,"Order #");
@@ -63,7 +68,22 @@ public class paperworkPanel extends JPanel{
         JTextField  nameField = new JTextField("Huy",5);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
- 
+        
+        JLabel break1Label = new JLabel("1st break");
+        JTextField  break1Field = new JTextField("20",2);
+        JTextField  break2Field = new JTextField("23",2);
+        JCheckBox break2cb = new JCheckBox("2nd break",true);
+        break2cb.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+            	break2Field.setEnabled(break2cb.isSelected());
+            }
+        });
+        timePanel.add(break1Label);
+        timePanel.add(break1Field);
+        timePanel.add(break2cb);
+        timePanel.add(break2Field);
+        
         JButton button = new JButton("Game Over");
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
@@ -84,7 +104,7 @@ public class paperworkPanel extends JPanel{
 	              			 String password = passField.getText();
 	              			 String orderNum = orderField.getText();
 	              			 
-	                         JOptionPane.showMessageDialog(frame, "File sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+	                         JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
@@ -117,6 +137,7 @@ public class paperworkPanel extends JPanel{
         this.add(userPanel);
         this.add(passPanel);
         this.add(namePanel);
+        this.add(timePanel);
         this.add(button);
 	}
 	
