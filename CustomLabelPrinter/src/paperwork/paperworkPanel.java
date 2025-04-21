@@ -29,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
+import org.json.simple.parser.ParseException;
+
 public class paperworkPanel extends JPanel{
 	private JFrame frame;
 
@@ -152,11 +154,17 @@ public class paperworkPanel extends JPanel{
 	              	         for (String s : array) {
 	              	        	comdemnList.add(Integer.parseInt(s));
 	              	         }
-	              	         System.out.println(comdemnList);
-	             			 paperworkGen ppw = new paperworkGen(username,password,orderNum,reworkOrderNum,name,times,comdemnList);
-	             			 ppw.start();
+		              	       new Thread(() -> {
+			             			 paperworkGen ppw = new paperworkGen(username,password,orderNum,reworkOrderNum,name,times,comdemnList);
+			             			 try {
+										ppw.start();
+				                        JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+									} catch (ParseException | InterruptedException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+		              	        }).start();
 	              			 
-	                         JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
@@ -168,7 +176,7 @@ public class paperworkPanel extends JPanel{
               	   }
                 } catch (Exception ex)
                 {
-             	   
+             	   ex.printStackTrace();
                 }
                 // Create a Timer to re-enable the button after a delay
                 Timer timer = new Timer(300, new ActionListener() {
