@@ -20,7 +20,7 @@ import java.util.TreeMap;
 public class test {
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-    	File input = new File("whistle_order2.html");
+    	/*File input = new File("whistle_order2.html");
         Document doc = Jsoup.parse(input, "UTF-8");
         
         Element bodyElement = doc.body();
@@ -41,6 +41,6 @@ public class test {
     			ppw.evaluateData(map);
     			break;
     		}
-    	}
+    	}*/
     }
 }

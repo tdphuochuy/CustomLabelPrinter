@@ -149,16 +149,20 @@ public class paperworkPanel extends JPanel{
 	              			 int[] times = {break1,break2};
 	              			 
 	              			 String condemnText = textArea.getText();
+	              			 if(condemnText.length() == 0)
+	              			 {
+	              				condemnText = "0";
+	              			 }
 	              			 String[] array = condemnText.split("\n");
 	              			 List<Integer> comdemnList = new ArrayList<>();
 	              	         for (String s : array) {
 	              	        	comdemnList.add(Integer.parseInt(s));
 	              	         }
+	              	         System.out.println(comdemnList);
 		              	       new Thread(() -> {
-			             			 paperworkGen ppw = new paperworkGen(username,password,orderNum,reworkOrderNum,name,times,comdemnList);
+			             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList);
 			             			 try {
 										ppw.start();
-				                        JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
 									} catch (ParseException | InterruptedException e1) {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();

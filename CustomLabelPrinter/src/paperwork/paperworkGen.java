@@ -1,5 +1,6 @@
 package paperwork;
 
+import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,8 +53,10 @@ public class paperworkGen{
 	private List<Integer> condemnList;
 	private String sessionId = "";
 	private String recipient = "tdphuochuy@gmail.com";
-	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
+	private Frame frame;
+	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
 	{
+		this.frame = frame;
 		this.username = username;
 		this.password = password;
 		this.orderNum = orderNum;
@@ -350,6 +353,7 @@ public class paperworkGen{
             }
 
             out.flush();
+            JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("File sent to printer successfully.");
         } catch (Exception e) {
             e.printStackTrace();
