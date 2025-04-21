@@ -14,15 +14,38 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import config.Config;
 import paperwork.Product;
 
 abstract class excelGen {
 	public Map<String,Map<Integer,List<Product>>> productMap = new TreeMap<>();
+	public String filePath = "recap_output/recap.xlsx";
+    public String outputPath = "recap_output/recap.xlsx";
+	public double Break1Weight = 0;
+    public double Break2Weight = 0;
+    public double Break3Weight = 0;
+    public int[] times;
 	abstract public void setDate(Sheet sheet);
 	
 	abstract public void clear(Workbook workbook,Sheet sheet);
 	
 	abstract public void generateExcel();
+	
+    public double getBreak1Weight() {
+		return Break1Weight;
+	}
+
+	public double getBreak2Weight() {
+		return Break2Weight;
+	}
+
+	public double getBreak3Weight() {
+		return Break3Weight;
+	}
+	
+	public double getTotalWeight() {
+		return Break1Weight + Break2Weight + Break3Weight;
+	}
 	
 	public void addProduct(Product product)
 	{
@@ -36,6 +59,17 @@ abstract class excelGen {
 		{
 			productMap.get(productCode).put(hour, new ArrayList<Product>());
 		}
+		
+		if(hour <= times[0])
+		{
+			Break1Weight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2Weight += product.getWeight();
+		} else {
+			Break3Weight += product.getWeight();
+		}
+		
 		
 		productMap.get(productCode).get(hour).add(product);
 	}
@@ -85,8 +119,36 @@ abstract class excelGen {
         return formattedDate;
 	}
 	 
-	 abstract public String hourToLetter(int hour);
-	 
+	   public String hourToLetter(int number) {
+	    	// Convert number to letter using offset
+	        int ascii = number + 52;
+
+	        // Ensure result is a valid uppercase letter
+	        if (ascii < 'A' || ascii > 'Z') {
+	        	ascii = getHour() + 52;
+	        }
+
+	        return String.valueOf((char) ascii);
+	  } 
+	   
+	   
+		public int getHour()
+		{
+			LocalTime currentTime = LocalTime.now();
+
+	        // Get the current hour in 24-hour format
+	        //int currentHour = currentTime.getHour();
+	        int currentHour = currentTime.getHour() + Config.dayTimeSaving;
+
+	        // Adjust the hour by adding 24
+	        if(currentHour < 5)
+	        {        	
+	        	currentHour += 24;
+	        }
+	        
+	        return Math.min(26, currentHour);
+		}
+    
 	 public double getTotalWeightByProduct(Map<Integer,List<Product>> map)
 	 {
 		 double totalWeight = 0;

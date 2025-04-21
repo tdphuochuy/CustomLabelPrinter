@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import config.Config;
 import paperwork.Product;
 
 public class tenderGen extends excelGen{
@@ -29,33 +31,41 @@ public class tenderGen extends excelGen{
 	public Map<String,Map<Integer,List<Product>>> kneeboneMap = new TreeMap<>();
 	public Map<String,Map<Integer,List<Product>>> keelboneMap = new TreeMap<>();
 	public Map<String,Map<Integer,List<Product>>> skinMap = new TreeMap<>();
-	
+	public double Break1TrimWeight = 0;
+    public double Break2TrimWeight = 0;
+    public double Break3TrimWeight = 0;
+
+	public double Break1SkinWeight = 0;
+    public double Break2SkinWeight = 0;
+    public double Break3SkinWeight = 0;
+    
 	private int currentRow;
-	public tenderGen()
+	public tenderGen(int[] times)
 	{
 		currentRow = 5;
+		this.times = times;
 	}
 	
 	public void generateExcel()
 	{
-		String filePath = "recap_output/recap.xlsx";
-        String outputPath = "recap_output/recap.xlsx";
-
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(1); // First sheet
 
             setDate(sheet);
-            clear(workbook,sheet);
+            //clear(workbook,sheet);
             setDate(sheet);
             clear(workbook,sheet);
             caseToExcel(workbook,sheet);
             comboToExcel(workbook,sheet);
+            emptyBoxToExcel(workbook,sheet,4);
+            emptyBoxToExcel(workbook,sheet,5);
             otherToExcel(workbook,sheet,skinMap);
             otherToExcel(workbook,sheet,keelboneMap);
             otherToExcel(workbook,sheet,trimMap);
             otherToExcel(workbook,sheet,kneeboneMap);
+            emptyBoxToExcel(workbook,sheet,5);
 
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
@@ -69,6 +79,14 @@ public class tenderGen extends excelGen{
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void emptyBoxToExcel(Workbook workbook,Sheet sheet,int height)
+	{
+		setBorderAroundProductCell(workbook,sheet,height);
+    	setProductCodeCell(workbook,sheet,height,"");
+    	setTotalCell(workbook,sheet,height,"");
+    	currentRow += height;
 	}
 	
 	public void caseToExcel(Workbook workbook,Sheet sheet)
@@ -110,7 +128,6 @@ public class tenderGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
-        	System.out.println(currentRow);
         }
 	}
 	
@@ -153,7 +170,6 @@ public class tenderGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
-        	System.out.println(currentRow);
         }
 	}
 	
@@ -191,7 +207,6 @@ public class tenderGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
-        	System.out.println(currentRow);
         }
 	}
 	
@@ -357,6 +372,16 @@ public class tenderGen extends excelGen{
 			trimMap.get(productCode).put(hour, new ArrayList<Product>());
 		}
 		
+		if(hour <= times[0])
+		{
+			Break1TrimWeight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2TrimWeight += product.getWeight();
+		} else {
+			Break3TrimWeight += product.getWeight();
+		}
+		
 		trimMap.get(productCode).get(hour).add(product);
 	}
 	
@@ -433,15 +458,59 @@ public class tenderGen extends excelGen{
         }
     }
     
-    public String hourToLetter(int number) {
-    	// Convert number to letter using offset
-        int ascii = number + 52;
+	public double getBreak1TrimWeight() {
+		return Break1TrimWeight;
+	}
 
-        // Ensure result is a valid uppercase letter
-        if (ascii < 'A' || ascii > 'Z') {
-        	ascii = 25 + 52;
-        }
+	public double getBreak2TrimWeight() {
+		return Break2TrimWeight;
+	}
 
-        return String.valueOf((char) ascii);
-    }
+	public double getBreak3TrimWeight() {
+		return Break3TrimWeight;
+	}
+	
+	public double getTotalTrimWeight() {
+		return getBreak1TrimWeight() + getBreak2TrimWeight() + getBreak3TrimWeight();
+	}
+	
+	
+	public double getBreak1SkinWeight() {
+		return Break1SkinWeight;
+	}
+
+	public double getBreak2SkinWeight() {
+		return Break2SkinWeight;
+	}
+
+	public double getBreak3SkinWeight() {
+		return Break3SkinWeight;
+	}
+	
+	public double getKeelBoneWeight()
+	{
+		double totalWeight = 0;
+		for(String key: keelboneMap.keySet())
+		{
+			totalWeight += getTotalWeightByProduct(keelboneMap.get(key));
+		}
+		
+		return totalWeight;
+	}
+	
+	public double getKneeBoneWeight()
+	{
+		double totalWeight = 0;
+		for(String key: kneeboneMap.keySet())
+		{
+			totalWeight += getTotalWeightByProduct(kneeboneMap.get(key));
+		}
+		
+		return totalWeight;
+	}
+	
+	public double getTotalSkinWeight() {
+		return getBreak1SkinWeight() + getBreak2SkinWeight() + getBreak3SkinWeight();
+	}
+
 }

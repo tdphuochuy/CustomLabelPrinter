@@ -27,17 +27,21 @@ import okhttp3.Request;
 import okhttp3.Response;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
+import paperwork.gen.recapGen;
 import paperwork.gen.tenderGen;
 
 public class paperworkGen{
-	private String username,password,orderNum,reworkOrderNum;
+	private String username,password,orderNum,reworkOrderNum,name;
+	private int[] times;
 	private String sessionId = "";
-	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum)
+	public paperworkGen(String username,String password,String orderNum,String reworkOrderNum,String name,int[] times)
 	{
 		this.username = username;
 		this.password = password;
 		this.orderNum = orderNum;
 		this.reworkOrderNum = reworkOrderNum;
+		this.name = name;
+		this.times = times;
 		//sessionId = getSessionId(); TO-DO uncomment
 		
 	}
@@ -175,9 +179,9 @@ public class paperworkGen{
 	
 	public void evaluateData(Map<String,Product> map) throws InterruptedException
 	{
-		breastGen breastExcel = new breastGen();
-		tenderGen tenderExcel = new tenderGen();
-		carcassGen carcassExcel = new carcassGen();
+		breastGen breastExcel = new breastGen(times);
+		tenderGen tenderExcel = new tenderGen(times);
+		carcassGen carcassExcel = new carcassGen(times);
 		
 		for(String key: map.keySet())
 		{
@@ -191,6 +195,9 @@ public class paperworkGen{
 			} else if (product.getType().equals("carcass"))
 			{
 				carcassExcel.addProduct(product);
+			} else if (product.getType().equals("trim"))
+			{
+				tenderExcel.addTrim(product);
 			} else if (product.getType().equals("keelbone"))
 			{
 				tenderExcel.addKeelBone(product);
@@ -206,6 +213,9 @@ public class paperworkGen{
 		breastExcel.generateExcel();
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
+		
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel);
+		recapExcel.generateExcel();
 		
         File file = new File("recap_output/recap.xlsx");
         exportExceltoPDF(file.getAbsolutePath());

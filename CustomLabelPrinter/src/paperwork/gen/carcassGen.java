@@ -13,23 +13,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import paperwork.Product;
 
 public class carcassGen extends excelGen{
-	public carcassGen()
+	public carcassGen(int[] times)
 	{
-		
+		this.times = times;
 	}
 	
 	public void generateExcel()
 	{
-		String filePath = "recap_output/recap.xlsx";
-        String outputPath = "recap_output/recap.xlsx";
-
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(2); // First sheet
 
             setDate(sheet);
-            clear(workbook,sheet);
+            //clear(workbook,sheet);
             
             for(String key : productMap.keySet()) //for each productCode
             {
@@ -84,17 +81,5 @@ public class carcassGen extends excelGen{
                 }
             }
         }
-    }
-    
-    public String hourToLetter(int number) {
-    	// Convert number to letter using offset
-        int ascii = number + 52;
-
-        // Ensure result is a valid uppercase letter
-        if (ascii < 'A' || ascii > 'Z') {
-            throw new IllegalArgumentException("Resulting letter is out of A-Z range for input: " + number);
-        }
-
-        return String.valueOf((char) ascii);
     }
 }

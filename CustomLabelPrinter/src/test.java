@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class test {
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-    	File input = new File("whistle_order.html");
+    	File input = new File("whistle_order2.html");
         Document doc = Jsoup.parse(input, "UTF-8");
         
         Element bodyElement = doc.body();
@@ -28,8 +28,8 @@ public class test {
     		if(table.html().toLowerCase().contains("pmambo"))
     		{
     			Map<String,Product> map = new TreeMap<>();
-
-    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","test");
+    			int[] times = {20,23};
+    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","","Huy",times);
     			ppw.extractData(map,table);
     			ppw.evaluateData(map);
     			break;

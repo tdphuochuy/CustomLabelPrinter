@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,18 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import paperwork.Product;
+import paperwork.paperworkGen;
 
 public class breastGen extends excelGen{
 	List<Product> reworkList = new ArrayList<>();
 	private int currentRow;
-	public breastGen()
+	public double Break1CaseWeight = 0;
+    public double Break2CaseWeight = 0;
+    public double Break3CaseWeight = 0;
+	public breastGen(int[] times)
 	{
 		currentRow = 5;
+		this.times = times;
 	}
 	
 	public void addProduct(Product product)
@@ -50,23 +56,47 @@ public class breastGen extends excelGen{
 			productMap.get(productCode).put(hour, new ArrayList<Product>());
 		}
 		
+		if(hour <= times[0])
+		{
+			if(product.isCombo())
+			{
+				Break1Weight += product.getWeight();
+			} else {
+				Break1CaseWeight += product.getWeight();
+			}
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			if(product.isCombo())
+			{
+				Break2Weight += product.getWeight();
+			} else {
+				Break2CaseWeight += product.getWeight();
+			}
+		} else {
+			if(product.isCombo())
+			{
+				Break3Weight += product.getWeight();
+			} else {
+				Break3CaseWeight += product.getWeight();
+			}
+		}
+		
 		productMap.get(productCode).get(hour).add(product);
 	}
 	
 	public void generateExcel()
-	{
-		String filePath = "recap/recap.xlsx";
-        String outputPath = "recap_output/recap.xlsx";
-
-        try (FileInputStream fis = new FileInputStream(filePath);
-             Workbook workbook = new XSSFWorkbook(fis)) {
+	{		
+		try (InputStream inputStream = paperworkGen.class.getClassLoader().getResourceAsStream("paperwork/recap.xlsx");
+			Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0); // First sheet
 
             setDate(sheet);
-            clear(workbook,sheet);
+            //clear(workbook,sheet);
             caseToExcel(workbook,sheet);
+            emptyBoxToExcel(workbook,sheet,4);
             comboToExcel(workbook,sheet);
+            emptyBoxToExcel(workbook,sheet,5);
 
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
@@ -80,6 +110,14 @@ public class breastGen extends excelGen{
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void emptyBoxToExcel(Workbook workbook,Sheet sheet,int height)
+	{
+		setBorderAroundProductCell(workbook,sheet,height);
+    	setProductCodeCell(workbook,sheet,height,"");
+    	setTotalCell(workbook,sheet,height,"");
+    	currentRow += height;
 	}
 	
 	public void caseToExcel(Workbook workbook,Sheet sheet)
@@ -121,7 +159,6 @@ public class breastGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
-        	System.out.println(currentRow);
         }
 	}
 	
@@ -164,7 +201,6 @@ public class breastGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
-        	System.out.println(currentRow);
         }
 	}
 	
@@ -327,15 +363,36 @@ public class breastGen extends excelGen{
     	
     }
     
-    public String hourToLetter(int number) {
-    	// Convert number to letter using offset
-        int ascii = number + 52;
+	public double getBreak1CaseWeight() {
+		return Break1CaseWeight;
+	}
 
-        // Ensure result is a valid uppercase letter
-        if (ascii < 'A' || ascii > 'Z') {
-            throw new IllegalArgumentException("Resulting letter is out of A-Z range for input: " + number);
-        }
+	public double getBreak2CaseWeight() {
+		return Break2CaseWeight;
+	}
 
-        return String.valueOf((char) ascii);
-    }
+	public double getBreak3CaseWeight() {
+		return Break3CaseWeight;
+	}
+	
+	public double getTotalComboWeight()
+	{
+		return Break1Weight + Break2Weight + Break3Weight;
+	}
+	
+	public double getTotalCaseWeight()
+	{
+		return Break1CaseWeight + Break2CaseWeight + Break3CaseWeight;
+	}
+	
+	public double getTotalWeight()
+	{
+		return getTotalComboWeight() + getTotalCaseWeight();
+	}
+	
+	public List<Product> getReworkList()
+	{
+		return reworkList;
+	}
+	
 }
