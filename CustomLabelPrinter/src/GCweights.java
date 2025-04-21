@@ -107,7 +107,7 @@ public class GCweights extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 button.setEnabled(false);
                 try {
-              	   String text = textField.equals("Order #") ? "" : textField.getText();
+              	   String text = textField.getText().equals("Order #") ? "" : textField.getText();
               	   if(text.length() > 0)
               	   {
               		 if(userField.getText().length() > 0)

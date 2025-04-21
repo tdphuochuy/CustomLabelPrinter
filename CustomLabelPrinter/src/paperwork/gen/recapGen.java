@@ -144,14 +144,15 @@ public class recapGen extends excelGen{
 	        	
 	        	currentColumn = "G";
 	        	currentRow = 30;
-	        	for(Integer condemnWeight : condemnList)
+	        	for(int i = 1; i <= condemnList.size();i++)
 	        	{
+	        		int condemnWeight = condemnList.get(i - 1);
 	        		if(currentRow > 40)
 	        		{
 	        			currentColumn = "I";
 	        			currentRow = 30;
 	        		}
-	        		setCellValue(sheet, currentColumn, currentRow, String.valueOf(condemnWeight) + " lbs");
+	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
 		        	currentRow++;
 	        	}
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");

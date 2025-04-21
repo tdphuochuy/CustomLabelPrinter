@@ -240,6 +240,8 @@ public class paperworkGen{
 		
         File file = new File("recap_output/recap.xlsx");
         exportExceltoPDF(file.getAbsolutePath());
+        
+        sendtoPrinterJob();
 	}
 	
 	public String getType(String description)
@@ -296,8 +298,26 @@ public class paperworkGen{
         }
 	}
 	
-	public void sendtoPrinterJob()
+	public void sendtoPrinterJob() throws InterruptedException
 	{
+		File file = new File("recap_output/recap.pdf");
+
+        int timeoutSeconds = 30;
+        int waited = 0;
+
+        while (!file.exists()) {
+            System.out.println("Waiting for file to appear...");
+            Thread.sleep(1000); // Wait 1 second
+            waited++;
+
+            if (waited >= timeoutSeconds) {
+                System.out.println("Timeout reached. File not found.");
+                return;
+            }
+        }
+        
+        System.out.println("File found!!!.");
+		
 		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
         int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
         String filePath = "recap_output/recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF

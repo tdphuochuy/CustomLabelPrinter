@@ -141,7 +141,7 @@ abstract class excelGen {
 	        int currentHour = currentTime.getHour() + Config.dayTimeSaving;
 
 	        // Adjust the hour by adding 24
-	        if(currentHour < 6)
+	        if(currentHour < 5)
 	        {        	
 	        	currentHour += 24;
 	        }

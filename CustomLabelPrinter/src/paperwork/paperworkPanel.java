@@ -97,7 +97,7 @@ public class paperworkPanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 button.setEnabled(false);
                 try {
-              	   String text = orderField.equals("Order #") ? "" : orderField.getText();
+              	   String text = orderField.getText().equals("Order #") ? "" : orderField.getText();
               	   if(text.length() > 0)
               	   {
               		 if(userField.getText().length() > 0)
