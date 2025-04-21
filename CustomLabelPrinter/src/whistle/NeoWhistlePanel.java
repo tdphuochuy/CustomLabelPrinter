@@ -35,7 +35,7 @@ public class NeoWhistlePanel extends JPanel {
         setLayout(new BorderLayout());
 
         // User Input Console
-        userConsole = new JTextArea(14, 20);
+        userConsole = new JTextArea(16, 22);
         userConsole.setEditable(false);
         JScrollPane userScrollPane = new JScrollPane(userConsole);
         userConsole.setLineWrap(true);
@@ -43,7 +43,7 @@ public class NeoWhistlePanel extends JPanel {
         userConsole.setMargin(new Insets(5, 5, 5, 5));
         
         // System Message Console
-        systemConsole = new JTextArea(14, 20);
+        systemConsole = new JTextArea(16, 22);
         systemConsole.setEditable(false);
         JScrollPane systemScrollPane = new JScrollPane(systemConsole);
         systemConsole.setLineWrap(true);

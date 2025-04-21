@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import chatSystem.ChatPanel;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import paperwork.paperworkPanel;
 import whistle.NeoWhistlePanel;
 import whistle.SequenceGetter;
 
@@ -25,11 +26,12 @@ import java.util.concurrent.Executors;
 public class Main {
    private static NeoWhistlePanel neoWhistle;
    private static GCweights gcWeight;
+   private static paperworkPanel ppw;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.setSize(550, 420);
+       frame.setSize(600, 450);
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();
@@ -62,6 +64,10 @@ public class Main {
        JPanel freePanel = new JPanel();
        freePanel.add(new FreePanel(frame));
        
+       JPanel ppwPanel = new JPanel();
+       ppw = new paperworkPanel(frame);
+       ppwPanel.add(ppw);
+       
        JPanel gcWeightPanel = new JPanel();
        gcWeight = new GCweights(frame);
        gcWeightPanel.add(gcWeight);
@@ -77,6 +83,7 @@ public class Main {
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
+       tabbedPane.addTab("Paperwork", ppwPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
