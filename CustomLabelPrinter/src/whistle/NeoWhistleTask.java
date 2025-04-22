@@ -126,6 +126,14 @@ public class NeoWhistleTask implements Runnable {
 				userConsole.append("Enter quantity\n");
                 userConsole.setCaretPosition(userConsole.getDocument().getLength());
 				String quantity = scanner.nextLine();
+				try {
+					Integer.parseInt(quantity);
+					Integer.parseInt(prodNum);
+				} catch (Exception e)
+				{
+					continue;
+				}
+				
 				String sequence = "1";
 				if(prodNum.equals("skip") || quantity.equals("skip"))
 				{
