@@ -1,5 +1,6 @@
 package paperwork;
 
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,7 +56,8 @@ public class paperworkGen{
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
 	private List<Double> issuedList = new ArrayList<>();
-	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
+	private boolean pdfOnly;
+	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -65,6 +67,7 @@ public class paperworkGen{
 		this.name = name;
 		this.times = times;
 		this.condemnList = condemnList;
+		this.pdfOnly = pdfOnly;
 		sessionId = getSessionId();
 		
 	}
@@ -317,9 +320,46 @@ public class paperworkGen{
         File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
         exportExceltoPDF(file.getAbsolutePath());
         
-        sendtoPrinterJob();
+        if(pdfOnly)
+        {
+        	openPDFfile();
+        } else {
+        	sendtoPrinterJob();
+        }
         
         //sendEmail();
+	}
+	
+	public void openPDFfile()
+	{
+		try {
+	        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
+            
+	        File file = new File(filePath);
+
+	        int timeoutSeconds = 30;
+	        int waited = 0;
+
+	        while (!file.exists()) {
+	            System.out.println("Waiting for file to appear...");
+	            Thread.sleep(1000); // Wait 1 second
+	            waited++;
+
+	            if (waited >= timeoutSeconds) {
+	                System.out.println("Timeout reached. File not found.");
+	                return;
+	            }
+	        }
+	        
+	        File pdfFile = new File(filePath);
+            if (pdfFile.exists()) {
+                Desktop.getDesktop().browse(pdfFile.toURI()); // or use .open() for system default PDF viewer
+            } else {
+                System.out.println("File does not exist.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public String getType(String description)

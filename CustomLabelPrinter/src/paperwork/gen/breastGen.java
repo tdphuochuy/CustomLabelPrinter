@@ -341,7 +341,7 @@ public class breastGen extends excelGen{
 	
 	public int getHeight(Map<Integer,List<Product>> map)
 	{
-		int height = 0;
+		int height = 2;
 		for(List<Product> list : map.values())
 		{
 			if(list.size() > height)

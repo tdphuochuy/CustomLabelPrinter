@@ -49,7 +49,10 @@ public class paperworkPanel extends JPanel{
         namePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel timePanel = new JPanel();
         timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        timePanel.setBorder(new EmptyBorder(0, 0, 5, 0));
+        JPanel pdfOnlyPanel = new JPanel();
+        pdfOnlyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pdfOnlyPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
+
         
         JLabel label = new JLabel("Order #");
         JTextField orderField = new JTextField(15);
@@ -97,6 +100,9 @@ public class paperworkPanel extends JPanel{
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
         
+        JCheckBox pdfOnlycb = new JCheckBox("Generate PDF only");
+        pdfOnlyPanel.add(pdfOnlycb);
+        
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(inputPanel);
@@ -105,11 +111,12 @@ public class paperworkPanel extends JPanel{
         mainPanel.add(passPanel);
         mainPanel.add(namePanel);
         mainPanel.add(timePanel);
+        mainPanel.add(pdfOnlyPanel);
         mainPanel.add(button);
         
         JPanel textareaPanel = new JPanel();
         textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
-        JTextArea textArea = new JTextArea(12,12);
+        JTextArea textArea = new JTextArea(14,12);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
@@ -135,40 +142,40 @@ public class paperworkPanel extends JPanel{
               		 {
               			if(passField.getText().length() > 0)
                  		{
-	              			 String username = userField.getText();
-	              			 String password = passField.getText();
-	              			 String orderNum = orderField.getText();
-	              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
-	              			 String name = nameField.getText();
-	              			 int break1 = Integer.parseInt(break1Field.getText());
-	              			 int break2 = Integer.parseInt(break2Field.getText());
-	              			 if(!break2cb.isSelected())
-	              			 {
-	              				 break2 = 26;
-	              			 }
-	              			 int[] times = {break1,break2};
-	              			 
-	              			 String condemnText = textArea.getText();
-	              			 if(condemnText.length() == 0)
-	              			 {
-	              				condemnText = "0";
-	              			 }
-	              			 String[] array = condemnText.split("\n");
-	              			 List<Integer> comdemnList = new ArrayList<>();
-	              	         for (String s : array) {
-	              	        	comdemnList.add(Integer.parseInt(s));
-	              	         }
-	              	         System.out.println(comdemnList);
-		              	       new Thread(() -> {
-			             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList);
-			             			 try {
-										ppw.start();
-									} catch (ParseException | InterruptedException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-		              	        }).start();
-	              			 
+              				if(textArea.getText().length() > 0)
+              				{
+		              			 String username = userField.getText();
+		              			 String password = passField.getText();
+		              			 String orderNum = orderField.getText();
+		              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+		              			 String name = nameField.getText();
+		              			 int break1 = Integer.parseInt(break1Field.getText());
+		              			 int break2 = Integer.parseInt(break2Field.getText());
+		              			 if(!break2cb.isSelected())
+		              			 {
+		              				 break2 = 26;
+		              			 }
+		              			 int[] times = {break1,break2};
+		              			 
+		              			 String condemnText = textArea.getText();
+		              			 String[] array = condemnText.split("\n");
+		              			 List<Integer> comdemnList = new ArrayList<>();
+		              	         for (String s : array) {
+		              	        	comdemnList.add(Integer.parseInt(s));
+		              	         }
+		              	         System.out.println(comdemnList);
+			              	       new Thread(() -> {
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected());
+				             			 try {
+											ppw.start();
+										} catch (ParseException | InterruptedException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+			              	        }).start();
+              				} else {
+       	                       JOptionPane.showMessageDialog(frame, "Missing condemned weights", "Error", JOptionPane.ERROR_MESSAGE);
+              				}
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
