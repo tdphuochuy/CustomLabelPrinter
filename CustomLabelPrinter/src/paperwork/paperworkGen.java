@@ -54,6 +54,7 @@ public class paperworkGen{
 	private String sessionId = "";
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
+	private List<Double> issuedList = new ArrayList<>();
 	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList)
 	{
 		this.frame = frame;
@@ -77,16 +78,72 @@ public class paperworkGen{
 		extractData(productMap,dataTable);
 		if(reworkOrderNum.length() > 0)
 		{
+			System.out.println("Found rework!!");
 			Element dataTableRework = getData(reworkOrderNum);
-			extractData(productMap,dataTableRework);
+			if(dataTableRework != null)
+			{
+				extractData(productMap,dataTableRework);
+			}
+			getIssuedData(reworkOrderNum);
 		}
 		
 		evaluateData(productMap);
 	}
 	
+	public void getIssuedData(String orderNum)
+	{		
+		OkHttpClient client = new OkHttpClient();
+
+		FormBody formBody = new FormBody.Builder()
+                .add("fileName", "reports/issue_detail_for_production_order.txt")
+                .add("prodOrder2", orderNum)
+                .add("submit1", "Go")
+                .add("r", "XMLReport")
+                .add("f", "n")
+                .add("session", sessionId)
+                .build();
+		
+		Request request = new Request.Builder()
+                .url("http://whistleclient/cgi-bin/yield/") // Example URL
+                .post(formBody)
+                .build();
+		
+		try (
+				Response response = client.newCall(request).execute()) {
+            if (response.code() == 200) {
+            	String body = response.body().string();
+            	Document doc = Jsoup.parse(body);
+            	Element bodyElement = doc.body();
+            	Element inputElement = bodyElement.select("[name=unnamed]").first();
+            	for(Element table : inputElement.getElementsByTag("table"))
+            	{
+            		if(table.html().toLowerCase().contains(username.toLowerCase()))
+            		{
+            			for(Element tr : table.getElementsByTag("tr"))
+            			{
+            				String content = tr.html();
+            				if(content.toLowerCase().contains(username.toLowerCase()))
+            				{
+            					Elements td = tr.getElementsByTag("td");
+            					double quantity = Double.parseDouble(td.get(5).text().replace(",", ""));
+            					System.out.println(quantity);
+            					issuedList.add(quantity);
+            				}
+            			}
+            		}
+            	}
+            } else {
+            	System.out.println(response.code());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+	}
+	
 	public void deleteOldRecap()
 	{
-		File file = new File("recap_output/recap.pdf");
+        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf");
 
         if (!file.exists()) {
             System.out.println("File does not exist.");
@@ -199,9 +256,11 @@ public class paperworkGen{
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();
 				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
-				if(hour > 29 && hour < 54)
+				if(hour > 35 && hour < 54)
 				{
 					hour = hour - 30;
+				} else if (hour > 29 && hour < 35) {
+					hour = hour - 6;
 				} else if (hour > 26 && hour < 29)
 				{
 					hour = 26;
@@ -252,10 +311,10 @@ public class paperworkGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList,issuedList);
 		recapExcel.generateExcel();
 		
-        File file = new File("recap_output/recap.xlsx");
+        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
         exportExceltoPDF(file.getAbsolutePath());
         
         sendtoPrinterJob();
@@ -283,22 +342,20 @@ public class paperworkGen{
 		} else if (description.contains("SKN ")) {
 			type = "skin";
 		}
-		
-		
 
 		return type;
 	}
 	
 	public static void exportExceltoPDF(String excelFilePath)
 	{
-        String outputDir = "C:\\Users\\tdphu\\git\\customlabelprinter\\CustomLabelPrinter\\recap_output\\";
+        String outputDir = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\";
 
         // Full path to LibreOffice Portable or installed soffice.exe
-        String libreOfficePath = "D:\\Download\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
+        String libreOfficePath = "D:\\Users\\pdgwinterm7\\Downloads\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
 
         // Construct the command to run LibreOffice headless
         String command = libreOfficePath + " --headless --convert-to pdf --outdir " + outputDir + " " + excelFilePath;
-
+        System.out.println(command);
         try {
             // Run the process
             ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
@@ -319,7 +376,8 @@ public class paperworkGen{
 	
 	public void sendtoPrinterJob() throws InterruptedException
 	{
-		File file = new File("recap_output/recap.pdf");
+        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
+		File file = new File(filePath);
 
         int timeoutSeconds = 30;
         int waited = 0;
@@ -339,7 +397,6 @@ public class paperworkGen{
 		
 		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
         int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
-        String filePath = "recap_output/recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
 
         try (Socket socket = new Socket(printerIp, printerPort);
              OutputStream out = socket.getOutputStream();
@@ -384,7 +441,7 @@ public class paperworkGen{
 	            MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 	            MimeBodyPart attachmentPart = new MimeBodyPart();
-	            attachmentPart.attachFile(new File("recap_output/recap.pdf"));
+	            attachmentPart.attachFile(new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"));
 
 	            Multipart multipart = new MimeMultipart();
 	            //multipart.addBodyPart(messageBodyPart);

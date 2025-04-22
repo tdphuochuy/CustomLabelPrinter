@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 public abstract class Terminal {
 
-    private final static Logger log = Logger.getLogger(Terminal.class);
+    //private final static Logger log = Logger.getLogger(Terminal.class);
     protected OutputStream streamOut;
     protected boolean end_loop = false;
     protected byte[] buff = new byte[1024];
@@ -34,7 +34,7 @@ public abstract class Terminal {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException ex) {
-                log.error(ex);
+                //log.error(ex);
             }
         }
         interruptWaiting = false;

@@ -23,7 +23,7 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
     private final String remoteip;
     private final int remoteport;
     private final PrintStream out;
-    private final static Logger log = Logger.getLogger(Telnet.class);
+    //private final static Logger log = Logger.getLogger(Telnet.class);
     private final int defaultTelnetPort = 23;
     public Telnet(String remoteip, PrintStream out) {
 
@@ -48,7 +48,7 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
         try {
             fout = new FileOutputStream("file.log", true);
         } catch (IOException ex) {
-            log.error(ex);
+            //////log.error(ex);
         }
         tc = new TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
@@ -59,7 +59,7 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
             tc.addOptionHandler(echoopt);
             tc.addOptionHandler(gaopt);
         } catch (InvalidTelnetOptionException ex) {
-            log.error(ex);
+            //////log.error(ex);
         }
 
         while (!end_loop) {
@@ -82,18 +82,14 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                         if (ret_read > 0) {
                             if ((new String(buff, 0, ret_read)).startsWith("AYT")) {
                                 try {
-                                    log.info("AYT response:" + tc.sendAYT(5000));
-                                } catch (IOException e) {
-                                    log.error("Exception waiting AYT response: " + e.getMessage());
+                                    //////log.info("AYT response:" + tc.sendAYT(5000));
                                 } catch (IllegalArgumentException ex) {
-                                    log.error(ex);
-                                } catch (InterruptedException ex) {
-                                    log.error(ex);
+                                    ////log.error(ex);
                                 }
                             } else if ((new String(buff, 0, ret_read)).startsWith("OPT")) {
-                                log.info("Status of options:");
+                                //////log.info("Status of options:");
                                 for (int ii = 0; ii < 25; ii++) {
-                                    log.info("Local Option " + ii + ":" + tc.getLocalOptionState(ii) + " Remote Option " + ii + ":" + tc.getRemoteOptionState(ii));
+                                    ////log.info("Local Option " + ii + ":" + tc.getLocalOptionState(ii) + " Remote Option " + ii + ":" + tc.getRemoteOptionState(ii));
                                 }
                             } else if ((new String(buff, 0, ret_read)).startsWith("REGISTER")) {
                                 StringTokenizer st = new StringTokenizer(new String(buff));
@@ -109,12 +105,12 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                                     tc.addOptionHandler(opthand);
                                 } catch (NumberFormatException | InvalidTelnetOptionException e) {
                                     if (e instanceof InvalidTelnetOptionException) {
-                                        log.error("Error registering option: " + e.getMessage());
+                                        ////log.error("Error registering option: " + e.getMessage());
                                     } else {
-                                        log.error("Invalid REGISTER command.");
-                                        log.error("Use REGISTER optcode initlocal initremote acceptlocal acceptremote");
-                                        log.error("(optcode is an integer.)");
-                                        log.error("(initlocal, initremote, acceptlocal, acceptremote are boolean)");
+                                        ////log.error("Invalid REGISTER command.");
+                                        ////log.error("Use REGISTER optcode initlocal initremote acceptlocal acceptremote");
+                                        ////log.error("(optcode is an integer.)");
+                                        ////log.error("(initlocal, initremote, acceptlocal, acceptremote are boolean)");
                                     }
                                 }
                             } else if ((new String(buff, 0, ret_read)).startsWith("UNREGISTER")) {
@@ -125,11 +121,11 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                                     tc.deleteOptionHandler(opcode);
                                 } catch (Exception e) {
                                     if (e instanceof InvalidTelnetOptionException) {
-                                        log.error("Error unregistering option: " + e.getMessage());
+                                        ////log.error("Error unregistering option: " + e.getMessage());
                                     } else {
-                                        log.error("Invalid UNREGISTER command.");
-                                        log.error("Use UNREGISTER optcode");
-                                        log.error("(optcode is an integer)");
+                                        ////log.error("Invalid UNREGISTER command.");
+                                        ////log.error("Use UNREGISTER optcode");
+                                        ////log.error("(optcode is an integer)");
                                     }
                                 }
                             } else if ((new String(buff, 0, ret_read)).startsWith("SPY")) {
@@ -146,7 +142,7 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                             }
                         }
                     } catch (IOException e) {
-                        log.error("Exception while reading keyboard:" + e.getMessage());
+                        ////log.error("Exception while reading keyboard:" + e.getMessage());
                         end_loop = true;
                     }
                 } while ((ret_read > 0) && (end_loop == false));
@@ -155,12 +151,12 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                     tc.disconnect();
                 } catch (IOException e) {
                 	System.out.println("TEST1 disconnect");
-                    log.error("Exception while connecting:" + e.getMessage());
+                    ////log.error("Exception while connecting:" + e.getMessage());
 
                 }
             } catch (IOException e) {
             	System.out.println("TEST2 disconnect");
-                log.error("Exception while connecting:" + e.getMessage());
+                ////log.error("Exception while connecting:" + e.getMessage());
 
             }
         }
@@ -191,7 +187,7 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
         } else if (negotiation_code == TelnetNotificationHandler.RECEIVED_WONT) {
             command = "WONT";
         }
-        log.info("Received " + command + " for option code " + option_code);
+        ////log.info("Received " + command + " for option code " + option_code);
     }
 
     /**
@@ -218,14 +214,14 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                 }
             } while (ret_read >= 0);
         } catch (Exception e) {
-            log.error("Exception while reading socket:" + e.getMessage());
+            ////log.error("Exception while reading socket:" + e.getMessage());
 
         }
         try {
             tc.disconnect();
             System.out.println("TesT 4 Disconnected");
         } catch (Exception e) {
-            log.error("Exception while closing telnet:" + e.getMessage());
+            ////log.error("Exception while closing telnet:" + e.getMessage());
 
         }
         System.out.println("TesT 5 Disconnected");
