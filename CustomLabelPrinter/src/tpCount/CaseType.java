@@ -76,6 +76,7 @@ public class CaseType extends JPanel{
         
         // Create the button with the icon
         JButton previewButton = new JButton(IconFontSwing.buildIcon(FontAwesome.QUESTION_CIRCLE, 15,Color.decode("#69a5de")));
+        previewButton.setToolTipText("Preview split result");
         previewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         previewButton.setMaximumSize(new Dimension(15,15));
         previewButton.setPreferredSize(new Dimension(15,15));
