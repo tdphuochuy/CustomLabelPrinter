@@ -56,8 +56,8 @@ public class paperworkGen{
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
 	private List<Double> issuedList = new ArrayList<>();
-	private boolean pdfOnly;
-	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly)
+	private boolean pdfOnly,sendEmail;
+	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly,boolean sendEmail)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -68,8 +68,8 @@ public class paperworkGen{
 		this.times = times;
 		this.condemnList = condemnList;
 		this.pdfOnly = pdfOnly;
+		this.sendEmail = sendEmail;
 		sessionId = getSessionId();
-		
 	}
 	
 	public void start() throws ParseException, InterruptedException
@@ -327,7 +327,10 @@ public class paperworkGen{
         	sendtoPrinterJob();
         }
         
-        //sendEmail();
+        if(sendEmail)
+        {
+        	sendEmail();
+        }
 	}
 	
 	public void openPDFfile()

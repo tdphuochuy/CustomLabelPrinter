@@ -49,9 +49,9 @@ public class paperworkPanel extends JPanel{
         namePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel timePanel = new JPanel();
         timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JPanel pdfOnlyPanel = new JPanel();
-        pdfOnlyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        pdfOnlyPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
+        JPanel checkboxesPanel = new JPanel();
+        checkboxesPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        checkboxesPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
 
         
         JLabel label = new JLabel("Order #");
@@ -101,7 +101,9 @@ public class paperworkPanel extends JPanel{
         button.setBackground(Color.white);
         
         JCheckBox pdfOnlycb = new JCheckBox("Generate PDF only");
-        pdfOnlyPanel.add(pdfOnlycb);
+        checkboxesPanel.add(pdfOnlycb);
+        JCheckBox sendEmailcb = new JCheckBox("Send email");
+        checkboxesPanel.add(sendEmailcb);
         
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -111,7 +113,7 @@ public class paperworkPanel extends JPanel{
         mainPanel.add(passPanel);
         mainPanel.add(namePanel);
         mainPanel.add(timePanel);
-        mainPanel.add(pdfOnlyPanel);
+        mainPanel.add(checkboxesPanel);
         mainPanel.add(button);
         
         JPanel textareaPanel = new JPanel();
@@ -165,7 +167,7 @@ public class paperworkPanel extends JPanel{
 		              	         }
 		              	         System.out.println(comdemnList);
 			              	       new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected());
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected());
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException e1) {
