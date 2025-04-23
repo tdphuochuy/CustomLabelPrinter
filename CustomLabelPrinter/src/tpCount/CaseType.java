@@ -2,6 +2,8 @@ package tpCount;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,8 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import config.Config;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 
 public class CaseType extends JPanel{
 	private JFrame frame;
@@ -49,7 +53,7 @@ public class CaseType extends JPanel{
         
         
         JCheckBox checkBox = new JCheckBox("Auto split");
-        JTextField caseQtyField = new JTextField(7);
+        JTextField caseQtyField = new JTextField(6);
         caseQtyField.setEnabled(false);
         setPlaceholder(caseQtyField,"# of cases");
         
@@ -69,24 +73,88 @@ public class CaseType extends JPanel{
         codePanel.add(codeLabel);
         codePanel.add(codeField);
         codePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
-
+        
+        // Create the button with the icon
+        JButton previewButton = new JButton(IconFontSwing.buildIcon(FontAwesome.QUESTION_CIRCLE, 15,Color.decode("#69a5de")));
+        previewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        previewButton.setMaximumSize(new Dimension(15,15));
+        previewButton.setPreferredSize(new Dimension(15,15));
+        // Remove button decorations
+        previewButton.setBorderPainted(false);
+        previewButton.setContentAreaFilled(false);
+        previewButton.setFocusPainted(false);
+        previewButton.setOpaque(false);
+        
+        previewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	previewButton.setEnabled(false);
+            	try {
+               	   String productCode = codeField.getText().equals("optional") ? "" : codeField.getText();
+                   String casesNumber = caseQtyField.getText().equals("# of cases") ? "" : caseQtyField.getText(); 
+                   if(casesNumber.length() > 0)
+            	   {
+                	   Map<Integer,Integer> map;
+                	   if(productCode.length() > 0 && productCode.equals("21108"))
+                	   {
+                		   map = getMultiplesOf80(new HashMap<>(),Integer.valueOf(casesNumber));
+                	   } else {
+                		   map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+                	   }
+                	   String splitResult = "";
+                	   for(int caseQuantity : map.keySet())
+                	   {
+                		   splitResult += map.get(caseQuantity);
+                		   if(map.get(caseQuantity) > 1)
+                		   {
+                			   splitResult +=  " pallets of " + caseQuantity + "\n";
+                		   } else {
+                			   splitResult +=  " pallet of " + caseQuantity + "\n";
+                		   }
+                	   }
+                       JOptionPane.showMessageDialog(frame, splitResult, "Preview", JOptionPane.INFORMATION_MESSAGE);
+            	   } else {
+                       JOptionPane.showMessageDialog(frame, "Missing number of cases", "Error", JOptionPane.ERROR_MESSAGE);
+            	   }
+            	} catch (Exception err)
+            	{
+            		
+            	}
+            	
+            	// Create a Timer to re-enable the previewButton after a delay
+                Timer timer = new Timer(500, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        previewButton.setEnabled(true); // Re-enable the previewButton
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
+           
+            }
+        });
+        
         checkBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                 	caseQtyField.setEnabled(true);
+                	previewButton.setEnabled(true);
                 	quantityField.setEnabled(false);
                 	casePerPalletField.setEnabled(false);
                 } else {
                 	caseQtyField.setEnabled(false);
+                	previewButton.setEnabled(false);
                 	quantityField.setEnabled(true);
                 	casePerPalletField.setEnabled(true);
                 }
             }
         });
+        
         autoPanel.add(checkBox);
         autoPanel.add(caseQtyField);
-        
+        autoPanel.add(previewButton);
+
         JButton button = new JButton("Print");
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
