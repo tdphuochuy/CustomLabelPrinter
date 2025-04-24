@@ -95,25 +95,30 @@ public class CaseType extends JPanel{
                    String casesNumber = caseQtyField.getText().equals("# of cases") ? "" : caseQtyField.getText(); 
                    if(casesNumber.length() > 0)
             	   {
-                	   Map<Integer,Integer> map;
-                	   if(productCode.length() > 0 && productCode.equals("21108"))
-                	   {
-                		   map = getMultiplesOf80(new HashMap<>(),Integer.valueOf(casesNumber));
+	                	   if(productCode.length() > 0)
+	                	   {
+	                	   Map<Integer,Integer> map;
+	                	   if(productCode.length() > 0 && productCode.equals("21108"))
+	                	   {
+	                		   map = getMultiplesOf80(new HashMap<>(),Integer.valueOf(casesNumber));
+	                	   } else {
+	                		   map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+	                	   }
+	                	   String splitResult = "";
+	                	   for(int caseQuantity : map.keySet())
+	                	   {
+	                		   splitResult += map.get(caseQuantity);
+	                		   if(map.get(caseQuantity) > 1)
+	                		   {
+	                			   splitResult +=  " pallets of " + caseQuantity + "\n";
+	                		   } else {
+	                			   splitResult +=  " pallet of " + caseQuantity + "\n";
+	                		   }
+	                	   }
+	                	   JOptionPane.showMessageDialog(frame, splitResult, "Preview", JOptionPane.INFORMATION_MESSAGE);
                 	   } else {
-                		   map = getMultiplesOf7(new HashMap<>(),Integer.valueOf(casesNumber));
+                           JOptionPane.showMessageDialog(frame, "Missing product code", "Error", JOptionPane.ERROR_MESSAGE);
                 	   }
-                	   String splitResult = "";
-                	   for(int caseQuantity : map.keySet())
-                	   {
-                		   splitResult += map.get(caseQuantity);
-                		   if(map.get(caseQuantity) > 1)
-                		   {
-                			   splitResult +=  " pallets of " + caseQuantity + "\n";
-                		   } else {
-                			   splitResult +=  " pallet of " + caseQuantity + "\n";
-                		   }
-                	   }
-                       JOptionPane.showMessageDialog(frame, splitResult, "Preview", JOptionPane.INFORMATION_MESSAGE);
             	   } else {
                        JOptionPane.showMessageDialog(frame, "Missing number of cases", "Error", JOptionPane.ERROR_MESSAGE);
             	   }
