@@ -118,7 +118,7 @@ public class GCweights extends JPanel{
 	              			 String password = passField.getText();
 	              			 String orderNum = textField.getText();
 	              			 run(username,password,orderNum);
-	                         JOptionPane.showMessageDialog(frame, "File's sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+	                         JOptionPane.showMessageDialog(frame, "File has been sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
