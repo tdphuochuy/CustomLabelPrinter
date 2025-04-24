@@ -453,7 +453,7 @@ public class paperworkGen{
             }
 
             out.flush();
-            JOptionPane.showMessageDialog(frame, "All papers are sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "All papers have been sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("File sent to printer successfully.");
         } catch (Exception e) {
             e.printStackTrace();
