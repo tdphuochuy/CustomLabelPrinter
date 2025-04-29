@@ -140,7 +140,13 @@ public class recapGen extends excelGen{
 	        			currentColumn = "C";
 	        			currentRow = 36;
 	        		}
-		        	setCellValue(sheet, currentColumn, currentRow, formatDouble(product.getWeight()) + " lbs");
+	        		String weightString = formatDouble(product.getWeight());
+	        		if(!weightString.endsWith("40"))
+	        		{
+	        			setCellValue(sheet, currentColumn, currentRow, weightString + " lbs*");
+	        		} else {
+	        			setCellValue(sheet, currentColumn, currentRow, weightString + " lbs");
+	        		}
 		        	currentRow++;
 	        	}
 	        	

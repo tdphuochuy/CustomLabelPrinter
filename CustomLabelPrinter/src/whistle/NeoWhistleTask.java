@@ -134,6 +134,18 @@ public class NeoWhistleTask implements Runnable {
 					continue;
 				}
 				
+				if(prodNum.equals("17261"))
+				{
+					userConsole.append("Rework type: Combo (1) or Cases (2)\n");
+	                userConsole.setCaretPosition(userConsole.getDocument().getLength());
+					String reworkType = scanner.nextLine();
+					if(reworkType.equals("2"))
+					{
+						int newQuantity = Integer.parseInt(quantity) + 40;
+						quantity = String.valueOf(newQuantity);
+					}
+				}
+				
 				String sequence = "1";
 				if(prodNum.equals("skip") || quantity.equals("skip"))
 				{
