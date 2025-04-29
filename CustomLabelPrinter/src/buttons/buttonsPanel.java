@@ -76,7 +76,7 @@ public class buttonsPanel extends JPanel{
 	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 	        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/buttons/images/" + buttonName + ".png"));
 	        
-	        Image scaledImage = imageIcon.getImage().getScaledInstance(88, 65, Image.SCALE_SMOOTH);
+	        Image scaledImage = imageIcon.getImage().getScaledInstance(92, 65, Image.SCALE_SMOOTH);
 	        ImageIcon scaledIcon = new ImageIcon(scaledImage);
 	        
 	        JLabel label = new JLabel(scaledIcon);

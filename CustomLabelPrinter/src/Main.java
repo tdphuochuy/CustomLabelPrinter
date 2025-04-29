@@ -190,7 +190,6 @@ public class Main {
 									JSONObject data = (JSONObject) obj.get("data");
 									String buttonName = data.get("buttonName").toString();
 									ButtonObj button = buttons.getButton(buttonName);
-									System.out.println(button.getProductCode());
 									if(button.isEnabled())
 									{
 										neoWhistle.addWhistleCommand(button.getProductCode(), button.getQuantity());
