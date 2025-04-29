@@ -225,7 +225,9 @@ public class NeoWhistlePanel extends JPanel {
     
     public void focusInput()
     {
-    	userInput.requestFocusInWindow();
+    	SwingUtilities.invokeLater(() -> {
+    	    userInput.requestFocusInWindow();
+    	});
     }
     
     public void addWhistleCommand(String productCode, String quantity)
