@@ -1,0 +1,20 @@
+[
+	{
+		"name":"button1",
+		"enable": false,
+		"productCode": "21579",
+		"quantity": "50"
+	},
+	{
+		"name":"button2",
+		"enable": false,
+		"productCode": "20177",
+		"quantity": "2000"
+	},
+	{
+		"name":"button3",
+		"enable": true,
+		"productCode": "22486",
+		"quantity": "1800"
+	}
+]

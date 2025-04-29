@@ -8,9 +8,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import buttons.ButtonObj;
+import buttons.buttonsPanel;
 import chatSystem.ChatPanel;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import paperwork.paperworkGen;
 import paperwork.paperworkPanel;
 import whistle.NeoWhistlePanel;
 import whistle.SequenceGetter;
@@ -20,12 +23,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
    private static NeoWhistlePanel neoWhistle;
    private static GCweights gcWeight;
+   private static buttonsPanel buttons;
    private static paperworkPanel ppw;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
@@ -35,6 +41,7 @@ public class Main {
 
        // Create a JTabbedPane
        JTabbedPane tabbedPane = new JTabbedPane();
+       tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
        
        tabbedPane.addChangeListener(new ChangeListener() {
            public void stateChanged(ChangeEvent e) {
@@ -78,11 +85,16 @@ public class Main {
        JPanel neoWhistlePanel = new JPanel();
        neoWhistle = new NeoWhistlePanel(frame);
        neoWhistlePanel.add(neoWhistle);
+       
+       JPanel buttonsPanel = new JPanel();
+       buttons = new buttonsPanel(frame);
+       buttonsPanel.add(buttons);
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
+       tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
        tabbedPane.addTab("Paperwork", ppwPanel);
        tabbedPane.addTab("GC weights", gcWeightPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
@@ -145,6 +157,44 @@ public class Main {
 									String username = data.get("username").toString();
 									String password = data.get("password").toString();
 									gcWeight.run(username, password, orderNum);
+								} else if (type.equals("paperwork"))
+								{
+									JSONObject data = (JSONObject) obj.get("data");
+									String orderNum = data.get("orderNum").toString();
+									String reworkOrderNum = data.get("reworkOrderNum").toString();
+									String username = data.get("username").toString();
+									String password = data.get("password").toString();
+									String name = data.get("name").toString();
+									String firstBreak = data.get("firstBreak").toString();
+									String secondBreak = data.get("secondBreak").toString();
+									String trimCondemned = data.get("trimCondemned").toString();
+									
+									int break1 = Integer.parseInt(firstBreak);
+			              			int break2 = Integer.parseInt(secondBreak);
+			              			int[] times = {break1,break2};
+			              			List<Integer> comdemnList = new ArrayList<>();
+			              			for (String s : trimCondemned.split(",")) {
+			              				comdemnList.add(Integer.parseInt(s));
+			              			}
+									new Thread(() -> {
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true);
+				             			 try {
+											ppw.start();
+										} catch (ParseException | InterruptedException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+			              	        }).start();
+								} else if (type.equals("whistle_button"))
+								{
+									JSONObject data = (JSONObject) obj.get("data");
+									String buttonName = data.get("buttonName").toString();
+									ButtonObj button = buttons.getButton(buttonName);
+									System.out.println(button.getProductCode());
+									if(button.isEnabled())
+									{
+										neoWhistle.addWhistleCommand(button.getProductCode(), button.getQuantity());
+									}
 								}
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
