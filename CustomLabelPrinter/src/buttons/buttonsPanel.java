@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
@@ -43,6 +44,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import config.Config;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 
 public class buttonsPanel extends JPanel{
 	private JFrame frame;
@@ -69,7 +72,11 @@ public class buttonsPanel extends JPanel{
 	    	String quantity = buttonObj.get("quantity").toString();
 	    	boolean enabled = (boolean) buttonObj.get("enable");
 	    	
-	    	buttonMap.put(buttonName, new ButtonObj(productCode,quantity,enabled));
+	    	JLabel currentQuantitylbl = new JLabel(quantity);
+	        JLabel iconlbl = new JLabel(IconFontSwing.buildIcon(FontAwesome.CARET_RIGHT, 12,Color.decode("#69a5de")));
+	        JLabel nextQuantitylbl = new JLabel(quantity);
+	    	
+	    	buttonMap.put(buttonName, new ButtonObj(productCode,quantity,enabled,currentQuantitylbl,nextQuantitylbl));
 	    	
 	        JPanel buttonPanel = new JPanel();
 	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 45)));
@@ -118,19 +125,24 @@ public class buttonsPanel extends JPanel{
 	        JTextField quantityField = new JTextField(5);
 	        quantityField.setHorizontalAlignment(JTextField.CENTER);
 	        quantityField.setText(quantity);
-	        quantityField.getDocument().addDocumentListener(new DocumentListener() {
-                public void insertUpdate(DocumentEvent e) { update(); }
-                public void removeUpdate(DocumentEvent e) { update(); }
-                public void changedUpdate(DocumentEvent e) { update(); } // Usually not used for plain JTextField
-
-                private void update() {
-                    String text = quantityField.getText();
+	        quantityField.addFocusListener(new FocusAdapter() {
+	            @Override
+	            public void focusLost(FocusEvent e) {
+	            	String text = quantityField.getText();
                     buttonMap.get(buttonName).setQuantity(text);
-                }
-            });
+	            }
+	        });
 	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 	        buttonPanel.add(quantityField);
 	        
+	        JPanel labelPanel = new JPanel();
+	        labelPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+	       
+	        labelPanel.add(currentQuantitylbl);
+	        labelPanel.add(iconlbl);
+	        labelPanel.add(nextQuantitylbl);
+	        buttonPanel.add(labelPanel);
+
 	        buttonsPanel.add(buttonPanel);
 	    }
 	    

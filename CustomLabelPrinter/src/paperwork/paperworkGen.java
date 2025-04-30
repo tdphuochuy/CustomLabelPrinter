@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.json.simple.JSONArray;
@@ -435,9 +438,7 @@ public class paperworkGen{
                 return;
             }
         }
-        
-        System.out.println("File found!!!.");
-		
+        		
 		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
         int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
 
@@ -453,8 +454,7 @@ public class paperworkGen{
             }
 
             out.flush();
-            JOptionPane.showMessageDialog(frame, "All papers have been sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("File sent to printer successfully.");
+            showAutoClosingDialog("All papers have been sent to the office!","Alert",3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -498,4 +498,22 @@ public class paperworkGen{
 	            e.printStackTrace();
 	        }
 	   }
+	   
+	   public static void showAutoClosingDialog(String message, String title, int timeoutMillis) {
+	        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+	        JDialog dialog = pane.createDialog(null, title);
+
+	        // Set dialog to not block the EDT
+	        dialog.setModal(false);
+	        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	        dialog.setVisible(true);
+
+	        // Create a timer to close the dialog
+	        new Timer().schedule(new TimerTask() {
+	            @Override
+	            public void run() {
+	                dialog.dispose();
+	            }
+	        }, timeoutMillis);
+	    }
 }

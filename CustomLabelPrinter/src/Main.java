@@ -192,7 +192,11 @@ public class Main {
 									ButtonObj button = buttons.getButton(buttonName);
 									if(button.isEnabled())
 									{
-										neoWhistle.addWhistleCommand(button.getProductCode(), button.getQuantity());
+										String quantity = button.getQuantity();
+										if(quantity != null)
+										{
+											neoWhistle.addWhistleCommand(button.getProductCode(), quantity);
+										}
 									}
 								}
 							} catch (Exception e) {
