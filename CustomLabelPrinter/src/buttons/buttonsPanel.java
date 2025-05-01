@@ -141,7 +141,7 @@ public class buttonsPanel extends JPanel{
 	        
 	        JPanel delayPanel = new JPanel();
 	        delayPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-	        JTextField delayField = new JTextField(String.valueOf(delay),5);
+	        JTextField delayField = new JTextField(String.valueOf(delay / 1000),3);
 	        delayField.setHorizontalAlignment(JTextField.CENTER);
 	        delayField.getDocument().addDocumentListener(new DocumentListener() {
                 public void insertUpdate(DocumentEvent e) { update(); }
@@ -151,14 +151,16 @@ public class buttonsPanel extends JPanel{
                 private void update() {
                     String text = delayField.getText();
                     try {
-                    	buttonMap.get(buttonName).setDelay(Long.valueOf(text));
+                    	buttonMap.get(buttonName).setDelay(Long.valueOf(text) * 1000);
                     } catch (Exception e)
                     {
                     	
                     }
                 }
             });
-	        JLabel mslbl = new JLabel("ms");
+	        JLabel delaylbl = new JLabel("Delay");
+	        JLabel mslbl = new JLabel("s");
+	        delayPanel.add(delaylbl);
 	        delayPanel.add(delayField);
 	        delayPanel.add(mslbl);
 	       

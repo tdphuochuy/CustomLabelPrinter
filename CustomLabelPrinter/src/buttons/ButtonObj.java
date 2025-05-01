@@ -98,6 +98,7 @@ public class ButtonObj {
 	}
 
 	public void setDelay(long delay) {
+		System.out.println(delay);
 		this.delay = delay;
 	}
 	
