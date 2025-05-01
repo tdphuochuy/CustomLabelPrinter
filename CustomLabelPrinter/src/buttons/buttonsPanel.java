@@ -150,7 +150,12 @@ public class buttonsPanel extends JPanel{
 
                 private void update() {
                     String text = delayField.getText();
+                    try {
                     buttonMap.get(buttonName).setDelay(Long.valueOf(text));
+                    } catch (Exception e)
+                    {
+                    	
+                    }
                 }
             });
 	        JLabel mslbl = new JLabel("ms");
