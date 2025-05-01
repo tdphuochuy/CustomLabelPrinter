@@ -71,11 +71,16 @@ public class ButtonObj {
 					   queue.offer(quantityText[0]);
 				   }
 			   }
-			   String secondItem = ((LinkedList<String>) queue).get(1);
 			   if(currentQuantitylbl != null)
 			   {
 				   currentQuantitylbl.setText(queue.peek());
-				   nextQuantitylbl.setText(secondItem);
+				   if(queue.size() > 1)
+				   {
+					   String secondItem = ((LinkedList<String>) queue).get(1);
+					   nextQuantitylbl.setText(secondItem);
+				   } else {
+		    			nextQuantitylbl.setText("0");
+				   }
 			   }
     	}
     }
