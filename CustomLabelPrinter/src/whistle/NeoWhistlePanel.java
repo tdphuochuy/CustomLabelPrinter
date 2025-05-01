@@ -230,7 +230,7 @@ public class NeoWhistlePanel extends JPanel {
     	});
     }
     
-    public void addWhistleCommand(String productCode, String quantity)
+    public void addWhistleButtonCommand(String productCode, String quantity)
     {
     	if(whistleTask != null)
         {

@@ -3,18 +3,21 @@
 		"name":"button1",
 		"enable": false,
 		"productCode": "21579",
-		"quantity": "50"
+		"quantity": "50",
+		"delay": 30000
 	},
 	{
 		"name":"button2",
 		"enable": false,
 		"productCode": "20177",
-		"quantity": "2000"
+		"quantity": "2000",
+		"delay": 60000
 	},
 	{
 		"name":"button3",
 		"enable": true,
 		"productCode": "22486",
-		"quantity": "1800"
+		"quantity": "1800",
+		"delay": 120000
 	}
 ]

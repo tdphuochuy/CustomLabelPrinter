@@ -195,7 +195,13 @@ public class Main {
 										String quantity = button.getQuantity();
 										if(quantity != null)
 										{
-											neoWhistle.addWhistleCommand(button.getProductCode(), quantity);
+											long currentTime = System.currentTimeMillis();
+											long buttonLastTimeStampt = button.getLastTimeStamp();
+											long buttonDelay = button.getDelay();
+											if (currentTime - buttonLastTimeStampt >= buttonDelay) {
+												button.setLastTimeStamp(currentTime);
+												neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+											}
 										}
 									}
 								}

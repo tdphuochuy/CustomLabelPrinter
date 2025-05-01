@@ -11,7 +11,9 @@ public class ButtonObj {
     private JLabel currentQuantitylbl,nextQuantitylbl;
     private boolean enabled;
     private Queue<String> queue;
-    public ButtonObj(String productCode, String quantity,boolean enabled,JLabel currentQuantitylbl,JLabel nextQuantitylbl) {
+    private long delay;
+    private long lastTimeStamp;
+    public ButtonObj(String productCode, String quantity,boolean enabled,JLabel currentQuantitylbl,JLabel nextQuantitylbl,long delay) {
         queue = new LinkedList<>();
     	this.productCode = productCode;
         setQuantity(quantity);
@@ -19,9 +21,11 @@ public class ButtonObj {
         this.enabled = enabled;
         this.currentQuantitylbl = currentQuantitylbl;
         this.nextQuantitylbl = nextQuantitylbl;
+        this.delay = delay;
+        this.lastTimeStamp = 0;
     }
 
-    // Getters and setters
+	// Getters and setters
     public String getProductCode() { return productCode; }
     public void setProductCode(String productCode) { this.productCode = productCode; }
 
@@ -87,4 +91,21 @@ public class ButtonObj {
     
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
+    
+
+    public long getDelay() {
+		return delay;
+	}
+
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+	
+	public long getLastTimeStamp() {
+		return lastTimeStamp;
+	}
+
+	public void setLastTimeStamp(long lastTimeStamp) {
+		this.lastTimeStamp = lastTimeStamp;
+	}
 }

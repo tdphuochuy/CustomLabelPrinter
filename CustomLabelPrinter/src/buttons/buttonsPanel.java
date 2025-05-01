@@ -70,13 +70,14 @@ public class buttonsPanel extends JPanel{
 	    	String buttonName = buttonObj.get("name").toString();
 	    	String productCode = buttonObj.get("productCode").toString();
 	    	String quantity = buttonObj.get("quantity").toString();
+	    	long delay = (long) buttonObj.get("delay");
 	    	boolean enabled = (boolean) buttonObj.get("enable");
 	    	
 	    	JLabel currentQuantitylbl = new JLabel(quantity);
 	        JLabel iconlbl = new JLabel(IconFontSwing.buildIcon(FontAwesome.CARET_RIGHT, 12,Color.decode("#69a5de")));
 	        JLabel nextQuantitylbl = new JLabel(quantity);
 	    	
-	    	buttonMap.put(buttonName, new ButtonObj(productCode,quantity,enabled,currentQuantitylbl,nextQuantitylbl));
+	    	buttonMap.put(buttonName, new ButtonObj(productCode,quantity,enabled,currentQuantitylbl,nextQuantitylbl,delay));
 	    	
 	        JPanel buttonPanel = new JPanel();
 	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 45)));
@@ -137,10 +138,30 @@ public class buttonsPanel extends JPanel{
 	        
 	        JPanel labelPanel = new JPanel();
 	        labelPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+	        
+	        JPanel delayPanel = new JPanel();
+	        delayPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+	        JTextField delayField = new JTextField(String.valueOf(delay),5);
+	        delayField.setHorizontalAlignment(JTextField.CENTER);
+	        delayField.getDocument().addDocumentListener(new DocumentListener() {
+                public void insertUpdate(DocumentEvent e) { update(); }
+                public void removeUpdate(DocumentEvent e) { update(); }
+                public void changedUpdate(DocumentEvent e) { update(); } // Usually not used for plain JTextField
+
+                private void update() {
+                    String text = delayField.getText();
+                    buttonMap.get(buttonName).setDelay(Long.valueOf(text));
+                }
+            });
+	        JLabel mslbl = new JLabel("ms");
+	        delayPanel.add(delayField);
+	        delayPanel.add(mslbl);
 	       
 	        labelPanel.add(currentQuantitylbl);
 	        labelPanel.add(iconlbl);
 	        labelPanel.add(nextQuantitylbl);
+	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+	        buttonPanel.add(delayPanel);
 	        buttonPanel.add(labelPanel);
 
 	        buttonsPanel.add(buttonPanel);
