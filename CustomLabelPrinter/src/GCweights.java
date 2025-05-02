@@ -406,7 +406,7 @@ public class GCweights extends JPanel{
             int end = Math.min(i + chunkSize, trackingList.size());
             List<String> trackingChunk = trackingList.subList(i, end);
             List<String> weightChunk = weightList.subList(i, end);
-            document.add(pdfTableGen(trackingChunk,weightList));
+            document.add(pdfTableGen(trackingChunk,weightChunk));
             if(end < trackingList.size())
             {
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
