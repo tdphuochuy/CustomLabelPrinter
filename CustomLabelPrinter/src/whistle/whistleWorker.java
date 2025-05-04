@@ -51,7 +51,7 @@ public class whistleWorker{
     {
     	//take 10-20 secs to start
 		running = true;
-    	telnet = new Telnet("167.110.212.137", 23, System.out);
+    	telnet = new Telnet("167.110.212.137", 23, System.out,systemConsole);
 		Thread myThread = new Thread(new Runnable() {
            @Override
            public void run() {

@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.swing.JTextArea;
+
 import org.apache.commons.net.telnet.EchoOptionHandler;
 import org.apache.commons.net.telnet.InvalidTelnetOptionException;
 import org.apache.commons.net.telnet.SimpleOptionHandler;
@@ -23,22 +26,23 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
     private final String remoteip;
     private final int remoteport;
     private final PrintStream out;
+    private JTextArea systemConsole;
     //private final static Logger log = Logger.getLogger(Telnet.class);
     private final int defaultTelnetPort = 23;
-    public Telnet(String remoteip, PrintStream out) {
+    public Telnet(String remoteip, PrintStream out,JTextArea systemConsole) {
 
         this.remoteip = remoteip;
         this.remoteport = defaultTelnetPort;
         this.out = out;
-
+        this.systemConsole = systemConsole;
     }
 
-    public Telnet(String remoteip, int remoteport, PrintStream out) {
+    public Telnet(String remoteip, int remoteport, PrintStream out,JTextArea systemConsole) {
 
         this.remoteip = remoteip;
         this.remoteport = remoteport;
         this.out = out;
-
+        this.systemConsole = systemConsole;
     }
 
     public void execute() {
@@ -66,8 +70,8 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
 
             try {
                 tc.connect(remoteip, remoteport);
-                Thread reader = new Thread(new Telnet(remoteip, remoteport, out));
-                tc.registerNotifHandler(new Telnet(remoteip, remoteport, out));
+                Thread reader = new Thread(new Telnet(remoteip, remoteport, out,systemConsole));
+                tc.registerNotifHandler(new Telnet(remoteip, remoteport, out,systemConsole));
                 reader.start();
                 OutputStream outstr = tc.getOutputStream();
                 byte[] buff = new byte[1024];
@@ -151,16 +155,19 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
                     tc.disconnect();
                 } catch (IOException e) {
                 	System.out.println("TEST1 disconnect");
+                	appendConsole("Telnet disconnected (1)");
                     ////log.error("Exception while connecting:" + e.getMessage());
 
                 }
             } catch (IOException e) {
             	System.out.println("TEST2 disconnect");
+            	appendConsole("Telnet disconnected (2)");
                 ////log.error("Exception while connecting:" + e.getMessage());
 
             }
         }
         System.out.println("TEST3 disconnected");
+    	appendConsole("Telnet disconnected (3)");
     }
 
     /**
@@ -255,5 +262,11 @@ public class Telnet extends Terminal implements Runnable, TelnetNotificationHand
     {
     	responseList.clear();
     }
+    
+    public void appendConsole(String text)
+	{
+		systemConsole.append(text);
+		systemConsole.setCaretPosition(systemConsole.getDocument().getLength());
+	}
 
 }
