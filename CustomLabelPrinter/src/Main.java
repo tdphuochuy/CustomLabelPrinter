@@ -82,13 +82,13 @@ public class Main {
        JPanel reprintPanel = new JPanel();
        reprintPanel.add(new reprintPanel(frame));
        
-       JPanel neoWhistlePanel = new JPanel();
-       neoWhistle = new NeoWhistlePanel(frame);
-       neoWhistlePanel.add(neoWhistle);
-       
        JPanel buttonsPanel = new JPanel();
        buttons = new buttonsPanel(frame);
        buttonsPanel.add(buttons);
+       
+       JPanel neoWhistlePanel = new JPanel();
+       neoWhistle = new NeoWhistlePanel(frame,buttons);
+       neoWhistlePanel.add(neoWhistle);
 
        // Add tabs to the tabbedPane
        tabbedPane.addTab("TP count", tpCountPanel);

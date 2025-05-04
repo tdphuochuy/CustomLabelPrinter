@@ -50,6 +50,7 @@ import jiconfont.swing.IconFontSwing;
 public class buttonsPanel extends JPanel{
 	private JFrame frame;
 	private Map<String, ButtonObj> buttonMap = new HashMap<>();
+	private JLabel whistlestatus;
     public buttonsPanel(JFrame frame) throws ParseException {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -80,7 +81,7 @@ public class buttonsPanel extends JPanel{
 	    	buttonMap.put(buttonName, new ButtonObj(productCode,quantity,enabled,currentQuantitylbl,nextQuantitylbl,delay));
 	    	
 	        JPanel buttonPanel = new JPanel();
-	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 45)));
+	        buttonPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 	        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/buttons/images/" + buttonName + ".png"));
 	        
@@ -174,6 +175,15 @@ public class buttonsPanel extends JPanel{
 	        buttonsPanel.add(buttonPanel);
 	    }
 	    
+        JPanel statusPanel = new JPanel();
+	    JLabel status = new JLabel("Neo Whistle's status:");
+	    whistlestatus = new JLabel("inactive");
+	    whistlestatus.setForeground(Color.RED);
+	    
+	    statusPanel.add(status);
+	    statusPanel.add(whistlestatus);
+	    
+	    this.add(statusPanel);
 	    this.add(buttonsPanel);
     }
     
@@ -202,6 +212,18 @@ public class buttonsPanel extends JPanel{
                 }
             }
         });
+    }
+    
+    public void setWhistleStatus(boolean running)
+    {
+    	if(running)
+    	{
+    		whistlestatus.setText("active");
+    	    whistlestatus.setForeground(Color.decode("#57eb66"));
+    	} else {
+    		whistlestatus.setText("inactive");
+    	    whistlestatus.setForeground(Color.RED);
+    	}
     }
     
     public ButtonObj getButton(String buttonName)

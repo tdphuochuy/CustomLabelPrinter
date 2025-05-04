@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import buttons.buttonsPanel;
 import config.Config;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
@@ -29,7 +30,7 @@ public class NeoWhistlePanel extends JPanel {
     private Thread thread;
     private JButton startButton;
     private String orderNum;
-    public NeoWhistlePanel(JFrame frame) throws ParseException {
+    public NeoWhistlePanel(JFrame frame,buttonsPanel buttonsPanel) throws ParseException {
         this.frame = frame;
         this.running = false;
         setLayout(new BorderLayout());
@@ -125,6 +126,7 @@ public class NeoWhistlePanel extends JPanel {
 						e1.printStackTrace();
 					}
             	}
+    	         buttonsPanel.setWhistleStatus(running);
             	 Timer timer = new Timer(300, new ActionListener() {
                      @Override
                      public void actionPerformed(ActionEvent evt) {
