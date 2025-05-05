@@ -151,7 +151,11 @@ public class Main {
 									String orderNum = data.get("orderNum").toString();
 									String username = data.get("username").toString();
 									String password = data.get("password").toString();
-									String reworkOrderNum = data.get("reworkOrderNum").toString();
+									String reworkOrderNum = "";
+									if(data.get("reworkOrderNum") != null)
+									{
+										reworkOrderNum = data.get("reworkOrderNum").toString();
+									}
 									Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
 									GCthread.start();
 								} else if (type.equals("paperwork"))
