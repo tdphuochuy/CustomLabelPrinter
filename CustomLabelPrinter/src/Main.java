@@ -193,7 +193,7 @@ public class Main {
 										long buttonLastTimeStampt = button.getLastTimeStamp();
 										long buttonDelay = button.getDelay();
 										if (currentTime - buttonLastTimeStampt >= buttonDelay) {
-											String quantity = button.getQuantity();
+											String quantity = button.getQuantity(); 
 											if(quantity != null)
 											{
 												button.setLastTimeStamp(currentTime);
