@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -76,6 +77,63 @@ public class paperworkPanel extends JPanel{
         passPanel.add(passLabel);
         passPanel.add(passField);
         
+        JPanel GCbuttonPanel = new JPanel();
+        GCbuttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JButton gcWeightButton = new JButton("Print GC weights");
+        gcWeightButton.setBackground(Color.white);
+        GCbuttonPanel.add(gcWeightButton);
+        
+        gcWeightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	gcWeightButton.setEnabled(false);
+                try {
+              	   String text = orderField.getText().equals("Order #") ? "" : orderField.getText();
+              	   if(text.length() > 0)
+              	   {
+              		 if(userField.getText().length() > 0)
+              		 {
+              			if(passField.getText().length() > 0)
+                 		{
+	              			 String username = userField.getText();
+	              			 String password = passField.getText();
+	              			 String orderNum = orderField.getText();
+	              			 String reworkOrderNum = reworkOrderField.getText();
+	              			 Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
+	              			 GCthread.start();
+	              			 try {
+	              				GCthread.join(); // Wait for the task to finish
+	              			 } catch (InterruptedException ex) {
+	              				 ex.printStackTrace();
+	              			 }
+	                         JOptionPane.showMessageDialog(frame, "File has been sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+                 		 } else {
+  	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
+                  		 }
+              		 } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
+              		 }
+              	   } else {
+	                       JOptionPane.showMessageDialog(frame, "Missing order #", "Error", JOptionPane.ERROR_MESSAGE);
+              	   }
+                } catch (Exception ex)
+                {
+             	   
+                }
+                // Create a Timer to re-enable the button after a delay
+                Timer timer = new Timer(300, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                    	gcWeightButton.setEnabled(true); // Re-enable the button
+                        userField.setText("pmambo");
+                        passField.setText("4292");
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
+            }
+        });
+        
         JLabel nameLabel = new JLabel("Name");
         JTextField  nameField = new JTextField("Huy",5);
         namePanel.add(nameLabel);
@@ -111,6 +169,7 @@ public class paperworkPanel extends JPanel{
         mainPanel.add(inputPanel2);
         mainPanel.add(userPanel);
         mainPanel.add(passPanel);
+        mainPanel.add(GCbuttonPanel);
         mainPanel.add(namePanel);
         mainPanel.add(timePanel);
         mainPanel.add(checkboxesPanel);
@@ -118,7 +177,8 @@ public class paperworkPanel extends JPanel{
         
         JPanel textareaPanel = new JPanel();
         textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
-        JTextArea textArea = new JTextArea(14,12);
+        textareaPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+        JTextArea textArea = new JTextArea(16,12);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         

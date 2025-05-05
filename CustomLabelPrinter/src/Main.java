@@ -13,6 +13,7 @@ import buttons.buttonsPanel;
 import chatSystem.ChatPanel;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import paperwork.GCweightsTask;
 import paperwork.paperworkGen;
 import paperwork.paperworkPanel;
 import whistle.NeoWhistlePanel;
@@ -30,7 +31,6 @@ import java.util.concurrent.Executors;
 
 public class Main {
    private static NeoWhistlePanel neoWhistle;
-   private static GCweights gcWeight;
    private static buttonsPanel buttons;
    private static paperworkPanel ppw;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
@@ -74,10 +74,6 @@ public class Main {
        JPanel ppwPanel = new JPanel();
        ppw = new paperworkPanel(frame);
        ppwPanel.add(ppw);
-       
-       JPanel gcWeightPanel = new JPanel();
-       gcWeight = new GCweights(frame);
-       gcWeightPanel.add(gcWeight);
 
        JPanel reprintPanel = new JPanel();
        reprintPanel.add(new reprintPanel(frame));
@@ -95,8 +91,7 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
-       tabbedPane.addTab("Paperwork", ppwPanel);
-       tabbedPane.addTab("GC weights", gcWeightPanel);
+       tabbedPane.addTab("Paperwork/GC weights", ppwPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
        tabbedPane.addTab("no clue", freePanel);
@@ -156,7 +151,9 @@ public class Main {
 									String orderNum = data.get("orderNum").toString();
 									String username = data.get("username").toString();
 									String password = data.get("password").toString();
-									gcWeight.run(username, password, orderNum);
+									String reworkOrderNum = data.get("reworkOrderNum").toString();
+									Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
+									GCthread.start();
 								} else if (type.equals("paperwork"))
 								{
 									JSONObject data = (JSONObject) obj.get("data");
