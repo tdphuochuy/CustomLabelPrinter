@@ -286,7 +286,7 @@ public class GCweightsTask implements Runnable {
         document.close();
 
         System.out.println("PDF created: " + new File(dest).getAbsolutePath());
-        //sendtoPrinterJob();
+        sendtoPrinterJob();
         //sendEmail();
 	}
 	
