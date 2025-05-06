@@ -183,8 +183,10 @@ public class whistleWorker{
 		    	   if(backflush)
 		    	   {
 		    		   break;
-		    	   } else {
-		    		   continue;
+		    	   } else { //timeout
+	        		   reset(telnet);
+	        		   Thread.sleep(300);
+		    		   continue outer;
 		    	   }
 		       }
            } catch (Exception e)
