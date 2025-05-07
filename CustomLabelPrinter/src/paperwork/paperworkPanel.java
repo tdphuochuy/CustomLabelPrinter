@@ -106,7 +106,6 @@ public class paperworkPanel extends JPanel{
 	              			 } catch (InterruptedException ex) {
 	              				 ex.printStackTrace();
 	              			 }
-	                         JOptionPane.showMessageDialog(frame, "File has been sent to the office!", "Alert", JOptionPane.INFORMATION_MESSAGE);
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }

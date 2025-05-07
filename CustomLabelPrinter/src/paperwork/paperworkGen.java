@@ -20,6 +20,10 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -42,6 +46,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import config.Config;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -327,7 +332,7 @@ public class paperworkGen{
         {
         	openPDFfile();
         } else {
-        	sendtoPrinterJob();
+        	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to Debone office!");
         }
         
         if(sendEmail)
@@ -420,7 +425,7 @@ public class paperworkGen{
         }
 	}
 	
-	public void sendtoPrinterJob() throws InterruptedException
+	public void sendtoPrinterJob(String printerIp,String notificationText) throws InterruptedException
 	{
         String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
 		File file = new File(filePath);
@@ -439,24 +444,28 @@ public class paperworkGen{
             }
         }
         		
-		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
         int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
 
-        try (Socket socket = new Socket(printerIp, printerPort);
-             OutputStream out = socket.getOutputStream();
-             FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+        try (Socket socket = new Socket()) {
+            SocketAddress address = new InetSocketAddress(printerIp, printerPort);
+            socket.connect(address, 5000); // 5000 milliseconds = 5 seconds
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
+            try (OutputStream out = socket.getOutputStream();
+                 FileInputStream fileInput = new FileInputStream(new File(filePath))) {
 
-            while ((bytesRead = fileInput.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                while ((bytesRead = fileInput.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+
+                out.flush();
+                showAutoClosingDialog(notificationText, "Alert", 3000);
             }
-
-            out.flush();
-            showAutoClosingDialog("All papers have been sent to the office!","Alert",3000);
         } catch (Exception e) {
             e.printStackTrace();
+        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to Line24 office!");
         }
 	}
 	

@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -29,6 +33,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
@@ -43,6 +48,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 
+import config.Config;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -286,7 +292,7 @@ public class GCweightsTask implements Runnable {
         document.close();
 
         System.out.println("PDF created: " + new File(dest).getAbsolutePath());
-        sendtoPrinterJob();
+    	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to Debone office!");
         //sendEmail();
 	}
 	
@@ -325,27 +331,31 @@ public class GCweightsTask implements Runnable {
 		return table;
 	}
 	
-	public void sendtoPrinterJob()
+	public void sendtoPrinterJob(String printerIp,String notificationText)
 	{
-		String printerIp = "167.110.88.204"; // Replace with your Ricoh's IP
         int printerPort = 9100; // Most printers listen on port 9100 for raw jobs
         String filePath = "D:/Users/pdgwinterm7/Desktop/GoldCreek_TareWeightLog.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
 
-        try (Socket socket = new Socket(printerIp, printerPort);
-             OutputStream out = socket.getOutputStream();
-             FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+        try (Socket socket = new Socket()) {
+            SocketAddress address = new InetSocketAddress(printerIp, printerPort);
+            socket.connect(address, 5000); // 5000 milliseconds = 5 seconds
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
+            try (OutputStream out = socket.getOutputStream();
+                 FileInputStream fileInput = new FileInputStream(new File(filePath))) {
 
-            while ((bytesRead = fileInput.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                while ((bytesRead = fileInput.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+
+                out.flush();
+                showAutoClosingDialog(notificationText, "Alert", 3000);
             }
-
-            out.flush();
-            System.out.println("File sent to printer successfully.");
         } catch (Exception e) {
             e.printStackTrace();
+        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to Line24 office!");
         }
 	}
 	   
@@ -384,5 +394,22 @@ public class GCweightsTask implements Runnable {
         return String.valueOf(randomEvenNumber);
     }
 	
+	   public static void showAutoClosingDialog(String message, String title, int timeoutMillis) {
+	        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+	        JDialog dialog = pane.createDialog(null, title);
+
+	        // Set dialog to not block the EDT
+	        dialog.setModal(false);
+	        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	        dialog.setVisible(true);
+
+	        // Create a timer to close the dialog
+	        new Timer().schedule(new TimerTask() {
+	            @Override
+	            public void run() {
+	                dialog.dispose();
+	            }
+	        }, timeoutMillis);
+	    }
 	
 }
