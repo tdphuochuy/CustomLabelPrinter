@@ -292,7 +292,7 @@ public class GCweightsTask implements Runnable {
         document.close();
 
         System.out.println("PDF created: " + new File(dest).getAbsolutePath());
-    	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to Debone office!");
+    	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
         //sendEmail();
 	}
 	
@@ -355,7 +355,7 @@ public class GCweightsTask implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to Line24 office!");
+        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to LINE2/24 office!");
         }
 	}
 	   

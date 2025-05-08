@@ -332,7 +332,7 @@ public class paperworkGen{
         {
         	openPDFfile();
         } else {
-        	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to Debone office!");
+        	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
         }
         
         if(sendEmail)
@@ -465,7 +465,7 @@ public class paperworkGen{
             }
         } catch (Exception e) {
             e.printStackTrace();
-        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to Line24 office!");
+        	sendtoPrinterJob(Config.officePrinter2IP,"All papers have been sent to LINE2/24 office!");
         }
 	}
 	
