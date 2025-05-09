@@ -169,7 +169,8 @@ public class Main {
 									String firstBreak = data.get("firstBreak").toString();
 									String secondBreak = data.get("secondBreak").toString();
 									String trimCondemned = data.get("trimCondemned").toString();
-									
+									String tenderCondemned = data.get("tenderCondemned").toString();
+
 									int break1 = Integer.parseInt(firstBreak);
 			              			int break2 = Integer.parseInt(secondBreak);
 			              			int[] times = {break1,break2};
@@ -178,7 +179,7 @@ public class Main {
 			              				comdemnList.add(Integer.parseInt(s));
 			              			}
 									new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,"");
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,tenderCondemned);
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException e1) {
