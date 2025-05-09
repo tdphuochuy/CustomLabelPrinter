@@ -177,7 +177,7 @@ public class paperworkPanel extends JPanel{
         JPanel textareaPanel = new JPanel();
         textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
         textareaPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-        JTextArea textArea = new JTextArea(16,12);
+        JTextArea textArea = new JTextArea(14,12);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
@@ -186,6 +186,15 @@ public class paperworkPanel extends JPanel{
         labelPanel.add(new JLabel("Trim condemned:"));
         textareaPanel.add(labelPanel);
         textareaPanel.add(scrollPane);
+        
+        JPanel tenderCondenmnedPanel = new JPanel();
+        tenderCondenmnedPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        tenderCondenmnedPanel.add(new JLabel("Tender condemned:"));
+        JTextField tendercondemnedField = new JTextField(5);
+        tenderCondenmnedPanel.add(tendercondemnedField);
+        
+        textareaPanel.add(tenderCondenmnedPanel);
         
         JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         splitPanel.add(mainPanel);
@@ -226,7 +235,7 @@ public class paperworkPanel extends JPanel{
 		              	         }
 		              	         System.out.println(comdemnList);
 			              	       new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected());
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException e1) {

@@ -19,7 +19,8 @@ public class recapGen extends excelGen{
 	private carcassGen carcass;
 	private List<Integer> condemnList;
 	private List<Double> issuedList;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> condemnList,List<Double> issuedList)
+	private String tenderCondemnTotal;
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> condemnList,List<Double> issuedList,String tenderCondemnTotal)
 	{
 		this.name = name;
 		this.breast = breast;
@@ -27,6 +28,7 @@ public class recapGen extends excelGen{
 		this.carcass = carcass;
 		this.condemnList = condemnList;
 		this.issuedList = issuedList;
+		this.tenderCondemnTotal = tenderCondemnTotal;
 	}
 
 	@Override
@@ -166,6 +168,8 @@ public class recapGen extends excelGen{
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
 
         		setCellValue(sheet, "G", 5, "Total rework issued: " + formatDouble(getIssuedTotal()) + " lbs");
+        		
+        		setCellValue(sheet, "G", 23, tenderCondemnTotal + " lbs");
 
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {

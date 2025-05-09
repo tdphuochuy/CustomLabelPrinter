@@ -178,7 +178,7 @@ public class Main {
 			              				comdemnList.add(Integer.parseInt(s));
 			              			}
 									new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true);
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,"");
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException e1) {

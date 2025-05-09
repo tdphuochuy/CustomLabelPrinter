@@ -61,11 +61,12 @@ public class paperworkGen{
 	private int[] times;
 	private List<Integer> condemnList;
 	private String sessionId = "";
+	private String tenderCondemnTotal;
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
 	private List<Double> issuedList = new ArrayList<>();
 	private boolean pdfOnly,sendEmail;
-	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly,boolean sendEmail)
+	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -77,6 +78,7 @@ public class paperworkGen{
 		this.condemnList = condemnList;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
+		this.tenderCondemnTotal = tenderCondemnTotal;
 		sessionId = getSessionId();
 	}
 	
@@ -322,7 +324,7 @@ public class paperworkGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList,issuedList);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList,issuedList,tenderCondemnTotal);
 		recapExcel.generateExcel();
 		
         File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
