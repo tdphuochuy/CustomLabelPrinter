@@ -135,6 +135,7 @@ public class whistleWorker{
 		       }
 		       String[] itemPack = getItemPack(telnet);
 		       String itemPackNum = itemPack[0].trim() + itemPack[1].trim();
+		       String currentHour = getHour();
 		       if(autoSequence)
 		       {
 			       appendConsole("Item: " + itemPack[0] + "\n");
@@ -159,7 +160,7 @@ public class whistleWorker{
 		       {
 		    	   continue;
 		       }
-		       String hour = setHour(telnet);
+		       setHour(telnet,currentHour);
 		       waitResponse(telnet,"Sequence");
 		       if(!setSequence(telnet,sequence))
 		       {
@@ -175,7 +176,7 @@ public class whistleWorker{
 		       boolean success = buildLabel(telnet);
 		       if(success)
 		       {
-		    	   sequenceGetter.updateSequence(itemPackNum, Integer.valueOf(hour) , Integer.valueOf(sequenceInput));
+		    	   sequenceGetter.updateSequence(itemPackNum, Integer.valueOf(currentHour) , Integer.valueOf(sequenceInput));
 		    	   appendConsole(sequenceGetter.getSequenceMap().toString() + "\n");
 		    	   break;
 		       } else {
@@ -397,9 +398,8 @@ public class whistleWorker{
 		return true;
 	}
 	
-	public String setHour(Telnet telnet) throws InterruptedException
+	public void setHour(Telnet telnet,String hour) throws InterruptedException
 	{
-		String hour = getHour();
 		appendConsole("Setting hour\n");
 		if(prodNum.equals("12623"))
 		{
@@ -409,7 +409,6 @@ public class whistleWorker{
 		}
 	    Thread.sleep(300);
 	    telnet.sendCommand("\n");
-	    return hour;
 	}
 	
 	public String getHour()
