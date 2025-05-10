@@ -94,7 +94,7 @@ public class GCweightsTask implements Runnable {
             	{
                 	getTrackingNum(client,session,reworkOrderNum,list);
             	}
-            	if(username.toLowerCase().equals("pmambo"))
+            	if(username.toLowerCase().equals(Config.username))
     			{
     				generatePdf(list,generateWeightList(list,"2146",true));
     			} else {

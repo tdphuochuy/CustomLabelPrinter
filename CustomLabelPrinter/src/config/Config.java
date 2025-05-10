@@ -6,6 +6,9 @@ public class Config {
     
     public static String officePrinterIP = "167.110.88.204";
     public static String officePrinter2IP = "167.110.88.200";
+    
+    public static String username = "pmambo";
+    public static String password = "4292";
 
     public static String chatId = "DSI ERP";
     public static int dayTimeSaving = 1;

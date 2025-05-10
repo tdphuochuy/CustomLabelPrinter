@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import buttons.ButtonObj;
 import buttons.buttonsPanel;
 import chatSystem.ChatPanel;
+import config.Config;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import paperwork.GCweightsTask;
@@ -109,7 +110,7 @@ public class Main {
        ExecutorService executor = Executors.newSingleThreadExecutor();
 		// Start WebSocket Client in a separate thread with auto-reconnect
        executor.submit(() -> {
-    	  SequenceGetter sequenceGetter = new SequenceGetter("pmambo","4292");
+    	  SequenceGetter sequenceGetter = new SequenceGetter(Config.username,Config.password);
            while (true) {
                try {
                    WebSocketClient client = new WebSocketClient(new URI("ws://projectmbymoneymine.com:8082")) {

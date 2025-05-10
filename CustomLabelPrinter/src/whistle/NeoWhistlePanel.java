@@ -75,9 +75,9 @@ public class NeoWhistlePanel extends JPanel {
         
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel usernamelbl = new JLabel("username");
-        JTextField usernameField = new JTextField("pmambo",7);
+        JTextField usernameField = new JTextField(Config.username,7);
         JLabel passwordlbl = new JLabel("password");
-        JPasswordField passwordField = new JPasswordField("4292",5);
+        JPasswordField passwordField = new JPasswordField(Config.password,5);
         
         JCheckBox autoSequencecb = new JCheckBox("Auto sequence",true);
         

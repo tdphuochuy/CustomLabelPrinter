@@ -32,6 +32,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.json.simple.parser.ParseException;
 
+import config.Config;
+
 public class paperworkPanel extends JPanel{
 	private JFrame frame;
 
@@ -68,12 +70,12 @@ public class paperworkPanel extends JPanel{
         inputPanel2.add(reworkOrderField);
         
         JLabel userLabel = new JLabel("Username");
-        JTextField userField = new JTextField("pmambo",8);
+        JTextField userField = new JTextField(Config.username,8);
         userPanel.add(userLabel);
         userPanel.add(userField);
         
         JLabel passLabel = new JLabel("Pass");
-        JPasswordField  passField = new JPasswordField("4292",5);
+        JPasswordField  passField = new JPasswordField(Config.password,5);
         passPanel.add(passLabel);
         passPanel.add(passField);
         
@@ -124,8 +126,8 @@ public class paperworkPanel extends JPanel{
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                     	gcWeightButton.setEnabled(true); // Re-enable the button
-                        userField.setText("pmambo");
-                        passField.setText("4292");
+                        userField.setText(Config.username);
+                        passField.setText(Config.password);
                     }
                 });
                 timer.setRepeats(false); // Make sure the timer only runs once
@@ -264,8 +266,8 @@ public class paperworkPanel extends JPanel{
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         button.setEnabled(true); // Re-enable the button
-                        userField.setText("pmambo");
-                        passField.setText("4292");
+                        userField.setText(Config.username);
+                        passField.setText(Config.password);
                     }
                 });
                 timer.setRepeats(false); // Make sure the timer only runs once

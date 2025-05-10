@@ -20,27 +20,6 @@ import java.util.TreeMap;
 public class test {
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-    	/*File input = new File("whistle_order2.html");
-        Document doc = Jsoup.parse(input, "UTF-8");
-        
-        Element bodyElement = doc.body();
-    	Element inputElement = bodyElement.select("[name=unnamed]").first();
-    	for(Element table : inputElement.getElementsByTag("table"))
-    	{
-    		if(table.html().toLowerCase().contains("pmambo"))
-    		{
-    			Map<String,Product> map = new TreeMap<>();
-    			int[] times = {20,23};
-    			List<Integer> comdemnlist = new ArrayList<>();
-    			comdemnlist.add(100);
-    			comdemnlist.add(400);
-    			comdemnlist.add(200);
-    			comdemnlist.add(100);
-    			paperworkGen ppw = new paperworkGen("pmambo","4292","test","","Huy",times,comdemnlist);
-    			ppw.extractData(map,table);
-    			ppw.evaluateData(map);
-    			break;
-    		}
-    	}*/
+    	
     }
 }
