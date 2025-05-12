@@ -385,6 +385,11 @@ public class breastGen extends excelGen{
 		return Break1CaseWeight + Break2CaseWeight + Break3CaseWeight;
 	}
 	
+	public int getTotalCase()
+	{
+		return (int) getTotalCaseWeight() / 40;
+	}
+	
 	public double getTotalWeight()
 	{
 		return getTotalComboWeight() + getTotalCaseWeight();

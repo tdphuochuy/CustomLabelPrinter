@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 import java.net.Socket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -48,8 +50,10 @@ import org.jsoup.select.Elements;
 
 import config.Config;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
@@ -341,6 +345,8 @@ public class paperworkGen{
         {
         	sendEmail();
         }
+        
+        postRecap(breastExcel);
 	}
 	
 	public void openPDFfile()
@@ -510,7 +516,44 @@ public class paperworkGen{
 	        }
 	   }
 	   
-	   public static void showAutoClosingDialog(String message, String title, int timeoutMillis) {
+	   public void postRecap(breastGen breastExcel)
+	   {
+		   OkHttpClient client = new OkHttpClient();
+		   
+	        LocalDateTime now = LocalDateTime.now();
+
+	        // Format it as a string
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String formattedDateTime = now.format(formatter);
+		   
+		   	String message = "Last updated: " + formattedDateTime + "\n";
+		   	message = message + "Total breast cases: " + breastExcel.getTotalCase();
+	        // Define JSON body
+	        String json = "{ \"message\": \"" + message + "\"}";
+
+	        // Create request body
+	        RequestBody body = RequestBody.create(
+	                json, MediaType.get("application/json; charset=utf-8"));
+
+	        // Build request
+	        Request request = new Request.Builder()
+	                .url("https://projectmbymoneymine.com:8083/recap")
+	                .post(body)
+	                .build();
+
+	        // Execute request
+	        try (Response response = client.newCall(request).execute()) {
+	            if (response.isSuccessful()) {
+	                System.out.println("Response: " + response.body().string());
+	            } else {
+	                System.out.println("Request failed: " + response.code());
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	   }
+	   
+	   public void showAutoClosingDialog(String message, String title, int timeoutMillis) {
 	        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
 	        JDialog dialog = pane.createDialog(null, title);
 
