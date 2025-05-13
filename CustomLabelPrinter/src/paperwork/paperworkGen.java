@@ -533,6 +533,11 @@ public class paperworkGen{
 				e.printStackTrace();
 			}
 	        LocalDateTime now = LocalDateTime.now();
+	        
+	        if(Config.dayTimeSaving == 1)
+	        {
+	        	now = LocalDateTime.now().plusHours(1);
+	        }
 
 	        // Format it as a string
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -93,7 +93,7 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
-       tabbedPane.addTab("Paperwork/GC weights", ppwPanel);
+       tabbedPane.addTab("Paperwork", ppwPanel);
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
        tabbedPane.addTab("no clue", freePanel);
