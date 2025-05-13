@@ -21,8 +21,12 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import java.net.Socket;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -36,6 +40,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -86,7 +94,7 @@ public class paperworkGen{
 		sessionId = getSessionId();
 	}
 	
-	public void start() throws ParseException, InterruptedException
+	public void start() throws ParseException, InterruptedException, IOException
 	{
 		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
@@ -291,7 +299,7 @@ public class paperworkGen{
 		}
 	}
 	
-	public void evaluateData(Map<String,Product> map) throws InterruptedException
+	public void evaluateData(Map<String,Product> map) throws InterruptedException, IOException
 	{
 		breastGen breastExcel = new breastGen(times);
 		tenderGen tenderExcel = new tenderGen(times);
@@ -516,10 +524,14 @@ public class paperworkGen{
 	        }
 	   }
 	   
-	   public void postRecap(breastGen breastExcel)
+	   public void postRecap(breastGen breastExcel) throws IOException
 	   {
-		   OkHttpClient client = new OkHttpClient();
-		   
+		   try {
+			trustAllCertificates();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        LocalDateTime now = LocalDateTime.now();
 
 	        // Format it as a string
@@ -529,29 +541,41 @@ public class paperworkGen{
 		   	String message = "Last updated: " + formattedDateTime + "\n";
 		   	message = message + "Total breast cases: " + breastExcel.getTotalCase();
 	        // Define JSON body
-	        String json = "{ \"message\": \"" + message + "\"}";
+		   	
+		   	JSONObject obj = new JSONObject();
+		   	obj.put("message", message);
 
-	        // Create request body
-	        RequestBody body = RequestBody.create(
-	                json, MediaType.get("application/json; charset=utf-8"));
+	        URL url = new URL("https://projectmbymoneymine.com:8083/recap");
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-	        // Build request
-	        Request request = new Request.Builder()
-	                .url("https://projectmbymoneymine.com:8083/recap")
-	                .post(body)
-	                .build();
-
-	        // Execute request
-	        try (Response response = client.newCall(request).execute()) {
-	            if (response.isSuccessful()) {
-	                System.out.println("Response: " + response.body().string());
-	            } else {
-	                System.out.println("Request failed: " + response.code());
-	            }
-	        } catch (IOException e) {
-	            e.printStackTrace();
+	        conn.setRequestMethod("POST");
+	        conn.setDoOutput(true);
+	        conn.setRequestProperty("Content-Type", "application/json");
+	        
+	        System.out.println(obj.toJSONString());
+	        try (OutputStream os = conn.getOutputStream()) {
+	            os.write(obj.toJSONString().getBytes("UTF-8"));
 	        }
+
+	        int responseCode = conn.getResponseCode();
+	        System.out.println("Response Code: " + responseCode);
 	   }
+	   
+	   private void trustAllCertificates() throws Exception {
+		    TrustManager[] trustAllCerts = new TrustManager[]{
+		        new X509TrustManager() {
+		            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+		            public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+		            public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+		        }
+		    };
+		    SSLContext sc = SSLContext.getInstance("TLS");
+		    sc.init(null, trustAllCerts, new SecureRandom());
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+		    // Disable hostname verification
+		    HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+		}
 	   
 	   public void showAutoClosingDialog(String message, String title, int timeoutMillis) {
 	        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);

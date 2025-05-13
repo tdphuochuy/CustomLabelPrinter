@@ -21,6 +21,7 @@ import whistle.NeoWhistlePanel;
 import whistle.SequenceGetter;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -183,7 +184,7 @@ public class Main {
 				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,tenderCondemned);
 				             			 try {
 											ppw.start();
-										} catch (ParseException | InterruptedException e1) {
+										} catch (ParseException | InterruptedException | IOException e1) {
 											// TODO Auto-generated catch block
 											e1.printStackTrace();
 										}

@@ -11,6 +11,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -240,7 +241,7 @@ public class paperworkPanel extends JPanel{
 				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
-										} catch (ParseException | InterruptedException e1) {
+										} catch (ParseException | InterruptedException | IOException e1) {
 											// TODO Auto-generated catch block
 											e1.printStackTrace();
 										}
