@@ -169,7 +169,11 @@ public class whistleWorker{
 		       if(prodNum.equals("22486"))
 		       {
 		    	   String copiesNum = "4";
-		    	   setCopiesQuantity(telnet,copiesNum);
+		    	   if(!setCopiesQuantity(telnet,copiesNum))
+		    	   {
+		    		   reset(telnet);
+		    		   continue;
+		    	   }
 		    	   Thread.sleep(300);
 		       }
 		       appendConsole("Bulding label\n");
@@ -323,16 +327,30 @@ public class whistleWorker{
 		return true;
 	}
 	
-	public void setCopiesQuantity(Telnet telnet,String copiesNum) throws IOException, InterruptedException
+	public boolean setCopiesQuantity(Telnet telnet,String copiesNum) throws IOException, InterruptedException
 	{
 		appendConsole("Setting copies quantity\n");
-		while(!checkCondition(telnet,"Copies [[0;7m"))
+		int count = 0;
+		while(running)
 		{
+			count++;
 			appendConsole("Looking for copies quantity input\n");
-		    telnet.sendCommand(getArrowKey("up"));
-			Thread.sleep(300);
+			if(checkCondition(telnet,"Copies [[0;7m"))
+			{
+			    telnet.sendCommand(copiesNum + "\n");
+			    break;
+			} else {
+				telnet.sendCommand(getArrowKey("up"));
+				Thread.sleep(300);
+			}
+			
+			if(count > 15)
+			{
+				return false;
+			}
 		}
-	    telnet.sendCommand(copiesNum + "\n");
+	    
+	    return true;
 	}
 	
 	public String checkBuildResponse(Telnet telnet) throws InterruptedException, IOException, ParseException
