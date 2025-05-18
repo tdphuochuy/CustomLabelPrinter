@@ -401,12 +401,18 @@ public class CaseType extends JPanel{
 		 {
 			 return result;
 		 }
-		 
-		 if (number <= 80) {
+		 		 		 
+		 if (number <= 90) {
 	    		result.put(number, result.getOrDefault(number, 0) + 1);
-	            number -= number;
-	            return getMultiplesOf80(result,number);
+	            return getMultiplesOf80(result,0);
 	     }
+		 
+		 if (number < 180 && number % 80 < 20 && number % 80 > 10) {
+		        int half = number - (number /2);
+		        number = number - half;
+	    		result.put(number, result.getOrDefault(number, 0) + 1);
+	            return getMultiplesOf80(result,half);
+		 }
 		 
 		 
 		 result.put(80, result.getOrDefault(80, 0) + 1);
