@@ -194,17 +194,20 @@ public class Main {
 									JSONObject data = (JSONObject) obj.get("data");
 									String buttonName = data.get("buttonName").toString();
 									ButtonObj button = buttons.getButton(buttonName);
-									if(button.isEnabled())
+									if(button != null)
 									{
-										long currentTime = System.currentTimeMillis();
-										long buttonLastTimeStampt = button.getLastTimeStamp();
-										long buttonDelay = button.getDelay();
-										if (currentTime - buttonLastTimeStampt >= buttonDelay) {
-											String quantity = button.getQuantity(); 
-											if(quantity != null)
-											{
-												button.setLastTimeStamp(currentTime);
-												neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+										if(button.isEnabled())
+										{
+											long currentTime = System.currentTimeMillis();
+											long buttonLastTimeStampt = button.getLastTimeStamp();
+											long buttonDelay = button.getDelay();
+											if (currentTime - buttonLastTimeStampt >= buttonDelay) {
+												String quantity = button.getQuantity(); 
+												if(quantity != null)
+												{
+													button.setLastTimeStamp(currentTime);
+													neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+												}
 											}
 										}
 									}
