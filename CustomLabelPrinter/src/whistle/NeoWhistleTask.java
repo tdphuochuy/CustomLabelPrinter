@@ -3,6 +3,7 @@ package whistle;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import config.Config;
 
 public class NeoWhistleTask implements Runnable {
 	private String username;
@@ -57,66 +60,7 @@ public class NeoWhistleTask implements Runnable {
 				orderNum = scanner.nextLine();
 			}
 			systemConsole.append("Starting with order #" + orderNum + "\n");
-			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
-			
-			ExecutorService executor = Executors.newSingleThreadExecutor();
-			// Start WebSocket Client in a separate thread with auto-reconnect
-	        executor.submit(() -> {
-	            while (running) {
-	                try {
-	                    WebSocketClient client = new WebSocketClient(new URI("ws://projectmbymoneymine.com:8082")) {
-	                        @Override
-	                        public void onOpen(ServerHandshake handshakedata) {
-	                            System.out.println("CONNECTED TO WEBSOCKET SERVER!");
-	                            JSONObject obj = new JSONObject();
-	                            obj.put("type", "auth");
-								obj.put("data", "whistle_server");
-	                            send(obj.toJSONString());
-	                        }
-	
-	                        @Override
-	                        public void onMessage(String message) {
-	                			try {
-	                            	JSONParser parser = new JSONParser();
-									JSONObject obj = (JSONObject)parser.parse(message);
-									String type = obj.get("type").toString();
-									if(type.equals("whistle_command"))
-									{
-										JSONObject data = (JSONObject) obj.get("data");
-										String prodNum = data.get("prodNum").toString();
-										String quantity = data.get("quantity").toString();
-										manager.addCommand(new Command(prodNum,quantity,"1"));
-									}
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-	                			
-	                        }
-	
-	                        @Override
-	                        public void onClose(int code, String reason, boolean remote) {
-	                            System.out.println("WebSocket connection closed: " + reason);
-	                        }
-	
-	                        @Override
-	                        public void onError(Exception ex) {
-	                            System.err.println("WebSocket Error: " + ex.getMessage());
-	                        }
-	                    };
-	                    client.connectBlocking(); // Block until connected
-	                    while (client.isOpen() && running) {
-	                        Thread.sleep(5000); // Keep the connection alive
-	                    }
-	                } catch (URISyntaxException | InterruptedException e) {
-	                    System.err.println("WebSocket client error: " + e.getMessage());
-	                }
-	                System.out.println("Reconnecting WebSocket in 5 seconds...");
-	                try {
-	                    Thread.sleep(5000);
-	                } catch (InterruptedException ignored) {}
-	            }
-	        });
+			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);			
 			
 			while(running)
 			{
@@ -146,7 +90,7 @@ public class NeoWhistleTask implements Runnable {
 					}
 				}
 				
-				String sequence = "1";
+				String sequence = "0";
 				if(prodNum.equals("skip") || quantity.equals("skip"))
 				{
 					userConsole.append("Skipping...\n");
@@ -157,7 +101,7 @@ public class NeoWhistleTask implements Runnable {
 					userConsole.append("Enter sequence\n");
 					sequence = scanner.nextLine();
 				}
-				manager.addCommand(new Command(prodNum,quantity,sequence));
+				manager.addCommand(new Command(prodNum,quantity,sequence,getHour()));
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -169,8 +113,34 @@ public class NeoWhistleTask implements Runnable {
 	{
 		if(manager != null)
 		{
-			manager.addCommand(new Command(prodNum,quantity,sequence));
+			manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
 		}
+	}
+	
+	public void addCommand(String prodNum,String quantity,String hour,String sequence)
+	{
+		if(manager != null)
+		{
+			manager.addCommand(new Command(prodNum,quantity,hour,sequence));
+		}
+	}
+	
+	public String getHour()
+	{
+		LocalTime currentTime = LocalTime.now();
+
+        // Get the current hour in 24-hour format
+        int currentHour = currentTime.getHour();
+        currentHour = currentTime.getHour() + Config.dayTimeSaving; //adjust day time saving
+
+        // Adjust the hour by adding 24
+        if(currentHour < 4)
+        {        	
+        	currentHour += 24;
+        }
+        
+        return String.valueOf(currentHour);
+
 	}
 	
 	public void stop() throws IOException {

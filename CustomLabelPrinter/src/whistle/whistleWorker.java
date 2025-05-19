@@ -70,6 +70,7 @@ public class whistleWorker{
 	public void process(Command command)
 	{
 	   setData(command);
+       String currentHour = command.getHour();
 	   backflush = false;
 	   notfound = false;
        outer:while(running)
@@ -135,7 +136,6 @@ public class whistleWorker{
 		       }
 		       String[] itemPack = getItemPack(telnet);
 		       String itemPackNum = itemPack[0].trim() + itemPack[1].trim();
-		       String currentHour = getHour();
 		       if(autoSequence)
 		       {
 			       appendConsole("Item: " + itemPack[0] + "\n");

@@ -9,6 +9,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import buttons.ButtonObj;
+import buttons.TableEntry;
 import buttons.buttonsPanel;
 import chatSystem.ChatPanel;
 import config.Config;
@@ -28,6 +29,7 @@ import java.net.UnknownHostException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -206,7 +208,14 @@ public class Main {
 												if(quantity != null)
 												{
 													button.setLastTimeStamp(currentTime);
-													neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+													Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
+													if(sequenceHourMap.containsKey(button.getProductCode()))
+													{
+														TableEntry entry = sequenceHourMap.get(button.getProductCode());
+														neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity, entry.getHour(), entry.getSequence());
+													} else {
+														neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+													}
 												}
 											}
 										}

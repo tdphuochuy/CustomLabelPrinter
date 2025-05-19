@@ -1,6 +1,7 @@
 package buttons;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.swing.Box;
@@ -51,12 +53,18 @@ public class buttonsPanel extends JPanel{
 	private JFrame frame;
 	private Map<String, ButtonObj> buttonMap = new HashMap<>();
 	private JLabel whistlestatus;
-    public buttonsPanel(JFrame frame) throws ParseException {
+	private Map<String, TableEntry> hourSequenceMap =  new TreeMap<>();
+	public buttonsPanel(JFrame frame) throws ParseException {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
+        hourSequenceMap.put("17900", new TableEntry("98","0"));
+        hourSequenceMap.put("17901", new TableEntry("98","0"));
+        hourSequenceMap.put("25814", new TableEntry("98","0"));
+        hourSequenceMap.put("16887", new TableEntry("98","0"));
+        hourSequenceMap.put("23978", new TableEntry("98","0"));
+
         JPanel buttonsPanel = new JPanel(new GridLayout(1, 3, 75, 0));
-        
         
         InputStream inputStream = buttonsPanel.class.getClassLoader().getResourceAsStream("buttons/buttons.json");
         String content = new BufferedReader(new InputStreamReader(inputStream))
@@ -183,7 +191,30 @@ public class buttonsPanel extends JPanel{
 	    statusPanel.add(status);
 	    statusPanel.add(whistlestatus);
 	    
+        JPanel sequenceHourbtnPanel = new JPanel();
+        JButton sequenceHourbtn = new JButton("<html><u>Setup Hour/Sequence</u></html>");
+        sequenceHourbtn.setContentAreaFilled(false);
+        sequenceHourbtn.setBorderPainted(false);
+        sequenceHourbtn.setOpaque(false);
+        sequenceHourbtn.setForeground(Color.decode("#1b93f5")); // Optional: make it look like a hyperlink
+        sequenceHourbtn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Optional: pointer cursor
+        
+        sequenceHourbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	SequenceHourPopup dialog = new SequenceHourPopup(frame,hourSequenceMap);
+                dialog.setVisible(true);
+                
+                if (dialog.isApplied()) {
+                    System.out.println("Updated Map:");
+                    hourSequenceMap.forEach((k, v) -> System.out.println(k + " -> " + v));
+                }
+            }
+        });
+        sequenceHourbtnPanel.add(sequenceHourbtn);
+	    
 	    this.add(statusPanel);
+	    this.add(sequenceHourbtnPanel);
 	    this.add(buttonsPanel);
     }
     
@@ -230,4 +261,8 @@ public class buttonsPanel extends JPanel{
     {
     	return buttonMap.get(buttonName);
     }
+    
+    public Map<String, TableEntry> getHourSequenceMap() {
+		return hourSequenceMap;
+	}
 }

@@ -238,7 +238,22 @@ public class NeoWhistlePanel extends JPanel {
         {
         	if(whistleTask.isRunning())
         	{
-        		whistleTask.addCommand(productCode, quantity, "1");
+        		whistleTask.addCommand(productCode, quantity, "0");
+        	} else {
+                JOptionPane.showMessageDialog(frame, "Failed executing button command!\nNeo Whistle is not running.", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        } else {
+            JOptionPane.showMessageDialog(frame, "Failed executing button command!\nNeo Whistle is not running.", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    public void addWhistleButtonCommand(String productCode, String quantity, String hour,String sequence)
+    {
+    	if(whistleTask != null)
+        {
+        	if(whistleTask.isRunning())
+        	{
+        		whistleTask.addCommand(productCode, quantity,hour, sequence);
         	} else {
                 JOptionPane.showMessageDialog(frame, "Failed executing button command!\nNeo Whistle is not running.", "Alert", JOptionPane.INFORMATION_MESSAGE);
         	}
