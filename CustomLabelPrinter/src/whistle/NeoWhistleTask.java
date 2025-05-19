@@ -60,7 +60,66 @@ public class NeoWhistleTask implements Runnable {
 				orderNum = scanner.nextLine();
 			}
 			systemConsole.append("Starting with order #" + orderNum + "\n");
-			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);			
+			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
+			
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			// Start WebSocket Client in a separate thread with auto-reconnect
+	        executor.submit(() -> {
+	            while (running) {
+	                try {
+	                    WebSocketClient client = new WebSocketClient(new URI("ws://projectmbymoneymine.com:8082")) {
+	                        @Override
+	                        public void onOpen(ServerHandshake handshakedata) {
+	                            System.out.println("CONNECTED TO WEBSOCKET SERVER!");
+	                            JSONObject obj = new JSONObject();
+	                            obj.put("type", "auth");
+								obj.put("data", "whistle_server");
+	                            send(obj.toJSONString());
+	                        }
+	
+	                        @Override
+	                        public void onMessage(String message) {
+	                			try {
+	                            	JSONParser parser = new JSONParser();
+									JSONObject obj = (JSONObject)parser.parse(message);
+									String type = obj.get("type").toString();
+									if(type.equals("whistle_command"))
+									{
+										JSONObject data = (JSONObject) obj.get("data");
+										String prodNum = data.get("prodNum").toString();
+										String quantity = data.get("quantity").toString();
+										addCommand(prodNum,quantity,"0");
+									}
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+	                			
+	                        }
+	
+	                        @Override
+	                        public void onClose(int code, String reason, boolean remote) {
+	                            System.out.println("WebSocket connection closed: " + reason);
+	                        }
+	
+	                        @Override
+	                        public void onError(Exception ex) {
+	                            System.err.println("WebSocket Error: " + ex.getMessage());
+	                        }
+	                    };
+	                    client.connectBlocking(); // Block until connected
+	                    while (client.isOpen() && running) {
+	                        Thread.sleep(5000); // Keep the connection alive
+	                    }
+	                } catch (URISyntaxException | InterruptedException e) {
+	                    System.err.println("WebSocket client error: " + e.getMessage());
+	                }
+	                System.out.println("Reconnecting WebSocket in 5 seconds...");
+	                try {
+	                    Thread.sleep(5000);
+	                } catch (InterruptedException ignored) {}
+	            }
+	        });
 			
 			while(running)
 			{
