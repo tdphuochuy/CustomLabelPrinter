@@ -58,11 +58,11 @@ public class buttonsPanel extends JPanel{
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        hourSequenceMap.put("17900", new TableEntry("98","0"));
-        hourSequenceMap.put("17901", new TableEntry("98","0"));
-        hourSequenceMap.put("25814", new TableEntry("98","0"));
-        hourSequenceMap.put("16887", new TableEntry("98","0"));
-        hourSequenceMap.put("23978", new TableEntry("98","0"));
+        hourSequenceMap.put("17900", new TableEntry("98","0000"));
+        hourSequenceMap.put("17901", new TableEntry("98","0000"));
+        hourSequenceMap.put("25814", new TableEntry("98","0000"));
+        hourSequenceMap.put("16887", new TableEntry("98","0000"));
+        hourSequenceMap.put("23978", new TableEntry("98","0000"));
 
         JPanel buttonsPanel = new JPanel(new GridLayout(1, 3, 75, 0));
         
