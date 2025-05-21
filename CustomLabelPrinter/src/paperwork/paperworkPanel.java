@@ -71,12 +71,12 @@ public class paperworkPanel extends JPanel{
         inputPanel2.add(reworkOrderField);
         
         JLabel userLabel = new JLabel("Username");
-        JTextField userField = new JTextField(Config.username,8);
+        JTextField userField = new JTextField("npham",8);
         userPanel.add(userLabel);
         userPanel.add(userField);
         
         JLabel passLabel = new JLabel("Pass");
-        JPasswordField  passField = new JPasswordField(Config.password,5);
+        JPasswordField  passField = new JPasswordField("2242",5);
         passPanel.add(passLabel);
         passPanel.add(passField);
         
