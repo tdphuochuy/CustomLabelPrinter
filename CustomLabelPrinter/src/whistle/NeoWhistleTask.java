@@ -160,7 +160,7 @@ public class NeoWhistleTask implements Runnable {
 					userConsole.append("Enter sequence\n");
 					sequence = scanner.nextLine();
 				}
-				manager.addCommand(new Command(prodNum,quantity,sequence,getHour()));
+				manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
