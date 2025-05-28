@@ -1,25 +1,29 @@
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import okhttp3.*;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
-import paperwork.Product;
-import paperwork.paperworkGen;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.net.ssl.*;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.TrustManager;
+
+import org.json.simple.JSONObject;
 
 public class test {
 
-    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-    	
+    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, InterruptedException {
+
+
+        
+        //Thread.sleep(3000);
     }
 }
