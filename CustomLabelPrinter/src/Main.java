@@ -167,11 +167,13 @@ public class Main {
 	                .build();
 	        
 	        final AtomicBoolean isConnected = new AtomicBoolean(false);
-	        
+	        final AtomicBoolean isConnecting = new AtomicBoolean(false);
+
 	        WebSocketListener listener = new WebSocketListener() {
 	            @Override
 	            public void onOpen(WebSocket webSocket, Response response) {
 	            	isConnected.set(true);
+	            	isConnecting.set(false);
 	            	System.out.println("CONNECTED TO WEBSOCKET SERVER!");
 	                JSONObject obj = new JSONObject();
 	                obj.put("type", "auth");
@@ -306,6 +308,7 @@ public class Main {
 	                t.printStackTrace();
 	                System.out.println("Failure!!");
 	                isConnected.set(false);
+	            	isConnecting.set(false);
 	            }
 	        };
         
@@ -313,11 +316,12 @@ public class Main {
 	        {
 	        	WebSocket webSocket = client.newWebSocket(request, listener);
 	        	System.out.println("Connecting to websocket");
-	        	try {
-	                Thread.sleep(5000);
-	            } catch (InterruptedException e) {
-	                e.printStackTrace();
-	            }
+	        	isConnecting.set(true);
+	        	while(isConnecting.get())
+	        	{
+                    Thread.sleep(1000); 
+	        	}
+	        	System.out.println("Connected!!!!");
 	        	while(isConnected.get())
 	        	{
 	        		try {
