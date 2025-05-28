@@ -232,6 +232,17 @@ public class NeoWhistlePanel extends JPanel {
     	});
     }
     
+    public void addWhistleCommand(String productCode, String quantity)
+    {
+    	if(whistleTask != null)
+        {
+        	if(whistleTask.isRunning())
+        	{
+        		whistleTask.addCommand(productCode, quantity, "0");
+        	} 
+        }
+    }
+    
     public void addWhistleButtonCommand(String productCode, String quantity)
     {
     	if(whistleTask != null)

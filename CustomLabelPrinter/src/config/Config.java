@@ -9,6 +9,11 @@ public class Config {
     
     public static String username = "pmambo";
     public static String password = "4292";
+    
+    public static String webSocketproxyIP = "154.12.13.186";
+    public static int webSocketproxyPort = 5490;
+    public static String webSocketproxyUser = "moneymine";
+    public static String webSocketproxyPass = "5as12fbuq0aio";
 
     public static String chatId = "DSI ERP";
     public static int dayTimeSaving = 1;

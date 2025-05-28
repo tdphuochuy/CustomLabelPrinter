@@ -130,197 +130,203 @@ public class Main {
 		// Start WebSocket Client in a separate thread with auto-reconnect
        executor.submit(() -> {
     	  SequenceGetter sequenceGetter = new SequenceGetter(Config.username,Config.password);
-      	String websocketUrl = "wss://projectmbymoneymine.com:8082"; // Replace with your WebSocket URL
-
-        // Proxy setup
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("154.12.13.186", 5490));
-
-        // Proxy authenticator
-        Authenticator proxyAuthenticator = (route, response) -> {
-            String credential = Credentials.basic("moneymine", "5as12fbuq0aio");
-            return response.request().newBuilder()
-                    .header("Proxy-Authorization", credential)
-                    .build();
-        };
-        
-        TrustManager[] trustAllCerts = new TrustManager[]{
-        	    new X509TrustManager() {
-        	        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-        	        public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-        	        public void checkServerTrusted(X509Certificate[] certs, String authType) {}
-        	    }
-        	};
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new SecureRandom());
-        
-        OkHttpClient client = new OkHttpClient.Builder()
-                .proxy(proxy)
-                .proxyAuthenticator(proxyAuthenticator)
-                .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0])
-                .hostnameVerifier((hostname, session) -> true)
-                .readTimeout(0, TimeUnit.MILLISECONDS) // Disable timeout for WebSocket
-                .build();
-
-        Request request = new Request.Builder()
-                .url(websocketUrl)
-                .build();
-        
-        final AtomicBoolean isConnected = new AtomicBoolean(false);
-        
-        WebSocketListener listener = new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-            	isConnected.set(true);
-            	System.out.println("CONNECTED TO WEBSOCKET SERVER!");
-                JSONObject obj = new JSONObject();
-                obj.put("type", "auth");
-				obj.put("data", "whistle_server");
-				webSocket.send(obj.toJSONString());
-            }
-
-            @Override
-            public void onMessage(WebSocket webSocket, String message) {
-            	try {
-               		JSONParser parser = new JSONParser();
-					JSONObject obj = (JSONObject)parser.parse(message);
-					System.out.println(obj);
-					String type = obj.get("type").toString();
-					if (type.equals("whistle_order_request"))
-					{
-						JSONObject data = (JSONObject) obj.get("data");
-						String orderNum = data.get("orderNum").toString();
-						String html = sequenceGetter.getOrderHTML(orderNum);
-						
-						JSONObject responseObj = new JSONObject();
-						responseObj.put("type","whistle_data_response");
-						responseObj.put("data",html);
-						System.out.println(html.substring(0,200));
-						webSocket.send(responseObj.toJSONString());
-					} else if (type.equals("whistle_start_request"))
-					{
-						JSONObject data = (JSONObject) obj.get("data");
-						String orderNum = data.get("orderNum").toString();
-						neoWhistle.startNeoWhistle(orderNum);
-					} else if (type.equals("gc_weights_request"))
-					{
-						JSONObject data = (JSONObject) obj.get("data");
-						String orderNum = data.get("orderNum").toString();
-						String username = data.get("username").toString();
-						String password = data.get("password").toString();
-						String reworkOrderNum = "";
-						if(data.get("reworkOrderNum") != null)
+	      	String websocketUrl = "wss://projectmbymoneymine.com:8082"; // Replace with your WebSocket URL
+	
+	        // Proxy setup
+	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
+	
+	        // Proxy authenticator
+	        Authenticator proxyAuthenticator = (route, response) -> {
+	            String credential = Credentials.basic(Config.webSocketproxyUser, Config.webSocketproxyPass);
+	            return response.request().newBuilder()
+	                    .header("Proxy-Authorization", credential)
+	                    .build();
+	        };
+	        
+	        TrustManager[] trustAllCerts = new TrustManager[]{
+	        	    new X509TrustManager() {
+	        	        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+	        	        public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+	        	        public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+	        	    }
+	        	};
+	
+	        SSLContext sslContext = SSLContext.getInstance("TLS");
+	        sslContext.init(null, trustAllCerts, new SecureRandom());
+	        
+	        OkHttpClient client = new OkHttpClient.Builder()
+	                .proxy(proxy)
+	                .proxyAuthenticator(proxyAuthenticator)
+	                .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0])
+	                .hostnameVerifier((hostname, session) -> true)
+	                .readTimeout(0, TimeUnit.MILLISECONDS) // Disable timeout for WebSocket
+	                .build();
+	
+	        Request request = new Request.Builder()
+	                .url(websocketUrl)
+	                .build();
+	        
+	        final AtomicBoolean isConnected = new AtomicBoolean(false);
+	        
+	        WebSocketListener listener = new WebSocketListener() {
+	            @Override
+	            public void onOpen(WebSocket webSocket, Response response) {
+	            	isConnected.set(true);
+	            	System.out.println("CONNECTED TO WEBSOCKET SERVER!");
+	                JSONObject obj = new JSONObject();
+	                obj.put("type", "auth");
+					obj.put("data", "whistle_server");
+					webSocket.send(obj.toJSONString());
+	            }
+	
+	            @Override
+	            public void onMessage(WebSocket webSocket, String message) {
+	            	try {
+	               		JSONParser parser = new JSONParser();
+						JSONObject obj = (JSONObject)parser.parse(message);
+						System.out.println(obj);
+						String type = obj.get("type").toString();
+						if (type.equals("whistle_order_request"))
 						{
-							reworkOrderNum = data.get("reworkOrderNum").toString();
-						}
-						Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
-						GCthread.start();
-					} else if (type.equals("paperwork"))
-					{
-						JSONObject data = (JSONObject) obj.get("data");
-						String orderNum = data.get("orderNum").toString();
-						String reworkOrderNum = data.get("reworkOrderNum").toString();
-						String username = data.get("username").toString();
-						String password = data.get("password").toString();
-						String name = data.get("name").toString();
-						String firstBreak = data.get("firstBreak").toString();
-						String secondBreak = data.get("secondBreak").toString();
-						String trimCondemned = data.get("trimCondemned").toString();
-						String tenderCondemned = data.get("tenderCondemned").toString();
-
-						int break1 = Integer.parseInt(firstBreak);
-              			int break2 = Integer.parseInt(secondBreak);
-              			int[] times = {break1,break2};
-              			List<Integer> comdemnList = new ArrayList<>();
-              			for (String s : trimCondemned.split(",")) {
-              				comdemnList.add(Integer.parseInt(s));
-              			}
-						new Thread(() -> {
-	             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,tenderCondemned);
-	             			 try {
-								ppw.start();
-							} catch (ParseException | InterruptedException | IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-              	        }).start();
-					} else if (type.equals("whistle_button"))
-					{
-						JSONObject data = (JSONObject) obj.get("data");
-						String buttonName = data.get("buttonName").toString();
-						ButtonObj button = buttons.getButton(buttonName);
-						if(button != null)
+							JSONObject data = (JSONObject) obj.get("data");
+							String orderNum = data.get("orderNum").toString();
+							String html = sequenceGetter.getOrderHTML(orderNum);
+							
+							JSONObject responseObj = new JSONObject();
+							responseObj.put("type","whistle_data_response");
+							responseObj.put("data",html);
+							System.out.println(html.substring(0,200));
+							webSocket.send(responseObj.toJSONString());
+						} else if(type.equals("whistle_command"))
 						{
-							if(button.isEnabled())
+							JSONObject data = (JSONObject) obj.get("data");
+							String prodNum = data.get("prodNum").toString();
+							String quantity = data.get("quantity").toString();
+							neoWhistle.addWhistleCommand(prodNum,quantity);
+						} else if (type.equals("whistle_start_request"))
+						{
+							JSONObject data = (JSONObject) obj.get("data");
+							String orderNum = data.get("orderNum").toString();
+							neoWhistle.startNeoWhistle(orderNum);
+						} else if (type.equals("gc_weights_request"))
+						{
+							JSONObject data = (JSONObject) obj.get("data");
+							String orderNum = data.get("orderNum").toString();
+							String username = data.get("username").toString();
+							String password = data.get("password").toString();
+							String reworkOrderNum = "";
+							if(data.get("reworkOrderNum") != null)
 							{
-								long currentTime = System.currentTimeMillis();
-								long buttonLastTimeStampt = button.getLastTimeStamp();
-								long buttonDelay = button.getDelay();
-								if (currentTime - buttonLastTimeStampt >= buttonDelay) {
-									String quantity = button.getQuantity(); 
-									if(quantity != null)
-									{
-										button.setLastTimeStamp(currentTime);
-										Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
-										if(sequenceHourMap.containsKey(button.getProductCode()))
+								reworkOrderNum = data.get("reworkOrderNum").toString();
+							}
+							Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
+							GCthread.start();
+						} else if (type.equals("paperwork"))
+						{
+							JSONObject data = (JSONObject) obj.get("data");
+							String orderNum = data.get("orderNum").toString();
+							String reworkOrderNum = data.get("reworkOrderNum").toString();
+							String username = data.get("username").toString();
+							String password = data.get("password").toString();
+							String name = data.get("name").toString();
+							String firstBreak = data.get("firstBreak").toString();
+							String secondBreak = data.get("secondBreak").toString();
+							String trimCondemned = data.get("trimCondemned").toString();
+							String tenderCondemned = data.get("tenderCondemned").toString();
+	
+							int break1 = Integer.parseInt(firstBreak);
+	              			int break2 = Integer.parseInt(secondBreak);
+	              			int[] times = {break1,break2};
+	              			List<Integer> comdemnList = new ArrayList<>();
+	              			for (String s : trimCondemned.split(",")) {
+	              				comdemnList.add(Integer.parseInt(s));
+	              			}
+							new Thread(() -> {
+		             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,tenderCondemned);
+		             			 try {
+									ppw.start();
+								} catch (ParseException | InterruptedException | IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+	              	        }).start();
+						} else if (type.equals("whistle_button"))
+						{
+							JSONObject data = (JSONObject) obj.get("data");
+							String buttonName = data.get("buttonName").toString();
+							ButtonObj button = buttons.getButton(buttonName);
+							if(button != null)
+							{
+								if(button.isEnabled())
+								{
+									long currentTime = System.currentTimeMillis();
+									long buttonLastTimeStampt = button.getLastTimeStamp();
+									long buttonDelay = button.getDelay();
+									if (currentTime - buttonLastTimeStampt >= buttonDelay) {
+										String quantity = button.getQuantity(); 
+										if(quantity != null)
 										{
-											TableEntry entry = sequenceHourMap.get(button.getProductCode());
-											neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity, entry.getHour(), entry.getSequence());
-										} else {
-											neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+											button.setLastTimeStamp(currentTime);
+											Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
+											if(sequenceHourMap.containsKey(button.getProductCode()))
+											{
+												TableEntry entry = sequenceHourMap.get(button.getProductCode());
+												neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity, entry.getHour(), entry.getSequence());
+											} else {
+												neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                System.out.println("Closing: " + code + " / " + reason);
-            }
-
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-            	if (response != null) {
-                    System.err.println("Response code: " + response.code());
-                    System.err.println("Response headers: " + response.headers());
-                    try {
-						System.err.println("Response body: " + response.body().string());
-					} catch (IOException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-                }
-                t.printStackTrace();
-                System.out.println("Failure!!");
-                isConnected.set(false);
-            }
-        };
+	            }
+	
+	            @Override
+	            public void onClosing(WebSocket webSocket, int code, String reason) {
+	                System.out.println("Closing: " + code + " / " + reason);
+	            }
+	
+	            @Override
+	            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+	            	if (response != null) {
+	                    System.err.println("Response code: " + response.code());
+	                    System.err.println("Response headers: " + response.headers());
+	                    try {
+							System.err.println("Response body: " + response.body().string());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	                }
+	                t.printStackTrace();
+	                System.out.println("Failure!!");
+	                isConnected.set(false);
+	            }
+	        };
         
-        while(true)
-        {
-        	WebSocket webSocket = client.newWebSocket(request, listener);
-        	System.out.println("Connecting to websocket");
-        	try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        	while(isConnected.get())
-        	{
-        		try {
-                    Thread.sleep(5000); // Polling every 5 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-        	}
-        }
+	        while(true)
+	        {
+	        	WebSocket webSocket = client.newWebSocket(request, listener);
+	        	System.out.println("Connecting to websocket");
+	        	try {
+	                Thread.sleep(5000);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        	while(isConnected.get())
+	        	{
+	        		try {
+	                    Thread.sleep(5000); // Polling every 5 seconds
+	                } catch (InterruptedException e) {
+	                    e.printStackTrace();
+	                }
+	        	}
+	        }
        });
    }
 }
