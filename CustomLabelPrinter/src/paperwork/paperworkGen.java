@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.net.Socket;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -57,12 +58,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import config.Config;
+import okhttp3.Credentials;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.Route;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
 import paperwork.gen.recapGen;
@@ -550,20 +553,45 @@ public class paperworkGen{
 		   	JSONObject obj = new JSONObject();
 		   	obj.put("message", message);
 
-	        URL url = new URL("https://projectmbymoneymine.com:8083/recap");
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-	        conn.setRequestMethod("POST");
-	        conn.setDoOutput(true);
-	        conn.setRequestProperty("Content-Type", "application/json");
 	        
-	        System.out.println(obj.toJSONString());
-	        try (OutputStream os = conn.getOutputStream()) {
-	            os.write(obj.toJSONString().getBytes("UTF-8"));
+
+	        String url = "https://projectmbymoneymine.com:8083/recap";
+
+	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
+
+			okhttp3.Authenticator proxyAuthenticator = new okhttp3.Authenticator() {
+				  @Override public Request authenticate(Route route, Response response) throws IOException {
+				       String credential = Credentials.basic(Config.webSocketproxyIP,Config.webSocketproxyPass);
+				       return response.request().newBuilder()
+				           .header("Proxy-Authorization", credential)
+				           .build();
+				  }
+				};
+
+	        OkHttpClient client = new OkHttpClient.Builder()
+	                .proxy(proxy)
+	                .proxyAuthenticator(proxyAuthenticator)
+	                .build();
+
+
+	        RequestBody body = RequestBody.create(
+	        		obj.toJSONString(), 
+	                MediaType.get("application/json; charset=utf-8")
+	        );
+
+	        Request request = new Request.Builder()
+	                .url(url)
+	                .post(body)
+	                .build();
+
+	        try (Response response = client.newCall(request).execute()) {
+	            if (response.isSuccessful()) {
+	                System.out.println("Response: " + response.body().string());
+	            } else {
+	                System.err.println("Request failed: " + response.code());
+	            }
 	        }
 
-	        int responseCode = conn.getResponseCode();
-	        System.out.println("Response Code: " + responseCode);
 	   }
 	   
 	   private void trustAllCertificates() throws Exception {
