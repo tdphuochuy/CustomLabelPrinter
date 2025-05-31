@@ -98,7 +98,7 @@ public class GCweightsTask implements Runnable {
     			{
     				generatePdf(list,generateWeightList(list,"2146",true));
     			} else {
-    				generatePdf(list,generateWeightList(list,"2140",false));
+    				generatePdf(list,generateWeightList(list,"2180",false));
     			}
             	
             } else {
