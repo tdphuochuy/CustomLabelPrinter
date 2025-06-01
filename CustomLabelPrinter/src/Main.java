@@ -130,7 +130,7 @@ public class Main {
 		// Start WebSocket Client in a separate thread with auto-reconnect
        executor.submit(() -> {
     	  SequenceGetter sequenceGetter = new SequenceGetter(Config.username,Config.password);
-	      	String websocketUrl = "wss://projectmbymoneymine.com:8082"; // Replace with your WebSocket URL
+	      	String websocketUrl = "wss://" + Config.serverDomain + ":8082"; // Replace with your WebSocket URL
 	
 	        // Proxy setup
 	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
@@ -244,7 +244,7 @@ public class Main {
 	              				comdemnList.add(Integer.parseInt(s));
 	              			}
 							new Thread(() -> {
-		             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,false,true,tenderCondemned);
+		             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,comdemnList,false,true,tenderCondemned);
 		             			 try {
 									ppw.start();
 								} catch (ParseException | InterruptedException | IOException e1) {

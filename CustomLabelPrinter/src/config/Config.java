@@ -14,6 +14,8 @@ public class Config {
     public static int webSocketproxyPort = 5490;
     public static String webSocketproxyUser = "moneymine";
     public static String webSocketproxyPass = "5as12fbuq0aio";
+    
+    public static String serverDomain = "projectmbymoneymine.com";
 
     public static String chatId = "DSI ERP";
     public static int dayTimeSaving = 1;
