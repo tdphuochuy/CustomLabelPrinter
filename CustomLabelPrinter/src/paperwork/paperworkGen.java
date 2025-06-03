@@ -43,7 +43,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.JDialog;
@@ -75,14 +74,14 @@ import paperwork.gen.tenderGen;
 public class paperworkGen{
 	private String username,password,orderNum,reworkOrderNum,name;
 	private int[] times;
-	private List<Integer> bloodcondemnList,greencondemnList;
+	private List<Integer> condemnList;
 	private String sessionId = "";
 	private String tenderCondemnTotal;
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
 	private List<Double> issuedList = new ArrayList<>();
 	private boolean pdfOnly,sendEmail;
-	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
+	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -91,8 +90,7 @@ public class paperworkGen{
 		this.reworkOrderNum = reworkOrderNum;
 		this.name = name;
 		this.times = times;
-		this.bloodcondemnList = bloodcondemnList;
-		this.greencondemnList = greencondemnList;
+		this.condemnList = condemnList;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
 		this.tenderCondemnTotal = tenderCondemnTotal;
@@ -341,7 +339,7 @@ public class paperworkGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList,tenderCondemnTotal);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,condemnList,issuedList,tenderCondemnTotal);
 		recapExcel.generateExcel();
 		
         File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
@@ -359,12 +357,7 @@ public class paperworkGen{
         	sendEmail();
         }
         
-        try {
-			postRecap(breastExcel);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        postRecap(breastExcel);
 	}
 	
 	public void openPDFfile()
@@ -534,8 +527,14 @@ public class paperworkGen{
 	        }
 	   }
 	   
-	   public void postRecap(breastGen breastExcel) throws Exception
+	   public void postRecap(breastGen breastExcel) throws IOException
 	   {
+		   try {
+			trustAllCertificates();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        LocalDateTime now = LocalDateTime.now();
 	        
 	        if(Config.dayTimeSaving == 1)
@@ -556,7 +555,7 @@ public class paperworkGen{
 
 	        
 
-	        String url = "https://" + Config.serverDomain + ":8083/recap";
+	        String url = "https://projectmbymoneymine.com:8083/recap";
 
 	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
 
@@ -572,8 +571,6 @@ public class paperworkGen{
 	        OkHttpClient client = new OkHttpClient.Builder()
 	                .proxy(proxy)
 	                .proxyAuthenticator(proxyAuthenticator)
-	                .sslSocketFactory(getUnsafeSSLSocketFactory(), getTrustAllCertsManager())
-	                .hostnameVerifier((hostname, session) -> true)
 	                .build();
 
 
@@ -597,28 +594,21 @@ public class paperworkGen{
 
 	   }
 	   
-	   private static SSLSocketFactory getUnsafeSSLSocketFactory() throws Exception {
+	   private void trustAllCertificates() throws Exception {
 		    TrustManager[] trustAllCerts = new TrustManager[]{
 		        new X509TrustManager() {
-		            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-		            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
 		            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+		            public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+		            public void checkServerTrusted(X509Certificate[] certs, String authType) { }
 		        }
 		    };
+		    SSLContext sc = SSLContext.getInstance("TLS");
+		    sc.init(null, trustAllCerts, new SecureRandom());
+		    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-		    SSLContext sslContext = SSLContext.getInstance("SSL");
-		    sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-		    return sslContext.getSocketFactory();
+		    // Disable hostname verification
+		    HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 		}
-
-		private static X509TrustManager getTrustAllCertsManager() {
-		    return new X509TrustManager() {
-		        public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-		        public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-		        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-		    };
-		}
-
 	   
 	   public void showAutoClosingDialog(String message, String title, int timeoutMillis) {
 	        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);

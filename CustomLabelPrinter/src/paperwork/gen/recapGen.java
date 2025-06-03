@@ -17,17 +17,16 @@ public class recapGen extends excelGen{
 	private breastGen breast;
 	private tenderGen tender;
 	private carcassGen carcass;
-	private List<Integer> bloodcondemnList,greencondemnList;
+	private List<Integer> condemnList;
 	private List<Double> issuedList;
 	private String tenderCondemnTotal;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList,String tenderCondemnTotal)
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> condemnList,List<Double> issuedList,String tenderCondemnTotal)
 	{
 		this.name = name;
 		this.breast = breast;
 		this.tender = tender;
 		this.carcass = carcass;
-		this.bloodcondemnList = bloodcondemnList;
-		this.greencondemnList = greencondemnList;
+		this.condemnList = condemnList;
 		this.issuedList = issuedList;
 		this.tenderCondemnTotal = tenderCondemnTotal;
 	}
@@ -154,28 +153,23 @@ public class recapGen extends excelGen{
 	        	}
 	        	
 	        	currentColumn = "G";
-	        	currentRow = 25;
-	        	for(int i = 1; i <= bloodcondemnList.size();i++)
+	        	currentRow = 30;
+	        	for(int i = 1; i <= condemnList.size();i++)
 	        	{
-	        		int condemnWeight = bloodcondemnList.get(i - 1);
+	        		int condemnWeight = condemnList.get(i - 1);
+	        		if(currentRow > 40)
+	        		{
+	        			currentColumn = "I";
+	        			currentRow = 30;
+	        		}
 	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
 		        	currentRow++;
 	        	}
-	        	
-	        	currentColumn = "I";
-	        	currentRow = 25;
-	        	for(int i = 1; i <= greencondemnList.size();i++)
-	        	{
-	        		int condemnWeight = greencondemnList.get(i - 1);
-	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
-		        	currentRow++;
-	        	}
-	        	
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
 
         		setCellValue(sheet, "G", 5, "Total rework issued: " + formatDouble(getIssuedTotal()) + " lbs");
         		
-        		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
+        		setCellValue(sheet, "G", 23, tenderCondemnTotal + " lbs");
 
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
@@ -194,11 +188,7 @@ public class recapGen extends excelGen{
 	public int getCondemnWeight()
 	{
 		int weight = 0;
-		for(Integer condemnWeight : bloodcondemnList)
-    	{
-			weight += condemnWeight;
-    	}
-		for(Integer condemnWeight : greencondemnList)
+		for(Integer condemnWeight : condemnList)
     	{
 			weight += condemnWeight;
     	}
