@@ -11,8 +11,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,13 +180,25 @@ public class paperworkPanel extends JPanel{
         JPanel textareaPanel = new JPanel();
         textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
         textareaPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-        JTextArea textArea = new JTextArea(14,12);
+        JTextArea textArea = new JTextArea(6,12);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
+        
+        JTextArea textArea2 = new JTextArea(6,12);
+        JScrollPane scrollPane2 = new JScrollPane(textArea2);
+        scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
+        
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        labelPanel.add(new JLabel("Trim condemned:"));
+        labelPanel.add(new JLabel("Trim blood condemned:"));
+        JPanel labelPanel2 = new JPanel();
+        labelPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel2.add(new JLabel("Trim green condemned:"));
+        
+        textareaPanel.add(labelPanel2);
+        textareaPanel.add(scrollPane2);
+        
         textareaPanel.add(labelPanel);
         textareaPanel.add(scrollPane);
         
@@ -232,15 +242,24 @@ public class paperworkPanel extends JPanel{
 		              			 }
 		              			 int[] times = {break1,break2};
 		              			 
-		              			 String condemnText = textArea.getText();
-		              			 String[] array = condemnText.split("\n");
-		              			 List<Integer> comdemnList = new ArrayList<>();
+		              			 String bloodcondemnText = textArea.getText();
+		              			 String[] array = bloodcondemnText.split("\n");
+		              			 List<Integer> bloodcomdemnList = new ArrayList<>();
 		              	         for (String s : array) {
-		              	        	comdemnList.add(Integer.parseInt(s));
+		              	        	bloodcomdemnList.add(Integer.parseInt(s));
 		              	         }
-		              	         System.out.println(comdemnList);
+		              	         
+		              	         
+		              	         String greencondemnText = textArea2.getText();
+		              			 String[] array2 = greencondemnText.split("\n");
+		              			 List<Integer> greencomdemnList = new ArrayList<>();
+		              	         for (String s : array2) {
+		              	        	greencomdemnList.add(Integer.parseInt(s));
+		              	         }
+		              	         
+		              	         
 			              	       new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
+				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException | IOException e1) {
@@ -279,17 +298,6 @@ public class paperworkPanel extends JPanel{
         });
         
         this.add(splitPanel);
-        
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
-
-        try (FileWriter writer = new FileWriter(file)) {
-            // Opening the file in write mode will automatically overwrite the contents, 
-            // so the file will be cleared.
-            writer.write(""); // Clear the file by writing an empty string
-            System.out.println("File has been cleared.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 	}
 	
     // Method to set the placeholder text
