@@ -94,6 +94,10 @@ public class paperworkGen{
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
 		this.tenderCondemnTotal = tenderCondemnTotal;
+		for(int i = 0; i < condemnList.size();i++)
+		{
+			condemnList.set(i, condemnList.get(i) - 25);
+		}
 		sessionId = getSessionId();
 	}
 	
@@ -590,8 +594,9 @@ public class paperworkGen{
 	            } else {
 	                System.err.println("Request failed: " + response.code());
 	            }
-	        }
-
+	        } catch (Exception e)
+	        {
+	        	e.printStackTrace();	        }
 	   }
 	   
 	   private void trustAllCertificates() throws Exception {

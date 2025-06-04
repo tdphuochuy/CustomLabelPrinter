@@ -96,7 +96,7 @@ public class GCweightsTask implements Runnable {
             	}
             	if(username.toLowerCase().equals(Config.username))
     			{
-    				generatePdf(list,generateWeightList(list,"2146",true));
+    				generatePdf(list,generateWeightList(list,"2170",true));
     			} else {
     				generatePdf(list,generateWeightList(list,"2180",false));
     			}
@@ -383,8 +383,8 @@ public class GCweightsTask implements Runnable {
 	public String randomWeight()
 	{
 		Random random = new Random();
-        int min = 2146;
-        int max = 2154;
+        int min = 2170;
+        int max = 2178;
         int randomEvenNumber;
 
         do {

@@ -11,6 +11,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -277,6 +279,17 @@ public class paperworkPanel extends JPanel{
         });
         
         this.add(splitPanel);
+        
+        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
+
+        try (FileWriter writer = new FileWriter(file)) {
+            // Opening the file in write mode will automatically overwrite the contents, 
+            // so the file will be cleared.
+            writer.write(""); // Clear the file by writing an empty string
+            System.out.println("File has been cleared.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
     // Method to set the placeholder text
