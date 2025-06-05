@@ -175,7 +175,7 @@ public class recapGen extends excelGen{
 
         		setCellValue(sheet, "G", 5, "Total rework issued: " + formatDouble(getIssuedTotal()) + " lbs");
         		
-        		setCellValue(sheet, "G", 23, tenderCondemnTotal + " lbs");
+        		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
 
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
