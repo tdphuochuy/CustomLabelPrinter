@@ -147,8 +147,11 @@ public class Main {
                			try {
                            		JSONParser parser = new JSONParser();
 								JSONObject obj = (JSONObject)parser.parse(message);
-								System.out.println(obj);
 								String type = obj.get("type").toString();
+								if(!type.equals("ping"))
+								{
+									System.out.println(obj);
+								}
 								if (type.equals("whistle_order_request"))
 								{
 									JSONObject data = (JSONObject) obj.get("data");
