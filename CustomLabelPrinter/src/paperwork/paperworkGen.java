@@ -556,7 +556,7 @@ public class paperworkGen{
 
 	        
 
-	        String url = "https://" + Config.serverDomain + ":8083/recap";
+	        String url = "https://" + Config.serverDomain + "/recap";
 
 	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
 
@@ -570,8 +570,8 @@ public class paperworkGen{
 				};
 
 	        OkHttpClient client = new OkHttpClient.Builder()
-	                .proxy(proxy)
-	                .proxyAuthenticator(proxyAuthenticator)
+	                //.proxy(proxy)
+	                //.proxyAuthenticator(proxyAuthenticator)
 	                .sslSocketFactory(getUnsafeSSLSocketFactory(), getTrustAllCertsManager())
 	                .hostnameVerifier((hostname, session) -> true)
 	                .build();

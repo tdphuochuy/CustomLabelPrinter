@@ -15,7 +15,7 @@ public class Config {
     public static String webSocketproxyUser = "moneymine";
     public static String webSocketproxyPass = "5as12fbuq0aio";
     
-    public static String serverDomain = "projectmbymoneymine.com";
+    public static String serverDomain = "erp-app-dc3826c87da0.herokuapp.com";
 
     public static String chatId = "DSI ERP";
     public static int dayTimeSaving = 1;
