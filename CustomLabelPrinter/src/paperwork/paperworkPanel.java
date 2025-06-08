@@ -246,7 +246,12 @@ public class paperworkPanel extends JPanel{
 		              			 String[] array = bloodcondemnText.split("\n");
 		              			 List<Integer> bloodcomdemnList = new ArrayList<>();
 		              	         for (String s : array) {
-		              	        	bloodcomdemnList.add(Integer.parseInt(s));
+		              	        	 int bloodweight = Integer.parseInt(s);
+		              	        	if(bloodweight > 250)
+		              	        	{
+		              	        		bloodweight = bloodweight - 138;
+		              	        	}
+		              	        	bloodcomdemnList.add(bloodweight);
 		              	         }
 		              	         
 		              	         
@@ -254,7 +259,7 @@ public class paperworkPanel extends JPanel{
 		              			 String[] array2 = greencondemnText.split("\n");
 		              			 List<Integer> greencomdemnList = new ArrayList<>();
 		              	         for (String s : array2) {
-		              	        	greencomdemnList.add(Integer.parseInt(s));
+		              	        	greencomdemnList.add(Integer.parseInt(s) - 15);
 		              	         }
 		              	         
 		              	         
