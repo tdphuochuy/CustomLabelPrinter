@@ -395,9 +395,25 @@ public class breastGen extends excelGen{
 		return getTotalComboWeight() + getTotalCaseWeight();
 	}
 	
+	public double getTotalWeightwRW()
+	{
+		return getTotalWeight() + getReworkWeight();
+	}
+	
 	public List<Product> getReworkList()
 	{
 		return reworkList;
+	}
+	
+	public double getReworkWeight()
+	{
+		double weight = 0;
+		for(Product product: reworkList)
+		{
+			weight += product.getWeight();
+		}
+		
+		return weight;
 	}
 	
 }

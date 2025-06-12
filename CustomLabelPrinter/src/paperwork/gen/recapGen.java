@@ -128,6 +128,7 @@ public class recapGen extends excelGen{
 	            }
 	            
 	        	setCellValue(sheet, "B", 6, formatDouble(breast.getTotalWeight()) + " lbs");
+	        	setCellValue(sheet, "C", 8, formatDouble(breast.getTotalWeightwRW()) + " lbs");
 	        	setCellValue(sheet, "B", 11, formatDouble(tender.getTotalWeight()) + " lbs");
 	        	setCellValue(sheet, "B", 16, formatDouble(tender.getKeelBoneWeight()) + " lbs");
 	        	setCellValue(sheet, "B", 21, formatDouble(tender.getKneeBoneWeight()) + " lbs");
