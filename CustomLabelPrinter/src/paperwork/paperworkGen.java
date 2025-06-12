@@ -80,7 +80,8 @@ public class paperworkGen{
 	private String tenderCondemnTotal;
 	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
-	private List<Double> issuedList = new ArrayList<>();
+	private List<Double> issuedList1 = new ArrayList<>();
+	private List<Double> issuedList2 = new ArrayList<>();
 	private boolean pdfOnly,sendEmail;
 	public paperworkGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
 	{
@@ -156,8 +157,16 @@ public class paperworkGen{
             				{
             					Elements td = tr.getElementsByTag("td");
             					double quantity = Double.parseDouble(td.get(5).text().replace(",", ""));
+            					String lotNum = td.get(4).text();
+        						String hourSequenceText = lotNum.substring(lotNum.length() - 6);
+        						int lotNumHour = Integer.valueOf(hourSequenceText.substring(0,2));
+        						if(lotNumHour < 17)
+        						{
+                					issuedList1.add(quantity);
+        						} else {
+                					issuedList2.add(quantity);
+        						}
             					System.out.println(quantity);
-            					issuedList.add(quantity);
             				}
             			}
             		}
@@ -341,7 +350,7 @@ public class paperworkGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList,tenderCondemnTotal);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
 		recapExcel.generateExcel();
 		
         File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");

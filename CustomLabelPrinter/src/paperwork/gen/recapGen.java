@@ -18,9 +18,10 @@ public class recapGen extends excelGen{
 	private tenderGen tender;
 	private carcassGen carcass;
 	private List<Integer> bloodcondemnList,greencondemnList;
-	private List<Double> issuedList;
+	private List<Double> issuedList1;
+	private List<Double> issuedList2;
 	private String tenderCondemnTotal;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList,String tenderCondemnTotal)
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal)
 	{
 		this.name = name;
 		this.breast = breast;
@@ -28,7 +29,8 @@ public class recapGen extends excelGen{
 		this.carcass = carcass;
 		this.bloodcondemnList = bloodcondemnList;
 		this.greencondemnList = greencondemnList;
-		this.issuedList = issuedList;
+		this.issuedList1 = issuedList1;
+		this.issuedList2 = issuedList2;
 		this.tenderCondemnTotal = tenderCondemnTotal;
 	}
 
@@ -173,9 +175,21 @@ public class recapGen extends excelGen{
 	        	}
 	        	
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
-
-        		setCellValue(sheet, "G", 5, "Total rework issued: " + formatDouble(getIssuedTotal()) + " lbs");
         		
+        		String dailyRecap = "";
+        		
+        		if(issuedList1.size() > 0)
+        		{
+        			dailyRecap = dailyRecap + "Rework issued (1st): " + formatDouble(getIssuedTotal(issuedList1)) + " lbs\n";
+        		}
+        		
+        		if(issuedList2.size() > 0)
+        		{
+        			dailyRecap = dailyRecap + "Rework issued (2nd): " + formatDouble(getIssuedTotal(issuedList2)) + " lbs";
+        		}
+        		
+        		setCellValue(sheet, "G", 5, dailyRecap);
+        		        		
         		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
 
 	        	// Save changes
@@ -207,7 +221,7 @@ public class recapGen extends excelGen{
 		return weight;
 	}
 	
-	public double getIssuedTotal()
+	public double getIssuedTotal(List<Double> issuedList)
 	{
 		double weight = 0;
 		for(Double issuedWeight : issuedList)
