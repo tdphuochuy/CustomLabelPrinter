@@ -183,6 +183,25 @@ public class FreePanel extends JPanel{
             }
         });
         
+        JButton buttonTrimCondemn = new JButton("Print trim condemn :(");
+        buttonTrimCondemn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonTrimCondemn.setBackground(Color.white);
+        buttonTrimCondemn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+     // Make the button transparent
+        buttonTrimCondemn.setContentAreaFilled(false);
+        buttonTrimCondemn.setBorder(null);
+        
+        buttonTrimCondemn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int quantity = quantityField.getText().length() > 0 ? Integer.valueOf(quantityField.getText()) : 1;
+         		 for(int i = 0; i < quantity;i++)
+         		 {
+         			 printTrimCondemn();
+         		 }
+            }
+        });
+        
         contentPanel.add(inputPanel);
         contentPanel.add(quantityPanel);
         
@@ -190,7 +209,9 @@ public class FreePanel extends JPanel{
         buttonPanel.add(switchBtn);
         buttonPanel.add(Box.createVerticalStrut(5));
         buttonPanel.add(button);
-        buttonPanel.add(Box.createVerticalStrut(180));
+        buttonPanel.add(Box.createVerticalStrut(140));
+        buttonPanel.add(buttonTrimCondemn);
+        buttonPanel.add(Box.createVerticalStrut(20));
         buttonPanel.add(buttonNhan);
         
         this.add(contentPanel);
@@ -292,6 +313,52 @@ public class FreePanel extends JPanel{
          } catch (Exception e) {
              System.out.println("Error: " + e.getMessage());
          }
+    }
+    
+    public void printTrimCondemn()
+    {
+    	String printerIP = Config.printer2IP;  // Replace with your printer's IP
+        int port = 9100;  // Default port for network printing
+        int quantity = 1;
+        String sbplCommand = "\u001BA"      // Initialize SBPL command
+                + "\u001BH300"  // Set horizontal position (H)
+                + "\u001BV" + 350                                                                                           // Set vertical position (V)        // Print "G"
+                + "\u001BL1010"
+                + "\u001BRH0,SATOCGStream.ttf,0," + 40 + "," + 40  + "," + "Green";
+
+			for(int i = 1; i <= 5;i++)
+			{
+			 sbplCommand = sbplCommand  + "\u001BH300"
+			 		+ "\u001BV" + (350 + i*75) 
+			         + "\u001BL1010"
+			         + "\u001BRH0,SATOCGStream.ttf,0," + 40 + "," + 40  + "," + i + ")";
+			
+			}
+			sbplCommand = sbplCommand  + "\u001BH600"
+					+ "\u001BV" + 350                                                                                           // Set vertical position (V)        // Print "G"
+			     + "\u001BL1010"
+			     + "\u001BRH0,SATOCGStream.ttf,0," + 40 + "," + 40  + "," + "Blood";
+			
+			for(int i = 1; i <= 5;i++)
+			{
+			 sbplCommand = sbplCommand  + "\u001BH600"
+			 		+ "\u001BV" + (350 + i*75) 
+			         + "\u001BL1010"
+			         + "\u001BRH0,SATOCGStream.ttf,0," + 40 + "," + 40  + "," + i + ")";
+			}
+			
+			sbplCommand = sbplCommand  
+			               + "\u001BQ" + quantity     // Print one label
+			                + "\u001BZ";     // End SBPL command
+			
+			try (Socket socket = new Socket(printerIP, port)) {
+			 OutputStream outputStream = socket.getOutputStream();
+			 outputStream.write(sbplCommand.getBytes("UTF-8"));
+			 outputStream.flush();
+			 System.out.println("Label sent to the printer.");
+			} catch (Exception e) {
+			 System.out.println("Error: " + e.getMessage());
+		}
     }
     
     public static int[] calculateFontSize(String text, int maxWidth) {
