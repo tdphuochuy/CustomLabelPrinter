@@ -130,7 +130,7 @@ public class recapGen extends excelGen{
 	            }
 	            
 	        	setCellValue(sheet, "B", 6, formatDouble(breast.getTotalWeight()) + " lbs");
-	        	setCellValue(sheet, "C", 8, formatDouble(breast.getTotalWeightwRW()) + " lbs");
+	        	//setCellValue(sheet, "C", 8, formatDouble(breast.getTotalWeightwRW()) + " lbs");
 	        	setCellValue(sheet, "B", 11, formatDouble(tender.getTotalWeight()) + " lbs");
 	        	setCellValue(sheet, "B", 16, formatDouble(tender.getKeelBoneWeight()) + " lbs");
 	        	setCellValue(sheet, "B", 21, formatDouble(tender.getKneeBoneWeight()) + " lbs");
@@ -176,16 +176,16 @@ public class recapGen extends excelGen{
 	        	
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
         		
-        		String dailyRecap = "";
+        		String dailyRecap = "Rework issued\n";
         		
         		if(issuedList1.size() > 0)
         		{
-        			dailyRecap = dailyRecap + "Rework issued (1st): " + formatDouble(getIssuedTotal(issuedList1)) + " lbs\n";
+        			dailyRecap = dailyRecap + "1st: " + formatDouble(getIssuedTotal(issuedList1)) + " lbs\n";
         		}
         		
         		if(issuedList2.size() > 0)
         		{
-        			dailyRecap = dailyRecap + "Rework issued (2nd): " + formatDouble(getIssuedTotal(issuedList2)) + " lbs";
+        			dailyRecap = dailyRecap + "2nd: " + formatDouble(getIssuedTotal(issuedList2)) + " lbs";
         		}
         		
         		setCellValue(sheet, "G", 5, dailyRecap);
