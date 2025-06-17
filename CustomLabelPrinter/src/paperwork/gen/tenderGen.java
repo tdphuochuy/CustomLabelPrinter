@@ -430,6 +430,16 @@ public class tenderGen extends excelGen{
 			skinMap.get(productCode).put(hour, new ArrayList<Product>());
 		}
 		
+		if(hour <= times[0])
+		{
+			Break1SkinWeight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2SkinWeight += product.getWeight();
+		} else {
+			Break3SkinWeight += product.getWeight();
+		}
+		
 		skinMap.get(productCode).get(hour).add(product);
 	}
 	
