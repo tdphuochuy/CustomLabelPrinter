@@ -425,7 +425,7 @@ public class paperworkGen{
 			type = "kneebone";
 		} else if (description.contains("KEELBONES")) {
 			type = "keelbone";
-		} else if (description.contains("SKN ")) {
+		} else if (description.contains("SKN")) {
 			type = "skin";
 		}
 
