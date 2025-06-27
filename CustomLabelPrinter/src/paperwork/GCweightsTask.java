@@ -98,7 +98,7 @@ public class GCweightsTask implements Runnable {
     			{
     				generatePdf(list,generateWeightList(list,"2170",true));
     			} else {
-    				generatePdf(list,generateWeightList(list,"21",false));
+    				generatePdf(list,generateWeightList1st(list));
     			}
             	
             } else {
@@ -220,6 +220,38 @@ public class GCweightsTask implements Runnable {
 	        return lines;
 		}
 		
+	}
+	
+	public List<String> generateWeightList1st(List<String> list)
+	{
+		String fileOutput = "";
+		List<String> lines = new ArrayList<>();
+		for(String trackingNum : list)
+		{
+			 char lastChar = trackingNum.charAt(trackingNum.length() - 1);
+			 // Convert the character to an integer
+			 int lastDigit = Character.getNumericValue(lastChar);
+			 int weight = 2174 + lastDigit;
+			 if(weight % 2 != 0)
+			 {
+				 weight++;
+			 }
+			 fileOutput += weight + "\n";
+			 lines.add(String.valueOf(weight));
+		}
+		
+		File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
+
+        try (FileWriter writer = new FileWriter(file)) {
+            // Opening the file in write mode will automatically overwrite the contents, 
+            // so the file will be cleared.
+            writer.write(fileOutput); // Clear the file by writing an empty string
+            System.out.println("File has been overwriten.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+		return lines;
 	}
 	
 	public void printList(List<String> trackingList,List<String> weightList,int listNum)
