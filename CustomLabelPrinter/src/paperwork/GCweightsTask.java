@@ -237,7 +237,8 @@ public class GCweightsTask implements Runnable {
 				 weight++;
 			 }
 			 fileOutput += weight + "\n";
-			 lines.add(String.valueOf(weight));
+			 //lines.add(String.valueOf(weight));
+			 lines.add("21");
 		}
 		
 		File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
