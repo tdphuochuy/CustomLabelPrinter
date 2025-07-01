@@ -416,8 +416,8 @@ public class GCweightsTask implements Runnable {
 	public String randomWeight()
 	{
 		Random random = new Random();
-        int min = 2170;
-        int max = 2178;
+        int min = 2120;
+        int max = 2128;
         int randomEvenNumber;
 
         do {
