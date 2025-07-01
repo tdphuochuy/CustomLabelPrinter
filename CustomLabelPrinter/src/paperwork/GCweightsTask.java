@@ -96,9 +96,9 @@ public class GCweightsTask implements Runnable {
             	}
             	if(username.toLowerCase().equals(Config.username))
     			{
-    				generatePdf(list,generateWeightList(list,"2170",true));
+    				generatePdf(list,generateWeightList(list,"2120",true));
     			} else {
-    				generatePdf(list,generateWeightList1st(list));
+    				generatePdf(list,generateWeightList1st(list,2120));
     			}
             	
             } else {
@@ -222,7 +222,7 @@ public class GCweightsTask implements Runnable {
 		
 	}
 	
-	public List<String> generateWeightList1st(List<String> list)
+	public List<String> generateWeightList1st(List<String> list,int bottom)
 	{
 		String fileOutput = "";
 		List<String> lines = new ArrayList<>();
@@ -231,7 +231,7 @@ public class GCweightsTask implements Runnable {
 			 char lastChar = trackingNum.charAt(trackingNum.length() - 1);
 			 // Convert the character to an integer
 			 int lastDigit = Character.getNumericValue(lastChar);
-			 int weight = 2174 + lastDigit;
+			 int weight = bottom - 6 + lastDigit;
 			 if(weight % 2 != 0)
 			 {
 				 weight++;
