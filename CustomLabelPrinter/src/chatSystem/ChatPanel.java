@@ -32,7 +32,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -118,8 +120,14 @@ public class ChatPanel extends JPanel{
                 String message = textField.getText();
                 if (!message.trim().isEmpty() && !message.equals("Message")) {
                 	JSONObject obj = new JSONObject();
-    				obj.put("type", "message");
-    				obj.put("message", message);
+                	if(clientWS.isPrivateChat())
+                	{
+                		obj.put("type", "chatmessage_server");
+                		obj.put("data", message);
+                	} else {
+                		obj.put("type", "message");
+                		obj.put("message", message);
+                	}
     				clientWS.send(obj.toJSONString());
                 }
                 textField.setText("");
@@ -158,10 +166,35 @@ public class ChatPanel extends JPanel{
 	        ChatServer serverWS = new ChatServer(8887);
 	        serverWS.start();
 	        //ws://167.110.212.94:8887
-		    clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane,this);
-		    clientWS.connect();
+	        
+	        LocalTime StartTime = LocalTime.of(17, 10);
+	        LocalTime currentTime = LocalTime.now();
+	        
+	        if (currentTime.isAfter(StartTime)) {
+	        	clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane,this,false);
+			    clientWS.connect();
+	        } else {
+	        	clientWS = new ChatClient(new URI("wss://erp-app-dc3826c87da0.herokuapp.com"),textField,textArea,tabbedPane,this,true);
+			    clientWS.connect();
+			    
+			    long delay = java.time.Duration.between(LocalTime.now(), StartTime).toMillis();
+			    java.util.Timer scheduleTimer = new java.util.Timer();
+			    ChatPanel cp = this;
+		        scheduleTimer.schedule(new TimerTask() {
+		            @Override
+		            public void run() {
+		            	try {
+							clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane,cp,false);
+						} catch (URISyntaxException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					    clientWS.connect();
+		            }
+		        }, delay);
+	        }		    
         } else {
-        	clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane,this);
+        	clientWS = new ChatClient(new URI("ws://167.110.212.94:8887"),textField,textArea,tabbedPane,this,false);
 		    clientWS.connect();
         }
     }

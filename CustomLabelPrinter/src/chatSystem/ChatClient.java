@@ -35,6 +35,7 @@ import config.Config;
 
 public class ChatClient extends WebSocketClient {
   private ChatPanel cp;
+  private boolean privateChat;
   public ChatClient(URI serverUri, Draft draft) {
     super(serverUri, draft);
   }
@@ -43,9 +44,10 @@ public class ChatClient extends WebSocketClient {
     super(serverURI);
   }
   
-  public ChatClient(URI serverURI,JTextField textField,JTextArea textArea,JTabbedPane tabbedPane,ChatPanel cp) {
+  public ChatClient(URI serverURI,JTextField textField,JTextArea textArea,JTabbedPane tabbedPane,ChatPanel cp,boolean privateChat) {
     super(serverURI);
     this.cp = cp;
+    this.privateChat = privateChat;
   }
 
   public ChatClient(URI serverUri, Map<String, String> httpHeaders) {
@@ -54,7 +56,12 @@ public class ChatClient extends WebSocketClient {
 
   @Override
   public void onOpen(ServerHandshake handshakedata) {
-    send("{\"type\":\"init\",\"message\":\"" + Config.chatId + "\"}");
+	if(privateChat)
+	{
+		send("{\"type\":\"auth\",\"data\":\"chat_server\"}");
+	} else {
+		send("{\"type\":\"init\",\"message\":\"" + Config.chatId + "\"}");
+	}
   }
 
   @Override
@@ -63,8 +70,11 @@ public class ChatClient extends WebSocketClient {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject)parser.parse(msg);
 			String type = obj.get("type").toString();
-			String message = obj.get("message").toString();
-			cp.appendChat(type, message);
+			if(!type.equals("ping"))
+			{
+				String message = obj.get("message").toString();
+				cp.appendChat(type, message);
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,5 +92,9 @@ public class ChatClient extends WebSocketClient {
 	 ex.printStackTrace();
   }
 
-
+  public boolean isPrivateChat()
+  {
+	  return privateChat;
+  }
+  
 }
