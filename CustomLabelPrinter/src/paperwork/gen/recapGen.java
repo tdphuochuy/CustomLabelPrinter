@@ -176,19 +176,16 @@ public class recapGen extends excelGen{
 	        	
         		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
         		
-        		String dailyRecap = "Rework issued\n";
-        		
         		if(issuedList1.size() > 0)
         		{
-        			dailyRecap = dailyRecap + "1st: " + formatDouble(getIssuedTotal(issuedList1)) + " lbs\n";
+            		setCellValue(sheet, "G", 6, "1st: " + formatDouble(getIssuedTotal(issuedList1)) + " lbs");
         		}
         		
         		if(issuedList2.size() > 0)
         		{
-        			dailyRecap = dailyRecap + "2nd: " + formatDouble(getIssuedTotal(issuedList2)) + " lbs";
+            		setCellValue(sheet, "G", 7, "2nd: " + formatDouble(getIssuedTotal(issuedList2)) + " lbs");
         		}
         		
-        		setCellValue(sheet, "G", 5, dailyRecap);
         		        		
         		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
 
