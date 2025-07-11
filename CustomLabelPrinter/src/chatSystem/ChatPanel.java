@@ -67,7 +67,7 @@ public class ChatPanel extends JPanel{
 	private JFrame frame;
 	private ChatClient clientWS;
 	private JTextArea textArea;
-	private JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane; 
     public ChatPanel(JFrame frame,JTabbedPane tabbedPane) throws UnknownHostException, URISyntaxException {
     	this.frame = frame;
     	this.tabbedPane = tabbedPane;
