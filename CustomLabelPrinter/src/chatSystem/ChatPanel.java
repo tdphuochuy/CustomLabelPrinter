@@ -261,7 +261,12 @@ public class ChatPanel extends JPanel{
   		      
   		      try {
   		          tray.add(trayIcon);
-  		          trayIcon.displayMessage("New Message",message, MessageType.INFO);
+  		          if(clientWS.isPrivateChat())
+  		          {
+  		        	  trayIcon.displayMessage("?? 😁","😁 😁", MessageType.INFO);
+  		          } else {
+  		        	  trayIcon.displayMessage("New Message",message, MessageType.INFO);
+  		          }
   		      } catch (AWTException e) {
   		          e.printStackTrace();
   		      }
