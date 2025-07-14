@@ -124,6 +124,7 @@ public class ChatPanel extends JPanel{
                 	{
                 		obj.put("type", "chatmessage_server");
                 		obj.put("data", message);
+                		obj.put("notification", false);
                 	} else {
                 		obj.put("type", "message");
                 		obj.put("message", message);
