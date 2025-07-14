@@ -73,7 +73,7 @@ public class ChatClient extends WebSocketClient {
 			if(!type.equals("ping"))
 			{
 				String message = obj.get("message").toString();
-				cp.appendChat(type, message);
+				cp.appendChat(type, message,(boolean) obj.get("notification"));
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

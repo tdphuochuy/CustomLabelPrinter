@@ -127,6 +127,7 @@ public class ChatPanel extends JPanel{
                 	} else {
                 		obj.put("type", "message");
                 		obj.put("message", message);
+                		obj.put("notification", true);
                 	}
     				clientWS.send(obj.toJSONString());
                 }
@@ -214,7 +215,7 @@ public class ChatPanel extends JPanel{
 		}).start();
     }
     
-    public void appendChat(String type,String message)
+    public void appendChat(String type,String message,boolean notification)
     {
   	  SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         String currentTime = timeFormat.format(new Date());
@@ -224,11 +225,11 @@ public class ChatPanel extends JPanel{
         
         if(type.equals("message"))
 		{
-		      notifyUser(message);
+		      notifyUser(message,notification);
 		}
     }
     
-    public void notifyUser(String message)
+    public void notifyUser(String message,boolean notification)
     {
         int selectedIndex = tabbedPane.getSelectedIndex();
         String selectedTabTitle = tabbedPane.getTitleAt(selectedIndex);
@@ -263,7 +264,12 @@ public class ChatPanel extends JPanel{
   		          tray.add(trayIcon);
   		          if(clientWS.isPrivateChat())
   		          {
-  		        	  trayIcon.displayMessage("?? 😁","😁 😁", MessageType.INFO);
+  		        	  if(notification)
+  		        	  {
+  	  		        	  trayIcon.displayMessage("Lêu Lêu 😝",message, MessageType.INFO);
+  		        	  } else {
+  		        		  trayIcon.displayMessage("?? 😁","😁 😁", MessageType.INFO);
+  		        	  }
   		          } else {
   		        	  trayIcon.displayMessage("New Message",message, MessageType.INFO);
   		          }
