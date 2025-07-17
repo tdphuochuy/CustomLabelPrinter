@@ -54,17 +54,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class GCweightsTask implements Runnable {
+public class comboWeightTask implements Runnable {
 	private String username;
 	private String pass;
 	private String orderNum;
 	private String reworkOrderNum;
+	private String printType;
+	private String productCode;
+	private String comboWeight;
 
-	public GCweightsTask(String username,String pass,String orderNum,String reworkOrderNum) {
+	public comboWeightTask(String username,String pass,String orderNum,String reworkOrderNum,String printType,String productCode,String comboWeight) {
 		this.username = username;
 		this.pass = pass;
 		this.orderNum = orderNum;
 		this.reworkOrderNum = reworkOrderNum;
+		this.printType = printType;
+		this.productCode = productCode;
+		this.comboWeight = comboWeight;
 	}
 
 	@Override
@@ -94,13 +100,14 @@ public class GCweightsTask implements Runnable {
             	{
                 	getTrackingNum(client,session,reworkOrderNum,list);
             	}
-            	if(username.toLowerCase().equals(Config.username))
+            	if(printType.equals("Random"))
     			{
-    				generatePdf(list,generateWeightList(list,"2120",true));
+    				generatePdf(list,generateWeightList(list,comboWeight,true));
+    			} else if (printType.equals("Fixed")) {
+    				generatePdf(list,generateWeightList(list,comboWeight,false));
     			} else {
-    				generatePdf(list,generateWeightList1st(list,2120));
+    				generatePdf(list,generateWeightList(list,"",false));
     			}
-            	
             } else {
             	System.out.println(response.code());
             }
@@ -112,6 +119,15 @@ public class GCweightsTask implements Runnable {
 	
 	public void getTrackingNum(OkHttpClient client,String sessionid,String orderNum,List<String> list)
 	{
+		String weightLimit = "2,000.00";
+		if(comboWeight.length() > 0)
+		{
+			if(Integer.parseInt(comboWeight) < 2000)
+			{
+				weightLimit = "1,800.00";
+			}
+		}
+		
 		FormBody formBody = new FormBody.Builder()
                 .add("fileName", "reports/SingleOrderProductionViewer.txt")
                 .add("Order", orderNum)
@@ -142,10 +158,10 @@ public class GCweightsTask implements Runnable {
             			for(Element tr : table.getElementsByTag("tr"))
             			{
             				String content = tr.html();
-            				if(content.contains("105884") && content.toLowerCase().contains(username.toLowerCase()))
+            				if(content.contains(productCode) && content.toLowerCase().contains(username.toLowerCase()))
             				{
             					String trackingNum = tr.getElementsByTag("a").get(0).text();
-            					if(!content.contains("2,000.00"))
+            					if(!content.contains(weightLimit))
             					{
             						splitPalletlist.add(trackingNum);
             					}
@@ -190,7 +206,7 @@ public class GCweightsTask implements Runnable {
 	        System.out.println("List size: " + list.size());
 	        while(lines.size() < list.size())
 	        {
-	        	lines.add(randomWeight());
+	        	lines.add(randomWeight(fixedWeight));
 	        	//lines.add("2146");
 	        }
 	        
@@ -413,11 +429,11 @@ public class GCweightsTask implements Runnable {
 	        return formattedDate;
 		}
 	
-	public String randomWeight()
+	public String randomWeight(String weight)
 	{
 		Random random = new Random();
-        int min = 2120;
-        int max = 2128;
+        int min = Integer.parseInt(weight) - 4;
+        int max = Integer.parseInt(weight) + 4;
         int randomEvenNumber;
 
         do {

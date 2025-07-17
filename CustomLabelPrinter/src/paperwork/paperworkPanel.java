@@ -22,6 +22,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,6 +31,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
@@ -82,9 +84,46 @@ public class paperworkPanel extends JPanel{
         passPanel.add(passLabel);
         passPanel.add(passField);
         
+        JPanel comboWeightPanel = new JPanel();
+        comboWeightPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel typeLabel = new JLabel("Type");
+        String[] items = {"Random","Fixed" ,"Empty"};
+        JComboBox<String> typeDropDown = new JComboBox<>(items);
+        
+        JTextField comboProductField = new JTextField("105884",5);
+        setPlaceholder(comboProductField,"Product");
+        comboProductField.setText("105884");
+        comboProductField.setForeground(Color.BLACK); 
+        JTextField comboWeightField = new JTextField(4);
+        setPlaceholder(comboWeightField,"Weight");
+        comboWeightField.setText("2120");
+        comboWeightField.setForeground(Color.BLACK); 
+        
+        typeDropDown.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                String selectedItem = (String) typeDropDown.getSelectedItem();
+                
+                // Update the UI based on the selected item
+                SwingUtilities.invokeLater(() -> {
+                    if (selectedItem.equals("Empty")) {
+                    	comboWeightField.setEnabled(false);
+                    } else {
+                    	comboWeightField.setEnabled(true);
+                    }
+                });
+            }
+        });
+
+        comboWeightPanel.add(typeLabel);
+        comboWeightPanel.add(typeDropDown);
+        comboWeightPanel.add(comboProductField);
+        comboWeightPanel.add(comboWeightField);
+
+        
         JPanel GCbuttonPanel = new JPanel();
         GCbuttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton gcWeightButton = new JButton("Print GC weights");
+        JButton gcWeightButton = new JButton("Print combo weights");
         gcWeightButton.setBackground(Color.white);
         GCbuttonPanel.add(gcWeightButton);
         
@@ -104,12 +143,26 @@ public class paperworkPanel extends JPanel{
 	              			 String password = passField.getText();
 	              			 String orderNum = orderField.getText();
 	              			 String reworkOrderNum = reworkOrderField.getText();
-	              			 Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
-	              			 GCthread.start();
-	              			 try {
-	              				GCthread.join(); // Wait for the task to finish
-	              			 } catch (InterruptedException ex) {
-	              				 ex.printStackTrace();
+	              			 String printType = typeDropDown.getSelectedItem().toString();
+	              			 String productCode = comboProductField.getText().equals("Product") ? "" : comboProductField.getText();
+	              			 String comboWeight = comboWeightField.getText().equals("Weight") ? "" : comboWeightField.getText();
+	              			 if(productCode.length() > 0)
+	              			 {
+	              				 if(printType.equals("Empty"))
+	              				 {
+	              					comboWeight = "";
+	              				 }
+	              				 
+		              			 Thread GCthread = new Thread(new comboWeightTask(username,password,orderNum,reworkOrderNum,printType,productCode,comboWeight));
+		              			 
+		              			 GCthread.start();
+		              			 try {
+		              				GCthread.join(); // Wait for the task to finish
+		              			 } catch (InterruptedException ex) {
+		              				 ex.printStackTrace();
+		              			 }
+	              			 } else {
+	    	                       JOptionPane.showMessageDialog(frame, "Missing product code", "Error", JOptionPane.ERROR_MESSAGE);
 	              			 }
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
@@ -173,6 +226,7 @@ public class paperworkPanel extends JPanel{
         mainPanel.add(inputPanel2);
         mainPanel.add(userPanel);
         mainPanel.add(passPanel);
+        mainPanel.add(comboWeightPanel);
         mainPanel.add(GCbuttonPanel);
         mainPanel.add(namePanel);
         mainPanel.add(timePanel);

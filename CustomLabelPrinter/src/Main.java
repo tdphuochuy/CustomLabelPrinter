@@ -25,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import paperwork.GCweightsTask;
+import paperwork.comboWeightTask;
 import paperwork.paperworkGen;
 import paperwork.paperworkPanel;
 import whistle.NeoWhistlePanel;
@@ -185,7 +185,7 @@ public class Main {
 									{
 										reworkOrderNum = data.get("reworkOrderNum").toString();
 									}
-									Thread GCthread = new Thread(new GCweightsTask(username,password,orderNum,reworkOrderNum));
+									Thread GCthread = new Thread(new comboWeightTask(username,password,orderNum,reworkOrderNum,"Random","105884","2124"));
 									GCthread.start();
 								} else if (type.equals("paperwork"))
 								{
