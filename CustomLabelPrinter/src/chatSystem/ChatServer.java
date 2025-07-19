@@ -46,6 +46,7 @@ public class ChatServer extends WebSocketServer {
 		    {
 			    JSONObject obj = new JSONObject();
 				obj.put("type", "system");
+				obj.put("notification", false);
 				obj.put("message", nameMap.get(conn) + " has left the room!");
 			    broadcast(obj.toJSONString());
 		  	}
@@ -66,12 +67,14 @@ public class ChatServer extends WebSocketServer {
 					obj = new JSONObject();
 					obj.put("type", "system");
 					obj.put("message", nameMap.get(connection) + " has joined the room!");
+					obj.put("notification", false);
 				    conn.send(obj.toJSONString());
 				}
 				
 				nameMap.put(conn,message);
 				obj = new JSONObject();
 				obj.put("type", "system");
+				obj.put("notification", false);
 				obj.put("message", nameMap.get(conn) + " has joined the room!");
 			} else if (type.equals("message")) {
 				obj = new JSONObject();

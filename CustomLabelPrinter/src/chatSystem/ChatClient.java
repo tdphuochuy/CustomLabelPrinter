@@ -69,6 +69,7 @@ public class ChatClient extends WebSocketClient {
 		try {
 			JSONParser parser = new JSONParser();
 			JSONObject obj = (JSONObject)parser.parse(msg);
+			System.out.println(obj);
 			String type = obj.get("type").toString();
 			if(!type.equals("ping"))
 			{
