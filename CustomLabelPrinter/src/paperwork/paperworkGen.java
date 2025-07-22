@@ -291,6 +291,7 @@ public class paperworkGen{
 				}
 				Elements td = tr.getElementsByTag("td");
 				String itemPack = td.get(2).text() + td.get(3).text();
+				System.out.println(itemPack);
 				String productCode = ((JSONObject)productObj.get(itemPack)).get("Product").toString();
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();

@@ -43,7 +43,7 @@ public class carcassGen extends excelGen{
             }
             
             //set total weight
-	    	setCellValue(sheet, "O", 5, formatDouble(getTotalWeightByProduct(productMap.get("22486"))) + " lbs");
+	    	setCellValue(sheet, "O", 5, formatDouble(getTotalWeightByProduct(productMap.get("21102"))) + " lbs");
 
             
             // Save changes
