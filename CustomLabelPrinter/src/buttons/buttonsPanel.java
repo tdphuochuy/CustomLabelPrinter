@@ -64,7 +64,7 @@ public class buttonsPanel extends JPanel{
         hourSequenceMap.put("16887", new TableEntry("98","0000"));
         hourSequenceMap.put("23978", new TableEntry("98","0000"));
 
-        JPanel buttonsPanel = new JPanel(new GridLayout(1, 3, 75, 0));
+        JPanel buttonsPanel = new JPanel(new GridLayout(1, 4, 40, 0));
         
         InputStream inputStream = buttonsPanel.class.getClassLoader().getResourceAsStream("buttons/buttons.json");
         String content = new BufferedReader(new InputStreamReader(inputStream))

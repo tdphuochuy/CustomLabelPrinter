@@ -19,5 +19,12 @@
 		"productCode": "21102",
 		"quantity": "1800",
 		"delay": 120000
+	},
+	{
+		"name":"button4",
+		"enable": false,
+		"productCode": "18039",
+		"quantity": "2000",
+		"delay": 30000
 	}
 ]
