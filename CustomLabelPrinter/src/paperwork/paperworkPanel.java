@@ -75,12 +75,12 @@ public class paperworkPanel extends JPanel{
         inputPanel2.add(reworkOrderField);
         
         JLabel userLabel = new JLabel("Username");
-        JTextField userField = new JTextField("npham",8);
+        JTextField userField = new JTextField("pmambo",8);
         userPanel.add(userLabel);
         userPanel.add(userField);
         
         JLabel passLabel = new JLabel("Pass");
-        JPasswordField  passField = new JPasswordField("2242",5);
+        JPasswordField  passField = new JPasswordField("4294",5);
         passPanel.add(passLabel);
         passPanel.add(passField);
         
@@ -96,7 +96,7 @@ public class paperworkPanel extends JPanel{
         comboProductField.setForeground(Color.BLACK); 
         JTextField comboWeightField = new JTextField(4);
         setPlaceholder(comboWeightField,"Weight");
-        comboWeightField.setText("2120");
+        comboWeightField.setText("2124");
         comboWeightField.setForeground(Color.BLACK); 
         
         typeDropDown.addItemListener(new ItemListener() {
