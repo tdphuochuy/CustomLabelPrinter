@@ -87,7 +87,7 @@ public class paperworkPanel extends JPanel{
         JPanel comboWeightPanel = new JPanel();
         comboWeightPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel typeLabel = new JLabel("Type");
-        String[] items = {"Random","Fixed" ,"Empty"};
+        String[] items = {"File","Fixed" ,"Empty"};
         JComboBox<String> typeDropDown = new JComboBox<>(items);
         
         JTextField comboProductField = new JTextField("105884",5);
