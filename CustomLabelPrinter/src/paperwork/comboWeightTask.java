@@ -100,7 +100,7 @@ public class comboWeightTask implements Runnable {
             	{
                 	getTrackingNum(client,session,reworkOrderNum,list);
             	}
-            	if(printType.equals("Random"))
+            	if(printType.equals("File"))
     			{
     				generatePdf(list,generateWeightList(list,comboWeight,true));
     			} else if (printType.equals("Fixed")) {

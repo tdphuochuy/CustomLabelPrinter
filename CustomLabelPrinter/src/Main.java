@@ -185,7 +185,7 @@ public class Main {
 									{
 										reworkOrderNum = data.get("reworkOrderNum").toString();
 									}
-									Thread GCthread = new Thread(new comboWeightTask(username,password,orderNum,reworkOrderNum,"Random","105884","2124"));
+									Thread GCthread = new Thread(new comboWeightTask(username,password,orderNum,reworkOrderNum,"File","105884","2124"));
 									GCthread.start();
 								} else if (type.equals("paperwork"))
 								{
