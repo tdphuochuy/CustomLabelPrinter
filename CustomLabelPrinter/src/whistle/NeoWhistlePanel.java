@@ -30,6 +30,7 @@ public class NeoWhistlePanel extends JPanel {
     private Thread thread;
     private JButton startButton;
     private String orderNum;
+    private boolean isVerified;
     public NeoWhistlePanel(JFrame frame,buttonsPanel buttonsPanel) throws ParseException {
         this.frame = frame;
         this.running = false;
@@ -89,54 +90,57 @@ public class NeoWhistlePanel extends JPanel {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startButton.setEnabled(false);
-            	if(!running)
+            	if(isVerified())
             	{
-	            	if(usernameField.getText().length() > 0)
-	         		 {
-	         			 if(passwordField.getText().length() > 0)
-	     				 {
-	             			 String username = usernameField.getText();
-	             			 String password = passwordField.getText();
-	             			 if(orderNum != null)
-	             			 {
-	             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,orderNum);
-	             			 } else {
-	             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole);
-	             			 }
-	             			 thread = new Thread(whistleTask);
-	             	         thread.start();
-	             	         running = true;
-	                         autoSequencecb.setEnabled(false);
-	                         startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.SQUARE,12,Color.RED));
-		        		 } else {
-		                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
+	                startButton.setEnabled(false);
+	            	if(!running)
+	            	{
+		            	if(usernameField.getText().length() > 0)
+		         		 {
+		         			 if(passwordField.getText().length() > 0)
+		     				 {
+		             			 String username = usernameField.getText();
+		             			 String password = passwordField.getText();
+		             			 if(orderNum != null)
+		             			 {
+		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,orderNum);
+		             			 } else {
+		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole);
+		             			 }
+		             			 thread = new Thread(whistleTask);
+		             	         thread.start();
+		             	         running = true;
+		                         autoSequencecb.setEnabled(false);
+		                         startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.SQUARE,12,Color.RED));
+			        		 } else {
+			                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
+			         		 }
+		         		 } else {
+		                      JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
 		         		 }
-	         		 } else {
-	                      JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
-	         		 }
-            	} else {
-                    startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLAY,12,Color.GREEN));
-                    autoSequencecb.setEnabled(true);
-        	        running = false;
-            		try {
-						whistleTask.stop();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+	            	} else {
+	                    startButton.setIcon(IconFontSwing.buildIcon(FontAwesome.PLAY,12,Color.GREEN));
+	                    autoSequencecb.setEnabled(true);
+	        	        running = false;
+	            		try {
+							whistleTask.stop();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	            	}
+	    	         buttonsPanel.setWhistleStatus(running);
+	            	 Timer timer = new Timer(300, new ActionListener() {
+	                     @Override
+	                     public void actionPerformed(ActionEvent evt) {
+	                         startButton.setEnabled(true); // Re-enable the button
+	                     }
+	                 });
+	                 timer.setRepeats(false); // Make sure the timer only runs once
+	                 timer.start(); // Start the timer
+	                userInput.setEnabled(running);
+	            	 userInput.requestFocusInWindow();
             	}
-    	         buttonsPanel.setWhistleStatus(running);
-            	 Timer timer = new Timer(300, new ActionListener() {
-                     @Override
-                     public void actionPerformed(ActionEvent evt) {
-                         startButton.setEnabled(true); // Re-enable the button
-                     }
-                 });
-                 timer.setRepeats(false); // Make sure the timer only runs once
-                 timer.start(); // Start the timer
-                userInput.setEnabled(running);
-            	 userInput.requestFocusInWindow();
             }
         });
         
@@ -271,5 +275,15 @@ public class NeoWhistlePanel extends JPanel {
         } else {
             JOptionPane.showMessageDialog(frame, "Failed executing button command!\nNeo Whistle is not running.", "Alert", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+    
+    public void setVerified(boolean verified)
+    {
+    	this.isVerified = verified;
+    }
+    
+    public boolean isVerified()
+    {
+    	return isVerified;
     }
 }

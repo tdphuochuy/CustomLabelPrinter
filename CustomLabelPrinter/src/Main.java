@@ -148,9 +148,10 @@ public class Main {
                            		JSONParser parser = new JSONParser();
 								JSONObject obj = (JSONObject)parser.parse(message);
 								String type = obj.get("type").toString();
-								if(!type.equals("ping"))
+								if(type.equals("ping"))
 								{
-									System.out.println(obj);
+									ppw.setVerified(true);
+									neoWhistle.setVerified(true);
 								}
 								if (type.equals("whistle_order_request"))
 								{

@@ -41,7 +41,7 @@ import config.Config;
 
 public class paperworkPanel extends JPanel{
 	private JFrame frame;
-
+	private boolean isVerified = false;
 	public paperworkPanel(JFrame frame) {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -146,7 +146,7 @@ public class paperworkPanel extends JPanel{
 	              			 String printType = typeDropDown.getSelectedItem().toString();
 	              			 String productCode = comboProductField.getText().equals("Product") ? "" : comboProductField.getText();
 	              			 String comboWeight = comboWeightField.getText().equals("Weight") ? "" : comboWeightField.getText();
-	              			 if(productCode.length() > 0)
+	              			 if(productCode.length() > 0 && isVerified())
 	              			 {
 	              				 if(printType.equals("Empty"))
 	              				 {
@@ -283,7 +283,7 @@ public class paperworkPanel extends JPanel{
               		 {
               			if(passField.getText().length() > 0)
                  		{
-              				if(textArea.getText().length() > 0)
+              				if(textArea.getText().length() > 0 && isVerified())
               				{
 		              			 String username = userField.getText();
 		              			 String password = passField.getText();
@@ -398,5 +398,15 @@ public class paperworkPanel extends JPanel{
                 }
             }
         });
+    }
+    
+    public void setVerified(boolean verified)
+    {
+    	this.isVerified = verified;
+    }
+    
+    public boolean isVerified()
+    {
+    	return isVerified;
     }
 }
