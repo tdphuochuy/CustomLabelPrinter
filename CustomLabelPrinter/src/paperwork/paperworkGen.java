@@ -357,16 +357,16 @@ public class paperworkGen{
         File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
         exportExceltoPDF(file.getAbsolutePath());
         
+        if(sendEmail)
+        {
+        	sendEmail();
+        }
+        
         if(pdfOnly)
         {
         	openPDFfile();
         } else {
         	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
-        }
-        
-        if(sendEmail)
-        {
-        	sendEmail();
         }
         
         try {
@@ -524,7 +524,7 @@ public class paperworkGen{
 	            Message message = new MimeMessage(session);
 	            message.setFrom(new InternetAddress("letitburn0001@gmail.com"));
 	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-	            message.setSubject("Debone recap");
+	            message.setSubject("Debone recap (" + orderNum + ")");
 
 	            MimeBodyPart messageBodyPart = new MimeBodyPart();
 
