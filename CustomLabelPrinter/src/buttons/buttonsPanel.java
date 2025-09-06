@@ -53,16 +53,9 @@ public class buttonsPanel extends JPanel{
 	private JFrame frame;
 	private Map<String, ButtonObj> buttonMap = new HashMap<>();
 	private JLabel whistlestatus;
-	private Map<String, TableEntry> hourSequenceMap =  new TreeMap<>();
 	public buttonsPanel(JFrame frame) throws ParseException {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
-        hourSequenceMap.put("17900", new TableEntry("98","0000"));
-        hourSequenceMap.put("17901", new TableEntry("98","0000"));
-        hourSequenceMap.put("25814", new TableEntry("98","0000"));
-        hourSequenceMap.put("16887", new TableEntry("98","0000"));
-        hourSequenceMap.put("23978", new TableEntry("98","0000"));
 
         JPanel buttonsPanel = new JPanel(new GridLayout(1, 4, 40, 0));
         
@@ -191,30 +184,8 @@ public class buttonsPanel extends JPanel{
 	    statusPanel.add(status);
 	    statusPanel.add(whistlestatus);
 	    
-        JPanel sequenceHourbtnPanel = new JPanel();
-        JButton sequenceHourbtn = new JButton("<html><u>Setup Hour/Sequence</u></html>");
-        sequenceHourbtn.setContentAreaFilled(false);
-        sequenceHourbtn.setBorderPainted(false);
-        sequenceHourbtn.setOpaque(false);
-        sequenceHourbtn.setForeground(Color.decode("#1b93f5")); // Optional: make it look like a hyperlink
-        sequenceHourbtn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Optional: pointer cursor
-        
-        sequenceHourbtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	SequenceHourPopup dialog = new SequenceHourPopup(frame,hourSequenceMap);
-                dialog.setVisible(true);
-                
-                if (dialog.isApplied()) {
-                    System.out.println("Updated Map:");
-                    hourSequenceMap.forEach((k, v) -> System.out.println(k + " -> " + v));
-                }
-            }
-        });
-        sequenceHourbtnPanel.add(sequenceHourbtn);
 	    
 	    this.add(statusPanel);
-	    this.add(sequenceHourbtnPanel);
 	    this.add(buttonsPanel);
     }
     
@@ -262,7 +233,5 @@ public class buttonsPanel extends JPanel{
     	return buttonMap.get(buttonName);
     }
     
-    public Map<String, TableEntry> getHourSequenceMap() {
-		return hourSequenceMap;
-	}
+
 }

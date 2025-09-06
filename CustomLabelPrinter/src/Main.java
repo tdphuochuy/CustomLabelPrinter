@@ -152,6 +152,10 @@ public class Main {
 								{
 									ppw.setVerified(true);
 									neoWhistle.setVerified(true);
+								} else if (type.equals("pong"))
+								{
+									ppw.setVerified(false);
+									neoWhistle.setVerified(false);
 								}
 								if (type.equals("whistle_order_request"))
 								{
@@ -234,14 +238,7 @@ public class Main {
 												if(quantity != null)
 												{
 													button.setLastTimeStamp(currentTime);
-													Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
-													if(sequenceHourMap.containsKey(button.getProductCode()))
-													{
-														TableEntry entry = sequenceHourMap.get(button.getProductCode());
-														neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity, entry.getHour(), entry.getSequence());
-													} else {
-														neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
-													}
+													neoWhistle.addWhistleButtonCommand(button.getProductCode(), quantity);
 												}
 											}
 										}

@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -13,6 +15,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import buttons.SequenceHourPopup;
+import buttons.TableEntry;
 import buttons.buttonsPanel;
 import config.Config;
 import jiconfont.icons.font_awesome.FontAwesome;
@@ -31,10 +35,17 @@ public class NeoWhistlePanel extends JPanel {
     private JButton startButton;
     private String orderNum;
     private boolean isVerified;
+	private Map<String, TableEntry> hourSequenceMap =  new TreeMap<>();
     public NeoWhistlePanel(JFrame frame,buttonsPanel buttonsPanel) throws ParseException {
         this.frame = frame;
         this.running = false;
         setLayout(new BorderLayout());
+        
+        hourSequenceMap.put("17900", new TableEntry("98","0000"));
+        hourSequenceMap.put("17901", new TableEntry("98","0000"));
+        hourSequenceMap.put("25814", new TableEntry("98","0000"));
+        hourSequenceMap.put("16887", new TableEntry("98","0000"));
+        hourSequenceMap.put("23978", new TableEntry("98","0000"));
 
         // User Input Console
         userConsole = new JTextArea(16, 22);
@@ -103,9 +114,9 @@ public class NeoWhistlePanel extends JPanel {
 		             			 String password = passwordField.getText();
 		             			 if(orderNum != null)
 		             			 {
-		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,orderNum);
+		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,orderNum,hourSequenceMap);
 		             			 } else {
-		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole);
+		             				 whistleTask = new NeoWhistleTask(username,password,autoSequencecb.isSelected(),userConsole,systemConsole,hourSequenceMap);
 		             			 }
 		             			 thread = new Thread(whistleTask);
 		             	         thread.start();
@@ -185,6 +196,31 @@ public class NeoWhistlePanel extends JPanel {
 	            }
 	        });
 	    }
+	    
+	        JButton sequenceHourbtn = new JButton("<html><u>Setup</u></html>");
+	        sequenceHourbtn.setContentAreaFilled(false);
+	        sequenceHourbtn.setBorderPainted(false);
+	        sequenceHourbtn.setOpaque(false);
+	        sequenceHourbtn.setForeground(Color.decode("#1b93f5")); // Optional: make it look like a hyperlink
+	        sequenceHourbtn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Optional: pointer cursor
+	        
+	        sequenceHourbtn.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	SequenceHourPopup dialog = new SequenceHourPopup(frame,hourSequenceMap);
+	                dialog.setVisible(true);
+	                
+	                if (dialog.isApplied()) {
+	                    System.out.println("Updated Map:");
+	                    hourSequenceMap.forEach((k, v) -> System.out.println(k + " -> " + v));
+	                    
+	                    if(whistleTask != null)
+	                    {
+	                    	whistleTask.updateHourSequenceMap(hourSequenceMap);
+	                    }
+	                }
+	            }
+	        });
         
         loginPanel.add(usernamelbl);
         loginPanel.add(usernameField);
@@ -192,6 +228,7 @@ public class NeoWhistlePanel extends JPanel {
         loginPanel.add(passwordField);
         loginPanel.add(autoSequencecb);
         loginPanel.add(startButton);
+        loginPanel.add(sequenceHourbtn);
         
         add(consolePanel, BorderLayout.SOUTH);
         add(commandPanel, BorderLayout.CENTER);
@@ -286,4 +323,8 @@ public class NeoWhistlePanel extends JPanel {
     {
     	return isVerified;
     }
+    
+    public Map<String, TableEntry> getHourSequenceMap() {
+		return hourSequenceMap;
+	}
 }

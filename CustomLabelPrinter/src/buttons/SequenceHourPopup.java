@@ -49,25 +49,19 @@ public class SequenceHourPopup extends JDialog {
         // === Add Button Logic ===
         addButton.addActionListener(e -> {
             String code = productCodeField.getText().trim();
-            String hourText = hourField.getText().trim();
-            String sequenceText = sequenceField.getText().trim();
+            String hour = hourField.getText().trim();
+            String sequence = sequenceField.getText().trim();
 
-            if (code.isEmpty() || hourText.isEmpty() || sequenceText.isEmpty()) {
+            if (code.isEmpty() || hour.isEmpty() || sequence.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "All fields must be filled.", "Input Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            try {
-                int hour = Integer.parseInt(hourText);
-                int sequence = Integer.parseInt(sequenceText);
                 tableModel.addRow(new Object[] { code, hour, sequence });
 
                 productCodeField.setText("");
                 hourField.setText("");
                 sequenceField.setText("");
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Hour and Sequence must be integers.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            }
         });
 
         // === Apply Button ===

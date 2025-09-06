@@ -90,7 +90,7 @@ public class SequenceGetter{
             						String lotNum = tds.get(5).text();
             						String hourSequenceText = lotNum.substring(lotNum.length() - 6);
             						int lotNumHour = Integer.valueOf(hourSequenceText.substring(0,2));
-            						int lotNumSequence = Integer.valueOf(hourSequenceText.substring(2)) - 1000;
+            						int lotNumSequence = Integer.valueOf(hourSequenceText.substring(4));
             						return getSequenceLocal(itemNum,packNum,lotNumHour,lotNumSequence);
             					}
             				}

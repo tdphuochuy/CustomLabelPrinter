@@ -20,6 +20,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import buttons.TableEntry;
 import config.Config;
 
 public class whistleWorker{
@@ -32,18 +33,20 @@ public class whistleWorker{
     public String quantity;
     public String sequenceInput;
     private Telnet telnet;
+    private TelnetManager manager;
 	private boolean backflush;
 	private boolean notfound;
 	private boolean running;
     public SequenceGetter sequenceGetter;
     private JTextArea systemConsole;
-    public whistleWorker(String orderNum,String username,String password,SequenceGetter sequenceGetter,boolean autoSequence,JTextArea systemConsole) throws InterruptedException{
+    public whistleWorker(TelnetManager manager, String orderNum,String username,String password,SequenceGetter sequenceGetter,boolean autoSequence,JTextArea systemConsole) throws InterruptedException{
 		this.orderNum = orderNum;
 		this.username = username;
 		this.password = password;
 		this.sequenceGetter = sequenceGetter;
 		this.autoSequence = autoSequence;
 		this.systemConsole = systemConsole;
+		this.manager = manager;
 		initialize();
 	}
     
@@ -151,9 +154,20 @@ public class whistleWorker{
 		       
 		       String sequence = String.valueOf(sequenceInteger);
 		       
-		       if(command.isHourmap())
+		       if(manager.getHourSequenceMap().containsKey(prodNum))
 		       {
-		    	   sequence = command.getSequence();
+		    	   TableEntry entry = manager.getHourSequenceMap().get(prodNum);
+		    	   if(!entry.getHour().equals("now"))
+		    	   {
+		    		   currentHour = entry.getHour();
+		    	   }
+		    	   if(entry.getSequence().equals("0000"))
+		    	   {
+		    		   sequence = "0";
+		    	   } else {
+		    		   sequenceInteger = Integer.parseInt(entry.getSequence()) + Integer.parseInt(sequenceInput);
+		    		   sequence = String.valueOf(sequenceInteger);
+		    	   }
 		       }
 		       
 		       appendConsole("Setting quantity\n");

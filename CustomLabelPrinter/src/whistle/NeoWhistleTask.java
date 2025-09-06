@@ -34,33 +34,29 @@ public class NeoWhistleTask implements Runnable {
     private JTextArea systemConsole;
     private JTextArea userConsole;
     private TelnetManager manager;
-    private buttonsPanel buttons;
-	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole) {
+    private Map<String, TableEntry> hourSequenceMap;
+	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole,Map<String, TableEntry> hourSequenceMap) {
         this.username = username;
         this.password = password;
         this.autoSequence = autoSequence;
         this.systemConsole = systemConsole;
         this.userConsole = userConsole;
+        this.hourSequenceMap = hourSequenceMap;
     }
 	
-	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole,String orderNum) {
+	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole,String orderNum,Map<String, TableEntry> hourSequenceMap) {
         this.username = username;
         this.password = password;
         this.autoSequence = autoSequence;
         this.systemConsole = systemConsole;
         this.userConsole = userConsole;
         this.orderNum = orderNum;
+        this.hourSequenceMap = hourSequenceMap;
     }
 	
 	@Override
     public void run()
 	{
-        try {
-			buttons = new buttonsPanel(null);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		try {
 			Scanner scanner = new Scanner(System.in);
 			if(orderNum == null)
@@ -69,7 +65,7 @@ public class NeoWhistleTask implements Runnable {
 				orderNum = scanner.nextLine();
 			}
 			systemConsole.append("Starting with order #" + orderNum + "\n");
-			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole);
+			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole,hourSequenceMap);
 			
 			while(running)
 			{
@@ -111,14 +107,7 @@ public class NeoWhistleTask implements Runnable {
 					sequence = scanner.nextLine();
 				}
 				
-				Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
-				if(sequenceHourMap.containsKey(prodNum))
-				{
-					TableEntry entry = sequenceHourMap.get(prodNum);
-					manager.addCommand(new Command(prodNum,quantity,entry.getHour(),entry.getSequence(),true));
-				} else {
-					manager.addCommand(new Command(prodNum,quantity,getHour(),sequence,false));
-				}
+				manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -130,7 +119,7 @@ public class NeoWhistleTask implements Runnable {
 	{
 		if(manager != null)
 		{
-			manager.addCommand(new Command(prodNum,quantity,getHour(),sequence,false));
+			manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
 		}
 	}
 	
@@ -138,7 +127,7 @@ public class NeoWhistleTask implements Runnable {
 	{
 		if(manager != null)
 		{
-			manager.addCommand(new Command(prodNum,quantity,hour,sequence,false));
+			manager.addCommand(new Command(prodNum,quantity,hour,sequence));
 		}
 	}
 	
@@ -167,6 +156,11 @@ public class NeoWhistleTask implements Runnable {
         	manager.stop();
         }
     }
+	
+	public void updateHourSequenceMap(Map<String, TableEntry> hourSequenceMap)
+	{
+        manager.updateHourSequenceMap(hourSequenceMap);
+	}
 	
 	public boolean isRunning()
 	{

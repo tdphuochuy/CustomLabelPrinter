@@ -3,6 +3,7 @@ package whistle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -11,17 +12,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JTextArea;
 
+import buttons.TableEntry;
+
 public class TelnetManager{
 	private final BlockingQueue<Command> queue = new LinkedBlockingQueue<>();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private whistleWorker worker;
     private SequenceGetter sequenceGetter;
     private JTextArea systemConsole;
-	public TelnetManager(String orderNum,String username,String password,boolean autoSequence,JTextArea systemConsole) throws InterruptedException
+    private Map<String, TableEntry> hourSequenceMap;
+	public TelnetManager(String orderNum,String username,String password,boolean autoSequence,JTextArea systemConsole,Map<String, TableEntry> hourSequenceMap) throws InterruptedException
 	{
 		this.systemConsole = systemConsole;
+		this.hourSequenceMap = hourSequenceMap;
 		sequenceGetter = new SequenceGetter(username,password);
-		worker = new whistleWorker(orderNum, username, password, sequenceGetter,autoSequence,systemConsole);
+		worker = new whistleWorker(this,orderNum, username, password, sequenceGetter,autoSequence,systemConsole);
         executor.submit(this::processCommands);
 	}
 	
@@ -51,4 +56,13 @@ public class TelnetManager{
 		 worker.stop();
 		 executor.shutdown();
 	 }
+	 
+	public void updateHourSequenceMap(Map<String, TableEntry> hourSequenceMap)
+	{
+		this.hourSequenceMap = hourSequenceMap;
+	}
+	 
+    public Map<String, TableEntry> getHourSequenceMap() {
+		return hourSequenceMap;
+	}
 }
