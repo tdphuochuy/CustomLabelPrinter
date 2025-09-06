@@ -5,11 +5,13 @@ class Command {
     private final String quantity;
     private final String sequence;
     private final String hour;
-	public Command(String prodNum,String quantity,String hour,String sequence) {
+    private final boolean hourmap;
+	public Command(String prodNum,String quantity,String hour,String sequence,boolean hourmap) {
         this.prodNum = prodNum;
         this.quantity = quantity;
         this.sequence = sequence;
         this.hour = hour;
+        this.hourmap = hourmap;
     }
     
     public String getProdNum() {
@@ -26,5 +28,9 @@ class Command {
     
     public String getHour() {
 		return hour;
+	}
+    
+	public boolean isHourmap() {
+		return hourmap;
 	}
 }

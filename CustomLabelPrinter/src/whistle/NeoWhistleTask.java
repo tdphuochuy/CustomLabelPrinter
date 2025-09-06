@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +21,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import buttons.TableEntry;
+import buttons.buttonsPanel;
 import config.Config;
 
 public class NeoWhistleTask implements Runnable {
@@ -31,6 +34,7 @@ public class NeoWhistleTask implements Runnable {
     private JTextArea systemConsole;
     private JTextArea userConsole;
     private TelnetManager manager;
+    private buttonsPanel buttons;
 	public NeoWhistleTask(String username, String password, boolean autoSequence,JTextArea userConsole,JTextArea systemConsole) {
         this.username = username;
         this.password = password;
@@ -51,7 +55,12 @@ public class NeoWhistleTask implements Runnable {
 	@Override
     public void run()
 	{
-		
+        try {
+			buttons = new buttonsPanel(null);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		try {
 			Scanner scanner = new Scanner(System.in);
 			if(orderNum == null)
@@ -101,7 +110,15 @@ public class NeoWhistleTask implements Runnable {
 					userConsole.append("Enter sequence\n");
 					sequence = scanner.nextLine();
 				}
-				manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
+				
+				Map<String, TableEntry> sequenceHourMap = buttons.getHourSequenceMap();
+				if(sequenceHourMap.containsKey(prodNum))
+				{
+					TableEntry entry = sequenceHourMap.get(prodNum);
+					manager.addCommand(new Command(prodNum,quantity,entry.getHour(),entry.getSequence(),true));
+				} else {
+					manager.addCommand(new Command(prodNum,quantity,getHour(),sequence,false));
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +130,7 @@ public class NeoWhistleTask implements Runnable {
 	{
 		if(manager != null)
 		{
-			manager.addCommand(new Command(prodNum,quantity,getHour(),sequence));
+			manager.addCommand(new Command(prodNum,quantity,getHour(),sequence,false));
 		}
 	}
 	
@@ -121,7 +138,7 @@ public class NeoWhistleTask implements Runnable {
 	{
 		if(manager != null)
 		{
-			manager.addCommand(new Command(prodNum,quantity,hour,sequence));
+			manager.addCommand(new Command(prodNum,quantity,hour,sequence,false));
 		}
 	}
 	

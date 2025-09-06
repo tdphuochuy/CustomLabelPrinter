@@ -142,12 +142,19 @@ public class whistleWorker{
 			       appendConsole("Pack: " + itemPack[1] + "\n");
 			       sequenceInput =String.valueOf(sequenceGetter.getSequence(orderNum,itemPack[0].trim(),itemPack[1].trim()));
 		       }
+		       
 		       int sequenceInteger = 1000 + Integer.parseInt(sequenceInput);
 		       if(sequenceInput.length() > 2)
 		       {
 		    	   sequenceInteger = Integer.parseInt(sequenceInput);
 		       }
+		       
 		       String sequence = String.valueOf(sequenceInteger);
+		       
+		       if(command.isHourmap())
+		       {
+		    	   sequence = command.getSequence();
+		       }
 		       
 		       appendConsole("Setting quantity\n");
 		       if(!setQuantity(telnet,quantity))
