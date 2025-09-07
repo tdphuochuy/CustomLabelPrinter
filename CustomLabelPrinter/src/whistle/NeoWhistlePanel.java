@@ -264,7 +264,10 @@ public class NeoWhistlePanel extends JPanel {
             try {
                 pipedOut.write((input + "\n").getBytes());
                 pipedOut.flush();
-                userConsole.append(input + "\n");
+                if(!input.contains(Config.neowhistlePassword))
+                {
+                    userConsole.append(input + "\n");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

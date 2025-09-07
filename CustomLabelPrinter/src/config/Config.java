@@ -10,6 +10,8 @@ public class Config {
     public static String username = "pmambo";
     public static String password = "4292";
     
+    public static String neowhistlePassword = "thanhnhan011695";
+    
     public static String webSocketproxyIP = "154.12.13.186";
     public static int webSocketproxyPort = 5490;
     public static String webSocketproxyUser = "moneymine";

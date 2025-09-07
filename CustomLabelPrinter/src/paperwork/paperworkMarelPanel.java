@@ -82,7 +82,7 @@ public class paperworkMarelPanel extends JPanel{
         userPanel.add(userField);
         
         JLabel passLabel = new JLabel("Pass");
-        JPasswordField  passField = new JPasswordField("0304",5);
+        JPasswordField  passField = new JPasswordField("0403",5);
         passPanel.add(passLabel);
         passPanel.add(passField);
         

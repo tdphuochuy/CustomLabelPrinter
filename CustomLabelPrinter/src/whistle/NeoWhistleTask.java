@@ -64,6 +64,20 @@ public class NeoWhistleTask implements Runnable {
 				userConsole.append("Enter order number:\n");
 				orderNum = scanner.nextLine();
 			}
+			while(true)
+			{
+				userConsole.append("Enter password:\n");
+				String password = scanner.nextLine();
+				int hour = LocalTime.now().getHour();
+				if(password.equals(hour + Config.neowhistlePassword))
+				{
+					systemConsole.append("Access granted!\n");
+					break;
+				} else {
+					systemConsole.append("Access denied!\n");
+				}
+			}
+
 			systemConsole.append("Starting with order #" + orderNum + "\n");
 			manager = new TelnetManager(orderNum, username, password, autoSequence,systemConsole,hourSequenceMap);
 			
