@@ -38,11 +38,13 @@ import javax.swing.border.EmptyBorder;
 import org.json.simple.parser.ParseException;
 
 import config.Config;
+import paperwork.dsi.comboWeightTask;
+import paperwork.dsi.paperworkGen;
 
-public class paperworkPanel extends JPanel{
+public class paperworkDSIPanel extends JPanel{
 	private JFrame frame;
 	private boolean isVerified = false;
-	public paperworkPanel(JFrame frame) {
+	public paperworkDSIPanel(JFrame frame) {
     	this.frame = frame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel inputPanel = new JPanel();

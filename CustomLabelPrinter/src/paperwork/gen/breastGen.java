@@ -24,7 +24,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import paperwork.Product;
-import paperwork.paperworkGen;
+import paperwork.dsi.paperworkGen;
 
 public class breastGen extends excelGen{
 	List<Product> reworkList = new ArrayList<>();

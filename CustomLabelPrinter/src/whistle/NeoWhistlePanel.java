@@ -46,6 +46,21 @@ public class NeoWhistlePanel extends JPanel {
         hourSequenceMap.put("25814", new TableEntry("98","0000"));
         hourSequenceMap.put("16887", new TableEntry("98","0000"));
         hourSequenceMap.put("23978", new TableEntry("98","0000"));
+        
+        hourSequenceMap.put("17332", new TableEntry("now","8000"));
+        hourSequenceMap.put("17429", new TableEntry("now","8000"));
+        hourSequenceMap.put("17444", new TableEntry("now","8000"));
+        hourSequenceMap.put("17728", new TableEntry("now","8000"));
+        hourSequenceMap.put("18293", new TableEntry("now","8000"));
+        hourSequenceMap.put("20780", new TableEntry("now","8000"));
+        hourSequenceMap.put("24489", new TableEntry("now","8000"));
+        hourSequenceMap.put("24837", new TableEntry("now","8000"));
+        hourSequenceMap.put("25765", new TableEntry("now","8000"));
+        hourSequenceMap.put("16605", new TableEntry("now","8000"));
+        hourSequenceMap.put("17333", new TableEntry("now","8000"));
+        hourSequenceMap.put("22258", new TableEntry("now","8000"));
+        hourSequenceMap.put("21102", new TableEntry("now","8000"));
+        hourSequenceMap.put("22777", new TableEntry("now","8000"));
 
         // User Input Console
         userConsole = new JTextArea(16, 22);

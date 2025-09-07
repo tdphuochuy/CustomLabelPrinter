@@ -25,9 +25,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import paperwork.comboWeightTask;
-import paperwork.paperworkGen;
-import paperwork.paperworkPanel;
+import paperwork.paperworkDSIPanel;
+import paperwork.paperworkMarelPanel;
+import paperwork.dsi.comboWeightTask;
+import paperwork.dsi.paperworkGen;
 import whistle.NeoWhistlePanel;
 import whistle.SequenceGetter;
 
@@ -52,7 +53,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Main {
    private static NeoWhistlePanel neoWhistle;
    private static buttonsPanel buttons;
-   private static paperworkPanel ppw;
+   private static paperworkDSIPanel ppwDSI;
+   private static paperworkMarelPanel ppwMarel;
    public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
@@ -91,9 +93,13 @@ public class Main {
        JPanel freePanel = new JPanel();
        freePanel.add(new FreePanel(frame));
        
-       JPanel ppwPanel = new JPanel();
-       ppw = new paperworkPanel(frame);
-       ppwPanel.add(ppw);
+       JPanel ppwDSIPanel = new JPanel();
+       ppwDSI = new paperworkDSIPanel(frame);
+       ppwDSIPanel.add(ppwDSI);
+       
+       JPanel ppwMarelPanel = new JPanel();
+       ppwMarel = new paperworkMarelPanel(frame);
+       ppwMarelPanel.add(ppwMarel);
 
        JPanel reprintPanel = new JPanel();
        reprintPanel.add(new reprintPanel(frame));
@@ -111,10 +117,18 @@ public class Main {
        tabbedPane.addTab("Combo count", countComboPanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
-       tabbedPane.addTab("Paperwork", ppwPanel);
+       
+       JTabbedPane nestedTabs = new JTabbedPane();
+       nestedTabs.addTab("DSI", ppwDSIPanel);
+       nestedTabs.addTab("Marel", ppwMarelPanel);
+       tabbedPane.addTab("Paperwork", nestedTabs);
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
        tabbedPane.addTab("no clue", freePanel);
+       
+       //change nested tab color to be looking transparent
+       UIManager.put("TabbedPane.contentAreaColor", new Color(238,238,238,255));		
+       SwingUtilities.updateComponentTreeUI(nestedTabs);
 
        // Add the tabbedPane to the frame
        frame.setLayout(new BorderLayout());
@@ -150,11 +164,11 @@ public class Main {
 								String type = obj.get("type").toString();
 								if(type.equals("ping"))
 								{
-									ppw.setVerified(true);
+									ppwDSI.setVerified(true);
 									neoWhistle.setVerified(true);
 								} else if (type.equals("pong"))
 								{
-									ppw.setVerified(false);
+									ppwDSI.setVerified(false);
 									neoWhistle.setVerified(false);
 								}
 								if (type.equals("whistle_order_request"))

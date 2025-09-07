@@ -1,4 +1,4 @@
-package paperwork;
+package paperwork.dsi;
 
 import java.awt.Desktop;
 import java.awt.Frame;
@@ -67,6 +67,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
+import paperwork.Product;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
 import paperwork.gen.recapGen;
