@@ -2,6 +2,7 @@ package paperwork;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -29,11 +31,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import org.json.simple.parser.ParseException;
 
@@ -169,7 +173,46 @@ public class paperworkMarelPanel extends JPanel{
             }
         });
         
-        this.add(mainPanel);
+        JPanel comdemnPanel =  new JPanel();
+        comdemnPanel.setLayout(new BoxLayout(comdemnPanel, BoxLayout.Y_AXIS));
+        String[] columnNames = {"Wing tips", "Wings", "Lollipop", "Miscut"};
+        Object[][] data = new Object[7][4];
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+
+        JTable table = new JTable(model);
+        // Scroll pane with table
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(275, 100));
+        scrollPane.setBorder(BorderFactory.createTitledBorder("1st break"));
+        
+        
+        Object[][] data2 = new Object[5][4];
+        DefaultTableModel model2 = new DefaultTableModel(data2, columnNames);
+        JTable table2 = new JTable(model2);
+        // Scroll pane with table
+        JScrollPane scrollPane2 = new JScrollPane(table2);
+        scrollPane2.setPreferredSize(new Dimension(275, 100));
+        scrollPane2.setBorder(BorderFactory.createTitledBorder("2nd break"));
+        
+        
+        Object[][] data3 = new Object[4][4];
+        DefaultTableModel model3 = new DefaultTableModel(data3, columnNames);
+        JTable table3 = new JTable(model3);
+        // Scroll pane with table
+        JScrollPane scrollPane3 = new JScrollPane(table3);
+        scrollPane3.setPreferredSize(new Dimension(275, 100));
+        scrollPane3.setBorder(BorderFactory.createTitledBorder("Go home"));
+        
+        comdemnPanel.add(scrollPane);        
+        comdemnPanel.add(scrollPane2);      
+        comdemnPanel.add(scrollPane3);        
+
+
+        JPanel splitPanel = new JPanel(new GridLayout(1, 2, 0, 0));
+        splitPanel.add(mainPanel);
+        splitPanel.add(comdemnPanel);
+        
+        this.add(splitPanel);
 
 	}
 	
