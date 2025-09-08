@@ -8,6 +8,7 @@ public class Product{
 	private String trackingNum;
 	private int hour;
 	private boolean isCombo;
+	private boolean isMarel;
 	public Product(String code,String trackingNum,int hour,String type,int quantity,double weight,boolean isCombo)
 	{
 		this.code = code;
@@ -17,6 +18,7 @@ public class Product{
 		this.type = type;
 		this.trackingNum = trackingNum;
 		this.hour = hour;
+		this.isMarel = isMarel;
 	}
 	
 	public double getWeight()
@@ -74,6 +76,14 @@ public class Product{
 
 	public void setCombo(boolean isCombo) {
 		this.isCombo = isCombo;
+	}
+	
+	public boolean isMarel() {
+		return isMarel;
+	}
+
+	public void setMarel(boolean isMarel) {
+		this.isMarel = isMarel;
 	}
 	
 	public String toString()

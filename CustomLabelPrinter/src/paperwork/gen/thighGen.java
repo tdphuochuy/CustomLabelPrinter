@@ -26,26 +26,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 
-public class breastGen extends excelGen{
-	List<Product> reworkList = new ArrayList<>();
+public class thighGen extends excelGen{
 	private int currentRow;
-	public double Break1CaseWeight = 0;
-    public double Break2CaseWeight = 0;
-    public double Break3CaseWeight = 0;
-	public breastGen(int[] times)
+	public thighGen(int[] times)
 	{
-		currentRow = 5;
+		currentRow = 4;
 		this.times = times;
 	}
 	
 	public void addProduct(Product product)
 	{
 		String productCode = product.getCode();
-		if(productCode.equals("17261"))
-		{
-			reworkList.add(product);
-			return;
-		}
 		if(!productMap.containsKey(productCode))
 		{
 			productMap.put(productCode, new TreeMap<Integer,List<Product>>());
@@ -58,45 +49,31 @@ public class breastGen extends excelGen{
 		
 		if(hour <= times[0])
 		{
-			if(product.isCombo())
-			{
-				Break1Weight += product.getWeight();
-			} else {
-				Break1CaseWeight += product.getWeight();
-			}
+			Break1Weight += product.getWeight();
 		} else if (hour > times[0] && hour <= times[1])
 		{
-			if(product.isCombo())
-			{
-				Break2Weight += product.getWeight();
-			} else {
-				Break2CaseWeight += product.getWeight();
-			}
+			Break2Weight += product.getWeight();
 		} else {
-			if(product.isCombo())
-			{
-				Break3Weight += product.getWeight();
-			} else {
-				Break3CaseWeight += product.getWeight();
-			}
+			Break3Weight += product.getWeight();
 		}
+		
 		
 		productMap.get(productCode).get(hour).add(product);
 	}
 	
 	public void generateExcel()
 	{		
-		try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/dsi/recap.xlsx");
+		try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/marel/recap_marel.xlsx");
 			Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0); // First sheet
 
             setDate(sheet);
             //clear(workbook,sheet);
+            emptyBoxToExcel(workbook,sheet,2);
             caseToExcel(workbook,sheet);
-            emptyBoxToExcel(workbook,sheet,4);
             comboToExcel(workbook,sheet);
-            emptyBoxToExcel(workbook,sheet,5);
+            emptyBoxToExcel(workbook,sheet,2);
 
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
@@ -209,12 +186,12 @@ public class breastGen extends excelGen{
 		int startRow = currentRow -1 ;
         int endRow = currentRow + height - 2;
    	
-   	 	CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 14, 15);
+   	 	CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 12, 12);
         sheet.addMergedRegion(mergedRegion);
         
      // Create font: size 28, underline
         Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 22);
+        font.setFontHeightInPoints((short) 12);
 
         // Create cell style with border, alignment, and font
         CellStyle style = workbook.createCellStyle();
@@ -233,7 +210,7 @@ public class breastGen extends excelGen{
             Row row = sheet.getRow(rowIndex);
             if (row == null) row = sheet.createRow(rowIndex);
 
-            for (int colIndex = 14; colIndex <= 15; colIndex++) {
+            for (int colIndex = 12; colIndex <= 12; colIndex++) {
                 Cell cell = row.getCell(colIndex);
                 if (cell == null) cell = row.createCell(colIndex);
                 cell.setCellStyle(style);
@@ -241,7 +218,7 @@ public class breastGen extends excelGen{
         }
         
         
-        Cell topLeftCell = sheet.getRow(startRow).getCell(14);
+        Cell topLeftCell = sheet.getRow(startRow).getCell(12);
         topLeftCell.setCellValue(quantity);
 	}
 	
@@ -249,11 +226,11 @@ public class breastGen extends excelGen{
 	{
 		int startRow = currentRow -1 ;
 		int endRow = currentRow + height - 2;;
-        int startCol = 2;
-        int endCol = 15;
+        int startCol = 0;
+        int endCol = 12;
         
         Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 20);
+        font.setFontHeightInPoints((short) 10);
         
         for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
             Row row = sheet.getRow(rowIndex);
@@ -302,12 +279,12 @@ public class breastGen extends excelGen{
 		int startRow = currentRow -1 ;
         int endRow = currentRow + height - 2;
    	
-   	 CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 2, 3);
+   	 CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 0, 1);
         sheet.addMergedRegion(mergedRegion);
         
      // Create font: size 28, underline
         Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 28);
+        font.setFontHeightInPoints((short) 14);
         font.setUnderline(Font.U_SINGLE);
 
         // Create cell style with border, alignment, and font
@@ -327,7 +304,7 @@ public class breastGen extends excelGen{
             Row row = sheet.getRow(rowIndex);
             if (row == null) row = sheet.createRow(rowIndex);
 
-            for (int colIndex = 2; colIndex <= 3; colIndex++) {
+            for (int colIndex = 0; colIndex <= 1; colIndex++) {
                 Cell cell = row.getCell(colIndex);
                 if (cell == null) cell = row.createCell(colIndex);
                 cell.setCellStyle(style);
@@ -335,7 +312,7 @@ public class breastGen extends excelGen{
         }
         
         
-        Cell topLeftCell = sheet.getRow(startRow).getCell(2);
+        Cell topLeftCell = sheet.getRow(startRow).getCell(0);
         topLeftCell.setCellValue(productCode);
 	}
 	
@@ -355,65 +332,22 @@ public class breastGen extends excelGen{
 	
     public void setDate(Sheet sheet)
     {
-    	setCellValue(sheet, "N", 2, getDate("MM/dd/yyyy"));
+    	setCellValue(sheet, "M", 2, getDate("MM/dd/yyyy"));
     }
     
     public void clear(Workbook workbook,Sheet sheet)
     {
     	
     }
-    
-	public double getBreak1CaseWeight() {
-		return Break1CaseWeight;
-	}
-
-	public double getBreak2CaseWeight() {
-		return Break2CaseWeight;
-	}
-
-	public double getBreak3CaseWeight() {
-		return Break3CaseWeight;
-	}
 	
 	public double getTotalComboWeight()
 	{
 		return Break1Weight + Break2Weight + Break3Weight;
 	}
 	
-	public double getTotalCaseWeight()
-	{
-		return Break1CaseWeight + Break2CaseWeight + Break3CaseWeight;
-	}
-	
-	public int getTotalCase()
-	{
-		return (int) getTotalCaseWeight() / 40;
-	}
-	
 	public double getTotalWeight()
 	{
-		return getTotalComboWeight() + getTotalCaseWeight();
-	}
-	
-	public double getTotalWeightwRW()
-	{
-		return getTotalWeight() + getReworkWeight();
-	}
-	
-	public List<Product> getReworkList()
-	{
-		return reworkList;
-	}
-	
-	public double getReworkWeight()
-	{
-		double weight = 0;
-		for(Product product: reworkList)
-		{
-			weight += product.getWeight();
-		}
-		
-		return weight;
+		return getTotalComboWeight();
 	}
 	
 }

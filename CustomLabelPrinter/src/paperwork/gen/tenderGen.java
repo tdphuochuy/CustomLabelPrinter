@@ -55,7 +55,7 @@ public class tenderGen extends excelGen{
 
             setDate(sheet);
             //clear(workbook,sheet);
-            setDate(sheet);
+            //setDate(sheet);
             clear(workbook,sheet);
             caseToExcel(workbook,sheet);
             comboToExcel(workbook,sheet);
