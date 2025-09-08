@@ -39,7 +39,7 @@ import org.json.simple.parser.ParseException;
 
 import config.Config;
 import paperwork.dsi.comboWeightTask;
-import paperwork.dsi.paperworkGen;
+import paperwork.dsi.paperworkDSIGen;
 
 public class paperworkDSIPanel extends JPanel{
 	private JFrame frame;
@@ -322,7 +322,7 @@ public class paperworkDSIPanel extends JPanel{
 		              	         
 		              	         
 			              	       new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
+				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException | IOException e1) {

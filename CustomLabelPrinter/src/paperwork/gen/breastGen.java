@@ -24,7 +24,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import paperwork.Product;
-import paperwork.dsi.paperworkGen;
+import paperwork.dsi.paperworkDSIGen;
 
 public class breastGen extends excelGen{
 	List<Product> reworkList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class breastGen extends excelGen{
 	
 	public void generateExcel()
 	{		
-		try (InputStream inputStream = paperworkGen.class.getClassLoader().getResourceAsStream("paperwork/recap.xlsx");
+		try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/recap.xlsx");
 			Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0); // First sheet

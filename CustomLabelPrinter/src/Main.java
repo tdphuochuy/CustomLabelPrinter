@@ -28,7 +28,7 @@ import okhttp3.WebSocketListener;
 import paperwork.paperworkDSIPanel;
 import paperwork.paperworkMarelPanel;
 import paperwork.dsi.comboWeightTask;
-import paperwork.dsi.paperworkGen;
+import paperwork.dsi.paperworkDSIGen;
 import whistle.NeoWhistlePanel;
 import whistle.SequenceGetter;
 
@@ -227,7 +227,7 @@ public class Main {
 			              				comdemnList.add(Integer.parseInt(s));
 			              			}
 									new Thread(() -> {
-				             			 paperworkGen ppw = new paperworkGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,comdemnList,false,true,tenderCondemned);
+				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,comdemnList,false,true,tenderCondemned);
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException | IOException e1) {
