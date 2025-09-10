@@ -69,6 +69,7 @@ public class NeoWhistleTask implements Runnable {
 				userConsole.append("Enter password:\n");
 				String password = scanner.nextLine();
 				int hour = LocalTime.now().getHour();
+				System.out.println(hour);
 				if(password.equals(hour + Config.neowhistlePassword))
 				{
 					systemConsole.append("Access granted!\n");
