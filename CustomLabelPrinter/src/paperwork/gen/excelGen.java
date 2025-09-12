@@ -22,7 +22,7 @@ abstract class excelGen {
 	public String filePath = System.getProperty("user.home") + "\\Desktop\\recap_output\\recap.xlsx";
     public String outputPath = System.getProperty("user.home") + " \\Desktop\\recap_output\\recap.xlsx";
 	public double Break1Weight = 0;
-    public double Break2Weight = 0;
+    public double Break2Weight = 0; 
     public double Break3Weight = 0;
     public int[] times;
 	abstract public void setDate(Sheet sheet);
