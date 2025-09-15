@@ -592,14 +592,24 @@ public class drumGen extends excelGen{
     	
     }
 	
-	public double getTotalComboWeight()
+	public double getTotalWeight()
 	{
 		return Break1Weight + Break2Weight + Break3Weight;
 	}
 	
-	public double getTotalWeight()
+	public double getTotalWog()
 	{
-		return getTotalComboWeight();
+		return Break1WogWeight + Break2WogWeight + Break3WogWeight;
+	}
+	
+	public double getTotalCarcass()
+	{
+		return Break1CarcassWeight + Break2CarcassWeight + Break2CarcassWeight;
+	}
+	
+	public double getTotalLeg()
+	{
+		return Break1LegWeight + Break2LegWeight + Break3LegWeight;
 	}
 	
 }

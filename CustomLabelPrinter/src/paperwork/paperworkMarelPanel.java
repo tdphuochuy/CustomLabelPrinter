@@ -185,7 +185,7 @@ public class paperworkMarelPanel extends JPanel{
         scrollPane.setBorder(BorderFactory.createTitledBorder("1st break"));
         
         
-        Object[][] data2 = new Object[5][4];
+        Object[][] data2 = new Object[7][4];
         DefaultTableModel model2 = new DefaultTableModel(data2, columnNames);
         JTable table2 = new JTable(model2);
         // Scroll pane with table
@@ -194,7 +194,7 @@ public class paperworkMarelPanel extends JPanel{
         scrollPane2.setBorder(BorderFactory.createTitledBorder("2nd break"));
         
         
-        Object[][] data3 = new Object[4][4];
+        Object[][] data3 = new Object[7][4];
         DefaultTableModel model3 = new DefaultTableModel(data3, columnNames);
         JTable table3 = new JTable(model3);
         // Scroll pane with table

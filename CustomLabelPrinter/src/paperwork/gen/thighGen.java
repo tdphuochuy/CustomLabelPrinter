@@ -400,14 +400,11 @@ public class thighGen extends excelGen{
     	
     }
 	
-	public double getTotalComboWeight()
-	{
-		return Break1Weight + Break2Weight + Break3Weight;
-	}
+
 	
 	public double getTotalWeight()
 	{
-		return getTotalComboWeight();
+		return Break1Weight + Break2Weight + Break3Weight;
 	}
 	
 }
