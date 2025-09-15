@@ -3,6 +3,7 @@ import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 import paperwork.gen.breastGen;
 import paperwork.gen.drumGen;
+import paperwork.gen.recapGenMarel;
 import paperwork.gen.thighGen;
 import paperwork.gen.wingGen;
 
@@ -63,7 +64,7 @@ public class test {
     	drumGen drumExcel = new drumGen(times);
 
 		Map<String,Product> productMap = new TreeMap<>();
-		Element dataTable = getData("");
+		Element dataTable = getData("","lcuevas");
 		extractData(productMap,dataTable);
 		
 		for(String key: productMap.keySet())
@@ -93,20 +94,22 @@ public class test {
 		thighExcel.generateExcel();
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
-    	
+		
+		recapGenMarel recapGen = new recapGenMarel("Lam", thighExcel, drumExcel, wingExcel,null); 
+		recapGen.generateExcel();
     	
     }
     
-	public static Element getData(String orderNum) throws IOException
+	public static Element getData(String orderNum,String searchKey) throws IOException
 	{
 
-		File input = new File("C:\\Users\\tdphu\\OneDrive\\Desktop\\XMLReport5.html");
+		File input = new File(System.getProperty("user.home") + "\\Desktop\\XMLReport.html");
         Document doc = Jsoup.parse(input, "UTF-8");
 		Element bodyElement = doc.body();
 		Element inputElement = bodyElement.select("[name=unnamed]").first();
 		for(Element table : inputElement.getElementsByTag("table"))
 		{
-			if(table.html().toLowerCase().contains("lcuevas"))
+			if(table.html().toLowerCase().contains(searchKey))
 			{
 				return table;
 			}
@@ -115,7 +118,7 @@ public class test {
 		return null;
 	}
 	
-	public static void extractData(Map<String,Product> map,Element table) throws ParseException
+	public static void extractData(Map<String,Product> map,Element table) throws ParseException, IOException
 	{
 		InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/product_data.json");
         String inputData = new BufferedReader(new InputStreamReader(inputStream))
@@ -141,6 +144,10 @@ public class test {
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();
 				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
+				if(hour == 98)
+				{
+					hour = getHourby98(trackingNum,getData("","transaction id"));
+				}
 				if(hour > 35 && hour < 54)
 				{
 					hour = hour - 30;
@@ -150,6 +157,7 @@ public class test {
 				{
 					hour = 26;
 				}
+				
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
 				if(productCode.equals("17333"))
@@ -165,6 +173,21 @@ public class test {
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
 			}
 		}
+	}
+	
+	public static int getHourby98(String tracking,Element table)
+	{
+		for(Element tr : table.getElementsByTag("tr"))
+		{
+			if(tr.html().contains(tracking))
+			{
+				Elements td = tr.getElementsByTag("td");
+				String transactionID = td.get(1).text();
+				String[] split = transactionID.split("-");
+			}
+		}
+		
+		return 0;
 	}
 	
 	public static String getType(String description)

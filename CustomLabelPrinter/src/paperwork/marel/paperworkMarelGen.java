@@ -105,12 +105,12 @@ public class paperworkMarelGen{
 		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
 
-		Element dataTable = getData(orderNum);
+		Element dataTable = getData(orderNum,username);
 		extractData(productMap,dataTable);
 		if(reworkOrderNum.length() > 0)
 		{
 			System.out.println("Found rework!!");
-			Element dataTableRework = getData(reworkOrderNum);
+			Element dataTableRework = getData(reworkOrderNum,username);
 			if(dataTableRework != null)
 			{
 				extractData(productMap,dataTableRework);
@@ -182,7 +182,7 @@ public class paperworkMarelGen{
 	
 	public void deleteOldRecap()
 	{
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf");
+        File file = new File(Config.ppwPDFPath);
 
         if (!file.exists()) {
             System.out.println("File does not exist.");
@@ -227,7 +227,7 @@ public class paperworkMarelGen{
 		return null;
 	}
 	
-	public Element getData(String orderNum)
+	public Element getData(String orderNum,String searchKey)
 	{
 		OkHttpClient client = new OkHttpClient();
 
@@ -254,7 +254,7 @@ public class paperworkMarelGen{
             	Element inputElement = bodyElement.select("[name=unnamed]").first();
             	for(Element table : inputElement.getElementsByTag("table"))
             	{
-            		if(table.html().toLowerCase().contains(username.toLowerCase()))
+            		if(table.html().toLowerCase().contains(searchKey.toLowerCase()))
             		{
             			return table;
             		}

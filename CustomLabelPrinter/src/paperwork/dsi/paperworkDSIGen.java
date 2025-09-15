@@ -183,7 +183,7 @@ public class paperworkDSIGen{
 	
 	public void deleteOldRecap()
 	{
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf");
+        File file = new File(Config.ppwPDFPath);
 
         if (!file.exists()) {
             System.out.println("File does not exist.");
