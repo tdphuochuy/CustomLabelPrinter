@@ -71,8 +71,11 @@ import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
+import paperwork.gen.drumGen;
 import paperwork.gen.recapGen;
 import paperwork.gen.tenderGen;
+import paperwork.gen.thighGen;
+import paperwork.gen.wingGen;
 
 public class paperworkMarelGen{
 	private String username,password,orderNum,reworkOrderNum,name;
@@ -246,7 +249,6 @@ public class paperworkMarelGen{
 				Response response = client.newCall(request).execute()) {
             if (response.code() == 200) {
             	String body = response.body().string();
-            	List<String> list = new ArrayList<>();
             	Document doc = Jsoup.parse(body);
             	Element bodyElement = doc.body();
             	Element inputElement = bodyElement.select("[name=unnamed]").first();
@@ -304,6 +306,14 @@ public class paperworkMarelGen{
 				}
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
+				if(productCode.equals("17333"))
+				{
+					quantity = 2000;
+				} else if (productCode.equals("15896") && quantity == 2000)
+				{
+					quantity = 1950;
+					weight = 1950;
+				}
 				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
 				String type = getType(description);
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
@@ -313,45 +323,38 @@ public class paperworkMarelGen{
 	
 	public void evaluateData(Map<String,Product> map) throws InterruptedException, IOException
 	{
-		breastGen breastExcel = new breastGen(times);
-		tenderGen tenderExcel = new tenderGen(times);
-		carcassGen carcassExcel = new carcassGen(times);
+    	thighGen thighExcel = new thighGen(times);
+    	wingGen wingExcel = new wingGen(times);
+    	drumGen drumExcel = new drumGen(times);
 		
 		for(String key: map.keySet())
 		{
 			Product product = map.get(key);
-			if(product.getType().equals("breast"))
+			if(product.getType().equals("thigh"))
 			{
-				breastExcel.addProduct(product);
-			} else if (product.getType().equals("tender"))
+				thighExcel.addProduct(product);
+			} else if(product.getType().equals("wing"))
 			{
-				tenderExcel.addProduct(product);
-			} else if (product.getType().equals("carcass"))
+				wingExcel.addProduct(product);
+			} else if(product.getType().equals("drums"))
 			{
-				carcassExcel.addProduct(product);
-			} else if (product.getType().equals("trim"))
+				drumExcel.addProduct(product);
+			} else if(product.getType().equals("carcass"))
 			{
-				tenderExcel.addTrim(product);
-			} else if (product.getType().equals("keelbone"))
+				drumExcel.addCarcass(product);
+			} else if(product.getType().equals("wog"))
 			{
-				tenderExcel.addKeelBone(product);
-			} else if (product.getType().equals("kneebone"))
+				drumExcel.addWog(product);
+			}else if(product.getType().equals("leg 1/4"))
 			{
-				tenderExcel.addKneeBone(product);
-			} else if (product.getType().equals("skin"))
-			{
-				tenderExcel.addSkin(product);
+				drumExcel.addLeg(product);
 			}
 		}
-		
-		breastExcel.generateExcel();
-		tenderExcel.generateExcel();
-		carcassExcel.generateExcel();
 		
 		//recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
 		//recapExcel.generateExcel();
 		
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap_marel.xlsx");
+        File file = new File(thighExcel.filePath);
         exportExceltoPDF(file.getAbsolutePath());
         
         if(sendEmail)
@@ -365,13 +368,6 @@ public class paperworkMarelGen{
         } else {
         	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
         }
-        
-        try {
-			postRecap(breastExcel);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public void openPDFfile()
@@ -406,26 +402,23 @@ public class paperworkMarelGen{
         }
 	}
 	
-	public String getType(String description)
+	public static String getType(String description)
 	{
 		String type = "";
-		if(description.contains("TENDER"))
+		if(description.contains("THGH"))
 		{
-			type = "tender";
-		} else if (description.contains("CARC"))
+			type = "thigh";
+		} else if (description.contains("WING"))
+		{
+			type = "wing";
+		} else if (description.contains("DRMS")) {
+			type = "drums";
+		} else if (description.contains("FRNT 1/2 W/O")) {
+			type = "wog";
+		} else if (description.contains("CARC") || description.contains("CKN BACKBONE AND TAILS"))
 		{
 			type = "carcass";
-		} else if (description.contains("TRIMGS")) {
-			type = "trim";
-		} else if (description.contains("BRST")) {
-			type = "breast";
-		} else if (description.contains("KNEE SOFT BONE")) {
-			type = "kneebone";
-		} else if (description.contains("KEELBONES")) {
-			type = "keelbone";
-		} else if (description.contains("SKN")) {
-			type = "skin";
-		}
+		} 
 
 		return type;
 	}

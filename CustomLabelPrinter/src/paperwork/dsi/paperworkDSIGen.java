@@ -250,7 +250,6 @@ public class paperworkDSIGen{
 				Response response = client.newCall(request).execute()) {
             if (response.code() == 200) {
             	String body = response.body().string();
-            	List<String> list = new ArrayList<>();
             	Document doc = Jsoup.parse(body);
             	Element bodyElement = doc.body();
             	Element inputElement = bodyElement.select("[name=unnamed]").first();
@@ -527,7 +526,6 @@ public class paperworkDSIGen{
 	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
 	            message.setSubject("Debone recap (" + orderNum + ")");
 
-	            MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 	            MimeBodyPart attachmentPart = new MimeBodyPart();
 	            attachmentPart.attachFile(new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"));

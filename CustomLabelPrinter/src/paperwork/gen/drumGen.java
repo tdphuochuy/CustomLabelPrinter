@@ -26,9 +26,25 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 
-public class thighGen extends excelGen{
+public class drumGen extends excelGen{
 	private int currentRow;
-	public thighGen(int[] times)
+	public Map<String,Map<Integer,List<Product>>> wogMap = new TreeMap<>();
+	public Map<String,Map<Integer,List<Product>>> legMap = new TreeMap<>();
+	public Map<String,Map<Integer,List<Product>>> carcassMap = new TreeMap<>();
+
+	public double Break1CarcassWeight = 0;
+    public double Break2CarcassWeight = 0;
+    public double Break3CarcassWeight = 0;
+    
+	public double Break1WogWeight = 0;
+    public double Break2WogWeight = 0;
+    public double Break3WogWeight = 0;
+    
+	public double Break1LegWeight = 0;
+    public double Break2LegWeight = 0;
+    public double Break3LegWeight = 0;
+	
+	public drumGen(int[] times)
 	{
 		currentRow = 4;
 		this.times = times;
@@ -61,36 +77,102 @@ public class thighGen extends excelGen{
 		productMap.get(productCode).get(hour).add(product);
 	}
 	
+	public void addCarcass(Product product)
+	{
+		String productCode = product.getCode();
+		if(!carcassMap.containsKey(productCode))
+		{
+			carcassMap.put(productCode, new TreeMap<Integer,List<Product>>());
+		}
+		int hour = product.getHour();
+		if(!carcassMap.get(productCode).containsKey(hour))
+		{
+			carcassMap.get(productCode).put(hour, new ArrayList<Product>());
+		}
+		
+		if(hour <= times[0])
+		{
+			Break1CarcassWeight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2CarcassWeight += product.getWeight();
+		} else {
+			Break3CarcassWeight += product.getWeight();
+		}
+		
+		carcassMap.get(productCode).get(hour).add(product);
+	}
+	
+	public void addWog(Product product)
+	{
+		String productCode = product.getCode();
+		if(!wogMap.containsKey(productCode))
+		{
+			wogMap.put(productCode, new TreeMap<Integer,List<Product>>());
+		}
+		int hour = product.getHour();
+		if(!wogMap.get(productCode).containsKey(hour))
+		{
+			wogMap.get(productCode).put(hour, new ArrayList<Product>());
+		}
+		
+		if(hour <= times[0])
+		{
+			Break1WogWeight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2WogWeight += product.getWeight();
+		} else {
+			Break3WogWeight += product.getWeight();
+		}
+		
+		wogMap.get(productCode).get(hour).add(product);
+	}
+	
+	public void addLeg(Product product)
+	{
+		String productCode = product.getCode();
+		if(!legMap.containsKey(productCode))
+		{
+			legMap.put(productCode, new TreeMap<Integer,List<Product>>());
+		}
+		int hour = product.getHour();
+		if(!legMap.get(productCode).containsKey(hour))
+		{
+			legMap.get(productCode).put(hour, new ArrayList<Product>());
+		}
+		
+		if(hour <= times[0])
+		{
+			Break1LegWeight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2LegWeight += product.getWeight();
+		} else {
+			Break3LegWeight += product.getWeight();
+		}
+		
+		legMap.get(productCode).get(hour).add(product);
+	}
+	
 	public void generateExcel()
 	{		
-		try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/marel/recap_marel.xlsx");
-			Workbook workbook = new XSSFWorkbook(inputStream)) {
+        try (FileInputStream fis = new FileInputStream(filePath);
+                Workbook workbook = new XSSFWorkbook(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0); // First sheet
+            Sheet sheet = workbook.getSheetAt(1); // Second sheet
 
             setDate(sheet);
-            //clear(workbook,sheet);
-            if(productMap.containsKey("15632"))
-            {
-                emptyBoxToExcel(workbook,sheet,2);
-                producttoExcel(workbook,sheet,"15632");
-                emptyBoxToExcel(workbook,sheet,2);
-            } else {
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-            }
             
-            currentRow = 13;
-            
+            emptyBoxToExcel(workbook,sheet,2);
             caseToExcel(workbook,sheet);
-            emptyBoxToExcel(workbook,sheet,3);
+            emptyBoxToExcel(workbook,sheet,2);
             emptyBoxToExcel(workbook,sheet,2);
             comboToExcel(workbook,sheet);
             emptyBoxToExcel(workbook,sheet,3);
-            emptyBoxToExcel(workbook,sheet,2);
-
+            wogToExcel(workbook,sheet);
+            legToExcel(workbook,sheet);
+            carcassToExcel(workbook,sheet);
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 workbook.write(fos);
@@ -117,10 +199,6 @@ public class thighGen extends excelGen{
 	{
 		for(String key : productMap.keySet()) //for each productCode
         {
-			if(key.equals("15632"))
-			{
-				continue;
-			}
         	Map<Integer,List<Product>> map = productMap.get(key);
         	
         	Product firstProduct = map.values().stream()
@@ -238,6 +316,120 @@ public class thighGen extends excelGen{
         	setTotalCell(workbook,sheet,height,total);
 
         	currentRow += height;
+        }
+	}
+	
+	public void carcassToExcel(Workbook workbook,Sheet sheet)
+	{
+		currentRow = 29;
+		for(String key : carcassMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = carcassMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+    		int count = 0;
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        			int column = ((count % 10) + 2);
+        	    	setCellValue(sheet,column , currentRow + (count/10), String.valueOf(product.getQuantity()));
+        			count++;
+        		}
+        	}
+        	
+        	int height = getHeight(map);
+        	
+            setBorderAroundProductCell(workbook,sheet,height);
+        	setProductCodeCell(workbook,sheet,height,key);
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	setTotalCell(workbook,sheet,height,total);
+
+        	currentRow += height;
+        }
+	}
+	
+	public void wogToExcel(Workbook workbook,Sheet sheet)
+	{
+		currentRow = 26;
+		
+		for(String key : wogMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = wogMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+    		int count = 0;
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        			int column = ((count % 10) + 2);
+        	    	setCellValue(sheet,column , currentRow + (count/10), String.valueOf(product.getQuantity()));
+        			count++;
+        		}
+        	}
+        	
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	
+	    	setCellValue(sheet,"M" , 26 , String.valueOf(total));
+
+        }
+	}
+	
+	public void legToExcel(Workbook workbook,Sheet sheet)
+	{
+		currentRow = 27;
+		
+		for(String key : legMap.keySet()) //for each productCode
+        {
+        	Map<Integer,List<Product>> map = legMap.get(key);
+        	
+        	Product firstProduct = map.values().stream()
+        		    .filter(list -> list != null && !list.isEmpty())
+        		    .map(list -> list.get(0))
+        		    .findFirst()
+        		    .orElse(null);
+        	
+    		int count = 0;
+        	for(Integer hour : map.keySet()) //for each hour
+        	{
+        		List<Product> list = map.get(hour); 
+        		for(int i = 0; i < list.size();i++) { //for each product
+        			Product product = list.get(i);
+        			int column = ((count % 10) + 2);
+        	    	setCellValue(sheet,column , currentRow + (count/10), String.valueOf(product.getQuantity()));
+        			count++;
+        		}
+        	}
+        	
+        	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
+        	if(!firstProduct.isCombo())
+        	{
+        		total = total + "\n" + getTotalCaseByProduct(map) + " cs";
+        	}
+        	
+	    	setCellValue(sheet,"M" , 27 , String.valueOf(total));
+
         }
 	}
 	

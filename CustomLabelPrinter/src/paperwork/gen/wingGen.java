@@ -26,9 +26,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 
-public class thighGen extends excelGen{
+public class wingGen extends excelGen{
 	private int currentRow;
-	public thighGen(int[] times)
+	public wingGen(int[] times)
 	{
 		currentRow = 4;
 		this.times = times;
@@ -63,29 +63,16 @@ public class thighGen extends excelGen{
 	
 	public void generateExcel()
 	{		
-		try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/marel/recap_marel.xlsx");
-			Workbook workbook = new XSSFWorkbook(inputStream)) {
+        try (FileInputStream fis = new FileInputStream(filePath);
+                Workbook workbook = new XSSFWorkbook(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0); // First sheet
+            Sheet sheet = workbook.getSheetAt(2); // Third sheet
 
             setDate(sheet);
-            //clear(workbook,sheet);
-            if(productMap.containsKey("15632"))
-            {
-                emptyBoxToExcel(workbook,sheet,2);
-                producttoExcel(workbook,sheet,"15632");
-                emptyBoxToExcel(workbook,sheet,2);
-            } else {
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-                emptyBoxToExcel(workbook,sheet,2);
-            }
             
-            currentRow = 13;
-            
-            caseToExcel(workbook,sheet);
             emptyBoxToExcel(workbook,sheet,3);
+            emptyBoxToExcel(workbook,sheet,2);
+            caseToExcel(workbook,sheet);
             emptyBoxToExcel(workbook,sheet,2);
             comboToExcel(workbook,sheet);
             emptyBoxToExcel(workbook,sheet,3);
@@ -117,10 +104,6 @@ public class thighGen extends excelGen{
 	{
 		for(String key : productMap.keySet()) //for each productCode
         {
-			if(key.equals("15632"))
-			{
-				continue;
-			}
         	Map<Integer,List<Product>> map = productMap.get(key);
         	
         	Product firstProduct = map.values().stream()

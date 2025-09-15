@@ -1,13 +1,26 @@
 import okhttp3.*;
+import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
+import paperwork.gen.breastGen;
+import paperwork.gen.drumGen;
+import paperwork.gen.thighGen;
+import paperwork.gen.wingGen;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.*;
 
@@ -31,6 +44,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import config.Config;
 
@@ -38,218 +57,137 @@ public class test {
 	private static int currentRow;
 
     public static void main(String[] args) throws Exception {
-    	currentRow = 4;
-    	try (InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/marel/recap_marel.xlsx");
-    			Workbook workbook = new XSSFWorkbook(inputStream)) {
+    	int[] times = {20,23};
+    	thighGen thighExcel = new thighGen(times);
+    	wingGen wingExcel = new wingGen(times);
+    	drumGen drumExcel = new drumGen(times);
 
-                Sheet sheet = workbook.getSheetAt(0); // First sheet
-
-                setDate(sheet);
-                emptyBoxToExcel(workbook,sheet,2);
-
-                // Save changes
-                try (FileOutputStream fos = new FileOutputStream("C:\\Users\\tdphu\\OneDrive\\Desktop\\recap_marel.xlsx")) {
-                    workbook.write(fos);
-                }
-
-                System.out.println("Cell updated successfully!");
-                
-                //File file = new File("recap_output/breast.xlsx");
-                //exportPDF(file.getAbsolutePath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-    	}
-    
-	public static void emptyBoxToExcel(Workbook workbook,Sheet sheet,int height)
-	{
-		setBorderAroundProductCell(workbook,sheet,height);
-    	setProductCodeCell(workbook,sheet,height,"");
-    	setTotalCell(workbook,sheet,height,"");
-    	currentRow += height;
-	}
-	
-	public static void setTotalCell(Workbook workbook,Sheet sheet,int height,String quantity)
-	{
-		int startRow = currentRow -1 ;
-        int endRow = currentRow + height - 2;
-   	
-   	 	CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 12, 12);
-        sheet.addMergedRegion(mergedRegion);
-        
-     // Create font: size 28, underline
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 12);
-
-        // Create cell style with border, alignment, and font
-        CellStyle style = workbook.createCellStyle();
-        style.setFont(font);
-        style.setWrapText(true);
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        style.setBorderTop(BorderStyle.MEDIUM);
-        style.setBorderBottom(BorderStyle.MEDIUM);
-        style.setBorderLeft(BorderStyle.MEDIUM);
-        style.setBorderRight(BorderStyle.MEDIUM);
-       
-        //set product code's cell style
-        for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) row = sheet.createRow(rowIndex);
-
-            for (int colIndex = 12; colIndex <= 12; colIndex++) {
-                Cell cell = row.getCell(colIndex);
-                if (cell == null) cell = row.createCell(colIndex);
-                cell.setCellStyle(style);
-            }
-        }
-        
-        
-        Cell topLeftCell = sheet.getRow(startRow).getCell(12);
-        topLeftCell.setCellValue(quantity);
-	}
-	
-	public static void setBorderAroundProductCell(Workbook workbook,Sheet sheet,int height)
-	{
-		int startRow = currentRow -1 ;
-		int endRow = currentRow + height - 2;;
-        int startCol = 0;
-        int endCol = 12;
-        
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 10);
-        
-        for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) row = sheet.createRow(rowIndex);
-
-            for (int colIndex = startCol; colIndex <= endCol; colIndex++) {
-                Cell cell = row.getCell(colIndex);
-                if (cell == null) cell = row.createCell(colIndex);
-
-                CellStyle style = workbook.createCellStyle();
-                style.setFont(font);
-                style.setVerticalAlignment(VerticalAlignment.CENTER);
-                style.setAlignment(HorizontalAlignment.CENTER);
-                // Default: thin borders all around
-                style.setBorderTop(BorderStyle.THIN);
-                style.setBorderBottom(BorderStyle.THIN);
-                style.setBorderLeft(BorderStyle.THIN);
-                style.setBorderRight(BorderStyle.THIN);
-
-                style.setTopBorderColor(IndexedColors.BLACK.getIndex());
-                style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-                style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-                style.setRightBorderColor(IndexedColors.BLACK.getIndex());
-
-                // Now, override outer borders with medium
-                if (rowIndex == startRow) {
-                    style.setBorderTop(BorderStyle.MEDIUM);
-                }
-                if (rowIndex == endRow) {
-                    style.setBorderBottom(BorderStyle.MEDIUM);
-                }
-                if (colIndex == startCol) {
-                    style.setBorderLeft(BorderStyle.MEDIUM);
-                }
-                if (colIndex == endCol) {
-                    style.setBorderRight(BorderStyle.MEDIUM);
-                }
-
-                cell.setCellStyle(style);
-            }
-        }
-	}
-	
-	public static void setProductCodeCell(Workbook workbook,Sheet sheet,int height,String productCode)
-	{
-		int startRow = currentRow -1 ;
-        int endRow = currentRow + height - 2;
-   	
-   	 CellRangeAddress mergedRegion = new CellRangeAddress(startRow, endRow, 0, 1);
-        sheet.addMergedRegion(mergedRegion);
-        
-     // Create font: size 28, underline
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 14);
-        font.setUnderline(Font.U_SINGLE);
-
-        // Create cell style with border, alignment, and font
-        CellStyle style = workbook.createCellStyle();
-        style.setFont(font);
-
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        style.setBorderTop(BorderStyle.MEDIUM);
-        style.setBorderBottom(BorderStyle.MEDIUM);
-        style.setBorderLeft(BorderStyle.MEDIUM);
-        style.setBorderRight(BorderStyle.MEDIUM);
-       
-        //set product code's cell style
-        for (int rowIndex = startRow; rowIndex <= endRow; rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) row = sheet.createRow(rowIndex);
-
-            for (int colIndex = 0; colIndex <= 1; colIndex++) {
-                Cell cell = row.getCell(colIndex);
-                if (cell == null) cell = row.createCell(colIndex);
-                cell.setCellStyle(style);
-            }
-        }
-        
-        
-        Cell topLeftCell = sheet.getRow(startRow).getCell(0);
-        topLeftCell.setCellValue(productCode);
-	}
-    
-	public static void setDate(Sheet sheet)
-	{
-		setCellValue(sheet, "M", 2, getDate("MM/dd/yyyy"));
-	}
-	
-	  public static void setCellValue(Sheet sheet, String columnLetter, int rowNumber, String value) {
-	        int columnIndex = columnLetterToIndex(columnLetter);
-	        int rowIndex = rowNumber - 1; // Excel rows start at 1, POI uses 0-based
-
-	        Row row = sheet.getRow(rowIndex);
-	        if (row == null) row = sheet.createRow(rowIndex);
-
-	        Cell cell = row.getCell(columnIndex);
-	        if (cell == null) cell = row.createCell(columnIndex);
-
-	        cell.setCellValue(value);
-	    }
-	  
-	    public static int columnLetterToIndex(String column) {
-	        column = column.toUpperCase();
-	        int index = 0;
-	        for (int i = 0; i < column.length(); i++) {
-	            index *= 26;
-	            index += column.charAt(i) - 'A' + 1;
-	        }
-	        return index - 1;
-	    }
-	
-	 public static String getDate(String dateFormat)
-	{
-		LocalDate today;
-		LocalTime currentTime = LocalTime.now();
-       int currentHour = currentTime.getHour();
-		if(currentHour < 5)
+		Map<String,Product> productMap = new TreeMap<>();
+		Element dataTable = getData("");
+		extractData(productMap,dataTable);
+		
+		for(String key: productMap.keySet())
 		{
-			today = LocalDate.now().minusDays(1);
-		} else {
-			today= LocalDate.now();
+			Product product = productMap.get(key);
+			if(product.getType().equals("thigh"))
+			{
+				thighExcel.addProduct(product);
+			} else if(product.getType().equals("wing"))
+			{
+				wingExcel.addProduct(product);
+			} else if(product.getType().equals("drums"))
+			{
+				drumExcel.addProduct(product);
+			} else if(product.getType().equals("carcass"))
+			{
+				drumExcel.addCarcass(product);
+			} else if(product.getType().equals("wog"))
+			{
+				drumExcel.addWog(product);
+			}else if(product.getType().equals("leg 1/4"))
+			{
+				drumExcel.addLeg(product);
+			}
 		}
 		
-       // Define the formatter for MMDD
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+		thighExcel.generateExcel();
+		wingExcel.generateExcel();
+		drumExcel.generateExcel();
+    	
+    	
+    }
+    
+	public static Element getData(String orderNum) throws IOException
+	{
 
-       // Format the date
-       String formattedDate = today.format(formatter);
-       
-       return formattedDate;
+		File input = new File("C:\\Users\\tdphu\\OneDrive\\Desktop\\XMLReport5.html");
+        Document doc = Jsoup.parse(input, "UTF-8");
+		Element bodyElement = doc.body();
+		Element inputElement = bodyElement.select("[name=unnamed]").first();
+		for(Element table : inputElement.getElementsByTag("table"))
+		{
+			if(table.html().toLowerCase().contains("lcuevas"))
+			{
+				return table;
+			}
+		}
+		
+		return null;
 	}
+	
+	public static void extractData(Map<String,Product> map,Element table) throws ParseException
+	{
+		InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/product_data.json");
+        String inputData = new BufferedReader(new InputStreamReader(inputStream))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+    	JSONParser jsonParser = new JSONParser();
+    	JSONObject productObj = (JSONObject) jsonParser.parse(inputData);
+		for(Element tr : table.getElementsByTag("tr"))
+		{
+			String content = tr.html();
+			if(content.toLowerCase().contains("lcuevas"))
+			{
+				String trackingNum = tr.getElementsByTag("a").get(0).text();
+				if(content.contains("#ff0000"))
+				{
+					map.remove(trackingNum);
+					continue;
+				}
+				Elements td = tr.getElementsByTag("td");
+				String itemPack = td.get(2).text() + td.get(3).text();
+				System.out.println(itemPack);
+				String productCode = ((JSONObject)productObj.get(itemPack)).get("Product").toString();
+				String description =  td.get(4).text();
+				String lotNumber =  td.get(5).text();
+				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
+				if(hour > 35 && hour < 54)
+				{
+					hour = hour - 30;
+				} else if (hour > 29 && hour < 35) {
+					hour = hour - 6;
+				} else if (hour > 26 && hour < 29)
+				{
+					hour = 26;
+				}
+				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
+				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
+				if(productCode.equals("17333"))
+				{
+					quantity = 2000;
+				} else if (productCode.equals("15896") && quantity == 2000)
+				{
+					quantity = 1950;
+					weight = 1950;
+				}
+				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
+				String type = getType(description);
+				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
+			}
+		}
+	}
+	
+	public static String getType(String description)
+	{
+		String type = "";
+		if(description.contains("THGH"))
+		{
+			type = "thigh";
+		} else if (description.contains("FRNT 1/2 W/O")) {
+			type = "wog";
+		}else if (description.contains("LEG 1/4")) {
+			type = "leg 1/4";
+		} else if (description.contains("WING"))
+		{
+			type = "wing";
+		} else if (description.contains("DRMS")) {
+			type = "drums";
+		} else if (description.contains("CARC") || description.contains("CKN BACKBONE AND TAILS"))
+		{
+			type = "carcass";
+		} 
+
+		return type;
+	}
+
 }

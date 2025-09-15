@@ -19,8 +19,8 @@ import paperwork.Product;
 
 abstract class excelGen {
 	public Map<String,Map<Integer,List<Product>>> productMap = new TreeMap<>();
-	public String filePath = System.getProperty("user.home") + "\\Desktop\\recap_output\\recap.xlsx";
-    public String outputPath = System.getProperty("user.home") + " \\Desktop\\recap_output\\recap.xlsx";
+	public String filePath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.xlsx";
+    public String outputPath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.xlsx";
 	public double Break1Weight = 0;
     public double Break2Weight = 0;
     public double Break3Weight = 0;
@@ -76,6 +76,18 @@ abstract class excelGen {
 	   // Converts column letter to index and sets cell value
     public void setCellValue(Sheet sheet, String columnLetter, int rowNumber, String value) {
         int columnIndex = columnLetterToIndex(columnLetter);
+        int rowIndex = rowNumber - 1; // Excel rows start at 1, POI uses 0-based
+
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) row = sheet.createRow(rowIndex);
+
+        Cell cell = row.getCell(columnIndex);
+        if (cell == null) cell = row.createCell(columnIndex);
+
+        cell.setCellValue(value);
+    }
+    
+    public void setCellValue(Sheet sheet, int columnIndex, int rowNumber, String value) {
         int rowIndex = rowNumber - 1; // Excel rows start at 1, POI uses 0-based
 
         Row row = sheet.getRow(rowIndex);
@@ -183,7 +195,7 @@ abstract class excelGen {
 	        if (value == (long) value) {
 	            return String.format("%d", (long) value);  // Remove .0 if whole number
 	        } else {
-	            return String.valueOf(value);             // Keep decimal if needed
+	            return String.format("%.2f", value);          // Keep decimal if needed
 	        }
 	    }
 }
