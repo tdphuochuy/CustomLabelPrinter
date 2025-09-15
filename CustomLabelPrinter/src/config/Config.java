@@ -17,6 +17,9 @@ public class Config {
     public static String webSocketproxyUser = "moneymine";
     public static String webSocketproxyPass = "5as12fbuq0aio";
     
+    public static String ppwExcelPath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.xlsx";
+    public static String ppwPDFPath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.pdf";
+
     public static String serverDomain = "erp-app-dc3826c87da0.herokuapp.com";
 
     public static String chatId = "DSI ERP";

@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import config.Config;
 import paperwork.Product;
 
 public class recapGen extends excelGen{
@@ -58,7 +59,7 @@ public class recapGen extends excelGen{
 	
 	public void generateRecap1()
 	{
-		try (FileInputStream fis = new FileInputStream(filePath);
+		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
 	            Sheet sheet = workbook.getSheetAt(3); 
@@ -104,7 +105,7 @@ public class recapGen extends excelGen{
 	        	setCellValue(sheet, "H", 27, formatDouble(carcass.getTotalWeight()));
 	        	
 	            // Save changes
-	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
 	            }
 
@@ -119,13 +120,13 @@ public class recapGen extends excelGen{
 	
 	public void generateRecap2()
 	{
-		try (FileInputStream fis = new FileInputStream(filePath);
+		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
 	            Sheet sheet = workbook.getSheetAt(4); 
 	        	
 	            // Save changes
-	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
 	            }
 	            
@@ -190,7 +191,7 @@ public class recapGen extends excelGen{
         		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
 
 	        	// Save changes
-	            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
 	            }
 

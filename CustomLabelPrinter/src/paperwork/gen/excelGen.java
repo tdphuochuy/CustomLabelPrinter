@@ -19,8 +19,6 @@ import paperwork.Product;
 
 abstract class excelGen {
 	public Map<String,Map<Integer,List<Product>>> productMap = new TreeMap<>();
-	public String filePath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.xlsx";
-    public String outputPath = System.getProperty("user.home") + "\\OneDrive\\Desktop\\recap_output\\recap.xlsx";
 	public double Break1Weight = 0;
     public double Break2Weight = 0;
     public double Break3Weight = 0;

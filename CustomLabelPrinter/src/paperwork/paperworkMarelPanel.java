@@ -43,7 +43,6 @@ import org.json.simple.parser.ParseException;
 
 import config.Config;
 import paperwork.dsi.comboWeightTask;
-import paperwork.dsi.paperworkDSIGen;
 
 public class paperworkMarelPanel extends JPanel{
 	private JFrame frame;

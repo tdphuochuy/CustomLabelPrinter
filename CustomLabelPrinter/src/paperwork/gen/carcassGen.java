@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import config.Config;
 import paperwork.Product;
 
 public class carcassGen extends excelGen{
@@ -20,7 +21,7 @@ public class carcassGen extends excelGen{
 	
 	public void generateExcel()
 	{
-        try (FileInputStream fis = new FileInputStream(filePath);
+        try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(2); // First sheet
@@ -47,7 +48,7 @@ public class carcassGen extends excelGen{
 
             
             // Save changes
-            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
                 workbook.write(fos);
             }
 

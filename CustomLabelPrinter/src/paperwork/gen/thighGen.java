@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import config.Config;
 import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
 
@@ -92,7 +93,7 @@ public class thighGen extends excelGen{
             emptyBoxToExcel(workbook,sheet,2);
 
             // Save changes
-            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
                 workbook.write(fos);
             }
 

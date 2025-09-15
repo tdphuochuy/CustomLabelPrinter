@@ -48,7 +48,7 @@ public class tenderGen extends excelGen{
 	
 	public void generateExcel()
 	{
-        try (FileInputStream fis = new FileInputStream(filePath);
+        try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(1); // First sheet
@@ -68,7 +68,7 @@ public class tenderGen extends excelGen{
             emptyBoxToExcel(workbook,sheet,5);
 
             // Save changes
-            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
                 workbook.write(fos);
             }
 

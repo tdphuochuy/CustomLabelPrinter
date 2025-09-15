@@ -354,7 +354,7 @@ public class paperworkMarelGen{
 		//recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
 		//recapExcel.generateExcel();
 		
-        File file = new File(thighExcel.filePath);
+        File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
         if(sendEmail)
@@ -373,7 +373,7 @@ public class paperworkMarelGen{
 	public void openPDFfile()
 	{
 		try {
-	        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap_marel.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
+	        String filePath = Config.ppwPDFPath; // Can be .txt, .pcl, .ps, or supported PDF
             
 	        File file = new File(filePath);
 
@@ -453,8 +453,7 @@ public class paperworkMarelGen{
 	
 	public void sendtoPrinterJob(String printerIp,String notificationText) throws InterruptedException
 	{
-        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap_marel.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
-		File file = new File(filePath);
+		File file = new File(Config.ppwPDFPath);
 
         int timeoutSeconds = 30;
         int waited = 0;
@@ -477,7 +476,7 @@ public class paperworkMarelGen{
             socket.connect(address, 5000); // 5000 milliseconds = 5 seconds
 
             try (OutputStream out = socket.getOutputStream();
-                 FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+                 FileInputStream fileInput = new FileInputStream(new File(Config.ppwPDFPath))) {
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -519,7 +518,7 @@ public class paperworkMarelGen{
 	            MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 	            MimeBodyPart attachmentPart = new MimeBodyPart();
-	            attachmentPart.attachFile(new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap_marel.pdf"));
+	            attachmentPart.attachFile(new File(Config.ppwPDFPath));
 
 	            Multipart multipart = new MimeMultipart();
 	            //multipart.addBodyPart(messageBodyPart);

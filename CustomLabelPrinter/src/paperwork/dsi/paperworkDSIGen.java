@@ -354,7 +354,7 @@ public class paperworkDSIGen{
 		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
 		recapExcel.generateExcel();
 		
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.xlsx");
+        File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
         if(sendEmail)
@@ -380,9 +380,8 @@ public class paperworkDSIGen{
 	public void openPDFfile()
 	{
 		try {
-	        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
             
-	        File file = new File(filePath);
+	        File file = new File(Config.ppwPDFPath);
 
 	        int timeoutSeconds = 30;
 	        int waited = 0;
@@ -398,7 +397,7 @@ public class paperworkDSIGen{
 	            }
 	        }
 	        
-	        File pdfFile = new File(filePath);
+	        File pdfFile = new File(Config.ppwPDFPath);
             if (pdfFile.exists()) {
                 Desktop.getDesktop().browse(pdfFile.toURI()); // or use .open() for system default PDF viewer
             } else {
@@ -463,8 +462,7 @@ public class paperworkDSIGen{
 	
 	public void sendtoPrinterJob(String printerIp,String notificationText) throws InterruptedException
 	{
-        String filePath = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"; // Can be .txt, .pcl, .ps, or supported PDF
-		File file = new File(filePath);
+		File file = new File(Config.ppwPDFPath);
 
         int timeoutSeconds = 30;
         int waited = 0;
@@ -487,7 +485,7 @@ public class paperworkDSIGen{
             socket.connect(address, 5000); // 5000 milliseconds = 5 seconds
 
             try (OutputStream out = socket.getOutputStream();
-                 FileInputStream fileInput = new FileInputStream(new File(filePath))) {
+                 FileInputStream fileInput = new FileInputStream(new File(Config.ppwPDFPath))) {
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -528,7 +526,7 @@ public class paperworkDSIGen{
 
 
 	            MimeBodyPart attachmentPart = new MimeBodyPart();
-	            attachmentPart.attachFile(new File("D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\recap.pdf"));
+	            attachmentPart.attachFile(new File(Config.ppwPDFPath));
 
 	            Multipart multipart = new MimeMultipart();
 	            //multipart.addBodyPart(messageBodyPart);
