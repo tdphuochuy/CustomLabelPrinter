@@ -69,7 +69,6 @@ import okhttp3.Response;
 import okhttp3.Route;
 import paperwork.Product;
 import paperwork.dsi.paperworkDSIGen;
-import paperwork.gen.breastGen;
 import paperwork.gen.carcassGen;
 import paperwork.gen.drumGen;
 import paperwork.gen.recapGen;
@@ -295,6 +294,11 @@ public class paperworkMarelGen{
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();
 				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
+				if(hour == 98)
+				{
+					hour = getHourby98(trackingNum,getData(orderNum,"transaction id"));
+					System.out.println(hour);
+				}
 				if(hour > 35 && hour < 54)
 				{
 					hour = hour - 30;
@@ -303,7 +307,11 @@ public class paperworkMarelGen{
 				} else if (hour > 26 && hour < 29)
 				{
 					hour = 26;
+				} else if (hour >= 0 && hour < 5)
+				{
+					hour = hour + 24;
 				}
+				
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
 				if(productCode.equals("17333"))
@@ -319,6 +327,24 @@ public class paperworkMarelGen{
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
 			}
 		}
+	}
+	
+	public static int getHourby98(String tracking,Element table)
+	{
+		for(Element tr : table.getElementsByTag("tr"))
+		{
+			if(tr.html().contains(tracking))
+			{
+				Elements td = tr.getElementsByTag("td");
+				String transactionID = td.get(1).text();
+				String[] split = transactionID.split("-");
+				String time = split[2];
+				String hour = time.substring(0,2);
+				return Integer.valueOf(hour);
+			}
+		}
+		
+		return 0;
 	}
 	
 	public void evaluateData(Map<String,Product> map) throws InterruptedException, IOException
@@ -351,8 +377,6 @@ public class paperworkMarelGen{
 			}
 		}
 		
-		//recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
-		//recapExcel.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
@@ -533,68 +557,7 @@ public class paperworkMarelGen{
 	        }
 	   }
 	   
-	   public void postRecap(breastGen breastExcel) throws Exception
-	   {
-	        LocalDateTime now = LocalDateTime.now();
-	        
-	        if(Config.dayTimeSaving == 1)
-	        {
-	        	now = LocalDateTime.now().plusHours(1);
-	        }
 
-	        // Format it as a string
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	        String formattedDateTime = now.format(formatter);
-		   
-		   	String message = "Last updated: " + formattedDateTime + "\n";
-		   	message = message + "Total breast cases: " + breastExcel.getTotalCase();
-	        // Define JSON body
-		   	
-		   	JSONObject obj = new JSONObject();
-		   	obj.put("message", message);
-
-	        
-
-	        String url = "https://" + Config.serverDomain + "/recap";
-
-	        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
-
-			okhttp3.Authenticator proxyAuthenticator = new okhttp3.Authenticator() {
-				  @Override public Request authenticate(Route route, Response response) throws IOException {
-				       String credential = Credentials.basic(Config.webSocketproxyIP,Config.webSocketproxyPass);
-				       return response.request().newBuilder()
-				           .header("Proxy-Authorization", credential)
-				           .build();
-				  }
-				};
-
-	        OkHttpClient client = new OkHttpClient.Builder()
-	                //.proxy(proxy)
-	                //.proxyAuthenticator(proxyAuthenticator)
-	                .sslSocketFactory(getUnsafeSSLSocketFactory(), getTrustAllCertsManager())
-	                .hostnameVerifier((hostname, session) -> true)
-	                .build();
-
-
-	        RequestBody body = RequestBody.create(
-	        		obj.toJSONString(), 
-	                MediaType.get("application/json; charset=utf-8")
-	        );
-
-	        Request request = new Request.Builder()
-	                .url(url)
-	                .post(body)
-	                .build();
-
-	        try (Response response = client.newCall(request).execute()) {
-	            if (response.isSuccessful()) {
-	                System.out.println("Response: " + response.body().string());
-	            } else {
-	                System.err.println("Request failed: " + response.code());
-	            }
-	        }
-
-	   }
 	   
 	   private static SSLSocketFactory getUnsafeSSLSocketFactory() throws Exception {
 		    TrustManager[] trustAllCerts = new TrustManager[]{

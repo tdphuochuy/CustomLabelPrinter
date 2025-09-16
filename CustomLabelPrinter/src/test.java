@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -95,6 +96,10 @@ public class test {
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
 		
+		Map<String,List<List<Integer>>> condemnMap = new HashMap<>();
+		
+		
+		
 		recapGenMarel recapGen = new recapGenMarel("Lam", thighExcel, drumExcel, wingExcel,null); 
 		recapGen.generateExcel();
     	
@@ -147,6 +152,7 @@ public class test {
 				if(hour == 98)
 				{
 					hour = getHourby98(trackingNum,getData("","transaction id"));
+					System.out.println(hour);
 				}
 				if(hour > 35 && hour < 54)
 				{
@@ -156,6 +162,9 @@ public class test {
 				} else if (hour > 26 && hour < 29)
 				{
 					hour = 26;
+				} else if (hour >= 0 && hour < 5)
+				{
+					hour = hour + 24;
 				}
 				
 				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
@@ -184,6 +193,9 @@ public class test {
 				Elements td = tr.getElementsByTag("td");
 				String transactionID = td.get(1).text();
 				String[] split = transactionID.split("-");
+				String time = split[2];
+				String hour = time.substring(0,2);
+				return Integer.valueOf(hour);
 			}
 		}
 		
