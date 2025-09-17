@@ -362,7 +362,7 @@ public class paperworkDSIPanel extends JPanel{
         
         this.add(splitPanel);
         
-        File file = new File("D:\\Users\\pdgwinterm7\\Desktop\\gcweights.txt");
+        File file = new File(System.getProperty("user.home") + "\\Desktop\\gcweights.txt");
 
         try (FileWriter writer = new FileWriter(file)) {
             // Opening the file in write mode will automatically overwrite the contents, 

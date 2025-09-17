@@ -434,10 +434,10 @@ public class paperworkDSIGen{
 	
 	public static void exportExceltoPDF(String excelFilePath)
 	{
-        String outputDir = "D:\\Users\\pdgwinterm7\\Desktop\\recap_output\\";
+        String outputDir = System.getProperty("user.home") + "\\Desktop\\recap_output\\";
 
         // Full path to LibreOffice Portable or installed soffice.exe
-        String libreOfficePath = "D:\\Users\\pdgwinterm7\\Downloads\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
+        String libreOfficePath = System.getProperty("user.home") + "\\Downloads\\LibreOfficePortable\\App\\libreoffice\\program\\soffice.exe"; // Adjust path if needed
 
         // Construct the command to run LibreOffice headless
         String command = libreOfficePath + " --headless --convert-to pdf --outdir " + outputDir + " " + excelFilePath;

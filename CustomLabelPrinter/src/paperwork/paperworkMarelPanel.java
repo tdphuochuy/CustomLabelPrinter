@@ -17,7 +17,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,6 +45,8 @@ import org.json.simple.parser.ParseException;
 
 import config.Config;
 import paperwork.dsi.comboWeightTask;
+import paperwork.dsi.paperworkDSIGen;
+import paperwork.marel.paperworkMarelGen;
 
 public class paperworkMarelPanel extends JPanel{
 	private JFrame frame;
@@ -183,7 +187,35 @@ public class paperworkMarelPanel extends JPanel{
               		 {
               			if(passField.getText().length() > 0)
                  		{
+              				String username = userField.getText();
+	              			 String password = passField.getText();
+	              			 String orderNum = orderField.getText();
+	              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+	              			 String name = nameField.getText();
+	              			 int break1 = Integer.parseInt(break1Field.getText());
+	              			 int break2 = Integer.parseInt(break2Field.getText());
+	              			 if(!break2cb.isSelected())
+	              			 {
+	              				 break2 = 26;
+	              			 }
+	              			 int[] times = {break1,break2};
               				
+              				Map<String,List<List<Integer>>> condemnMap = new HashMap<>();
+              				setCondemnMap(condemnMap,"wingtips",0,table,table2,table3);
+              				setCondemnMap(condemnMap,"wings",1,table,table2,table3);
+              				setCondemnMap(condemnMap,"lollipop",2,table,table2,table3);
+              				setCondemnMap(condemnMap,"miscut",3,table,table2,table3);
+              				
+              				
+              				new Thread(() -> {
+              					paperworkMarelGen ppw = new paperworkMarelGen(frame,username,password,orderNum,reworkOrderNum,name,times,condemnMap,pdfOnlycb.isSelected(),sendEmailcb.isSelected());
+		             			 try {
+									ppw.start();
+								} catch (ParseException | InterruptedException | IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+	              	        }).start();
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
@@ -213,6 +245,33 @@ public class paperworkMarelPanel extends JPanel{
         
         this.add(splitPanel);
 
+	}
+	
+	public void setCondemnMap(Map<String,List<List<Integer>>> condemnMap,String key,int position,JTable table1,JTable table2, JTable table3)
+	{
+		List<List<Integer>> condemnList = new ArrayList<>();
+		
+		condemnList.add(setCondemnMapHelper(table1,position));
+		condemnList.add(setCondemnMapHelper(table2,position));
+		condemnList.add(setCondemnMapHelper(table3,position));
+
+		condemnMap.put(key,condemnList);
+	}
+	
+	public List<Integer> setCondemnMapHelper(JTable table, int position)
+	{
+		List<Integer> list = new ArrayList<>();
+		
+		for(int i = 0; i < 7; i++)
+		{
+			if(table.getValueAt(i, position) != null)
+			{
+				int value = Integer.valueOf(table.getValueAt(i, position).toString());
+				list.add(value);
+			}
+		}
+		
+		return list;
 	}
 	
     // Method to set the placeholder text
