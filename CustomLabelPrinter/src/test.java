@@ -95,11 +95,7 @@ public class test {
 		thighExcel.generateExcel();
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
-		
-		Map<String,List<List<Integer>>> condemnMap = new HashMap<>();
-		
-		
-		
+				
 		recapGenMarel recapGen = new recapGenMarel("Lam", thighExcel, drumExcel, wingExcel,null); 
 		recapGen.generateExcel();
     	

@@ -72,6 +72,7 @@ import paperwork.dsi.paperworkDSIGen;
 import paperwork.gen.carcassGen;
 import paperwork.gen.drumGen;
 import paperwork.gen.recapGen;
+import paperwork.gen.recapGenMarel;
 import paperwork.gen.tenderGen;
 import paperwork.gen.thighGen;
 import paperwork.gen.wingGen;
@@ -84,8 +85,9 @@ public class paperworkMarelGen{
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
+	private Map<String,List<List<Integer>>> condemnMap;
 	private boolean pdfOnly,sendEmail;
-	public paperworkMarelGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> condemnList,boolean pdfOnly,boolean sendEmail)
+	public paperworkMarelGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,Map<String,List<List<Integer>>> condemnMap,boolean pdfOnly,boolean sendEmail)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -93,6 +95,7 @@ public class paperworkMarelGen{
 		this.orderNum = orderNum;
 		this.reworkOrderNum = reworkOrderNum;
 		this.name = name;
+		this.condemnMap = condemnMap;
 		this.times = times;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
@@ -377,6 +380,12 @@ public class paperworkMarelGen{
 			}
 		}
 		
+		thighExcel.generateExcel();
+		wingExcel.generateExcel();
+		drumExcel.generateExcel();
+		
+		recapGenMarel recapGen = new recapGenMarel(name, thighExcel, drumExcel, wingExcel,condemnMap); 
+		recapGen.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
