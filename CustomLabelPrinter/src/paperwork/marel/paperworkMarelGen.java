@@ -399,7 +399,7 @@ public class paperworkMarelGen{
         {
         	openPDFfile();
         } else {
-        	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
+        	//sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
         }
 	}
 	
