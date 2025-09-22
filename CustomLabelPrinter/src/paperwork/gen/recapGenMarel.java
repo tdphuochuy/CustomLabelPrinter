@@ -93,7 +93,31 @@ public class recapGenMarel extends excelGen{
 	        	setCellValue(sheet, "C", 22, formatDouble(drum.getBreak2Weight()));
 	        	setCellValue(sheet, "D", 22, formatDouble(drum.getBreak3Weight()));
 	        	setCellValue(sheet, "E", 22, formatDouble(drum.getTotalWeight()));
+	        	
+	        	//wing tips
+	        	setCellValue(sheet, "B", 17, String.valueOf(condemnMap.get("wingtips").get(0)));
+	        	setCellValue(sheet, "C", 17, String.valueOf(condemnMap.get("wingtips").get(1)));
+	        	setCellValue(sheet, "D", 17, String.valueOf(condemnMap.get("wingtips").get(2)));
+	        	setCellValue(sheet, "E", 17, String.valueOf(getCondemnWeightTotal(condemnMap.get("wingtips"))));
 
+	        	//wings
+	        	setCellValue(sheet, "B", 16, String.valueOf(condemnMap.get("wings").get(0)));
+	        	setCellValue(sheet, "C", 16, String.valueOf(condemnMap.get("wings").get(1)));
+	        	setCellValue(sheet, "D", 16, String.valueOf(condemnMap.get("wings").get(2)));
+	        	setCellValue(sheet, "E", 16, String.valueOf(getCondemnWeightTotal(condemnMap.get("wings"))));
+	        	
+	        	//lollipop
+	        	setCellValue(sheet, "B", 15, String.valueOf(condemnMap.get("lollipop").get(0)));
+	        	setCellValue(sheet, "C", 15, String.valueOf(condemnMap.get("lollipop").get(1)));
+	        	setCellValue(sheet, "D", 15, String.valueOf(condemnMap.get("lollipop").get(2)));
+	        	setCellValue(sheet, "E", 15, String.valueOf(getCondemnWeightTotal(condemnMap.get("lollipop"))));
+	        	
+	        	//miscut
+	        	setCellValue(sheet, "B", 14, String.valueOf(condemnMap.get("miscut").get(0)));
+	        	setCellValue(sheet, "C", 14, String.valueOf(condemnMap.get("miscut").get(1)));
+	        	setCellValue(sheet, "D", 14, String.valueOf(condemnMap.get("miscut").get(2)));
+	        	setCellValue(sheet, "E", 14, String.valueOf(getCondemnWeightTotal(condemnMap.get("miscut"))));
+	        	
 	            // Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
@@ -109,5 +133,32 @@ public class recapGenMarel extends excelGen{
 	public void generateRecap2()
 	{
 		
+	}
+	
+	public int getCondemnWeight(List<Integer> list)
+	{
+		int weight = 0;
+		
+		for(int condemn: list)
+		{
+			weight += condemn;
+		}
+		
+		return weight;
+	}
+	
+	public int getCondemnWeightTotal(List<List<Integer>> list)
+	{
+		int weight = 0;
+		
+		for(List<Integer> innerList: list)
+		{
+			for(int condemn: innerList)
+			{
+				weight += condemn;
+			}
+		}
+		
+		return weight;
 	}
 }
