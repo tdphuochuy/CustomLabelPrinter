@@ -87,6 +87,7 @@ public class paperworkMarelGen{
 	private List<Double> issuedList2 = new ArrayList<>();
 	private Map<String,List<List<Integer>>> condemnMap;
 	private boolean pdfOnly,sendEmail;
+	private Element transactionTable;
 	public paperworkMarelGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,Map<String,List<List<Integer>>> condemnMap,boolean pdfOnly,boolean sendEmail)
 	{
 		this.frame = frame;
@@ -231,6 +232,10 @@ public class paperworkMarelGen{
 	
 	public Element getData(String orderNum,String searchKey)
 	{
+		if(searchKey.equals("transaction id") && transactionTable != null) {
+			return transactionTable;
+		}
+		
 		OkHttpClient client = new OkHttpClient();
 
 		FormBody formBody = new FormBody.Builder()
@@ -258,6 +263,10 @@ public class paperworkMarelGen{
             	{
             		if(table.html().toLowerCase().contains(searchKey.toLowerCase()))
             		{
+            			if(searchKey.equals("transaction id"))
+            			{
+            				transactionTable = table;
+            			}
             			return table;
             		}
             	}
