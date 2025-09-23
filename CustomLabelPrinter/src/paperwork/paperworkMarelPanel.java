@@ -266,7 +266,7 @@ public class paperworkMarelPanel extends JPanel{
 		{
 			if(table.getValueAt(i, position) != null)
 			{
-				int value = Integer.valueOf(table.getValueAt(i, position).toString());
+				int value = Integer.valueOf(table.getValueAt(i, position).toString().trim());
 				list.add(value);
 			}
 		}
