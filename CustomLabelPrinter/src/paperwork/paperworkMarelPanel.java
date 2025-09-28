@@ -166,6 +166,12 @@ public class paperworkMarelPanel extends JPanel{
         scrollPane3.setPreferredSize(new Dimension(275, 100));
         scrollPane3.setBorder(BorderFactory.createTitledBorder("Go home"));
         
+        JPanel floormanPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JTextField floormanName = new JTextField("Donovan",8);
+        floormanPanel.add(new JLabel("Floor man: "));
+        floormanPanel.add(floormanName);
+        
+        comdemnPanel.add(floormanPanel);
         comdemnPanel.add(scrollPane);        
         comdemnPanel.add(scrollPane2);      
         comdemnPanel.add(scrollPane3);        
@@ -208,7 +214,7 @@ public class paperworkMarelPanel extends JPanel{
               				
               				
               				new Thread(() -> {
-              					paperworkMarelGen ppw = new paperworkMarelGen(frame,username,password,orderNum,reworkOrderNum,name,times,condemnMap,pdfOnlycb.isSelected(),sendEmailcb.isSelected());
+              					paperworkMarelGen ppw = new paperworkMarelGen(frame,username,password,orderNum,reworkOrderNum,name,floormanName.getText(),times,condemnMap,pdfOnlycb.isSelected(),sendEmailcb.isSelected());
 		             			 try {
 									ppw.start();
 								} catch (ParseException | InterruptedException | IOException e1) {

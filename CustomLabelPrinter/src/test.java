@@ -96,7 +96,7 @@ public class test {
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
 				
-		recapGenMarel recapGen = new recapGenMarel("Lam", thighExcel, drumExcel, wingExcel,null); 
+		recapGenMarel recapGen = new recapGenMarel("Lam","Donovan", thighExcel, drumExcel, wingExcel,null); 
 		recapGen.generateExcel();
     	
     }

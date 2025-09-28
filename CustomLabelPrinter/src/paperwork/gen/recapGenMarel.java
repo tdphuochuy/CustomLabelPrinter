@@ -12,13 +12,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import config.Config;
 
 public class recapGenMarel extends excelGen{
-	private String name;
+	private String name,floormanName;
 	private thighGen thigh;
 	private drumGen drum;
 	private wingGen wing;
 	private Map<String,List<List<Integer>>> condemnMap;
-	public recapGenMarel(String name, thighGen thigh, drumGen drum, wingGen wing, Map<String,List<List<Integer>>> condemnMap) {
+	public recapGenMarel(String name, String floormanName, thighGen thigh, drumGen drum, wingGen wing, Map<String,List<List<Integer>>> condemnMap) {
 		this.name = name;
+		this.floormanName = floormanName;
 		this.thigh = thigh;
 		this.drum = drum;
 		this.wing = wing;

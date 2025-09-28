@@ -78,7 +78,7 @@ import paperwork.gen.thighGen;
 import paperwork.gen.wingGen;
 
 public class paperworkMarelGen{
-	private String username,password,orderNum,reworkOrderNum,name;
+	private String username,password,orderNum,reworkOrderNum,name,floormanName;
 	private int[] times;
 	private String sessionId = "";
 	private String recipient = "tdphuochuy@gmail.com";
@@ -88,7 +88,7 @@ public class paperworkMarelGen{
 	private Map<String,List<List<Integer>>> condemnMap;
 	private boolean pdfOnly,sendEmail;
 	private Element transactionTable;
-	public paperworkMarelGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,Map<String,List<List<Integer>>> condemnMap,boolean pdfOnly,boolean sendEmail)
+	public paperworkMarelGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,String floormanName, int[] times,Map<String,List<List<Integer>>> condemnMap,boolean pdfOnly,boolean sendEmail)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -96,6 +96,7 @@ public class paperworkMarelGen{
 		this.orderNum = orderNum;
 		this.reworkOrderNum = reworkOrderNum;
 		this.name = name;
+		this.floormanName = floormanName;
 		this.condemnMap = condemnMap;
 		this.times = times;
 		this.pdfOnly = pdfOnly;
@@ -393,7 +394,7 @@ public class paperworkMarelGen{
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
 		
-		recapGenMarel recapGen = new recapGenMarel(name, thighExcel, drumExcel, wingExcel,condemnMap); 
+		recapGenMarel recapGen = new recapGenMarel(name,floormanName, thighExcel, drumExcel, wingExcel,condemnMap); 
 		recapGen.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);
