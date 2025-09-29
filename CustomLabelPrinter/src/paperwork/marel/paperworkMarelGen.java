@@ -85,6 +85,7 @@ public class paperworkMarelGen{
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
+	private List<String> reworkProductCodeList = new ArrayList<>();
 	private Map<String,List<List<Integer>>> condemnMap;
 	private boolean pdfOnly,sendEmail;
 	private Element transactionTable;
@@ -101,6 +102,14 @@ public class paperworkMarelGen{
 		this.times = times;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
+		reworkProductCodeList.add("100570");
+		reworkProductCodeList.add("100590");
+		reworkProductCodeList.add("100627");
+		reworkProductCodeList.add("100504");
+		reworkProductCodeList.add("248422");
+		reworkProductCodeList.add("248409");
+		reworkProductCodeList.add("110568");
+		reworkProductCodeList.add("101047");
 		sessionId = getSessionId();
 	}
 	
@@ -108,21 +117,22 @@ public class paperworkMarelGen{
 	{
 		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
+		Map<String,List<Product>> reworkMap = new TreeMap<>();
 
 		Element dataTable = getData(orderNum,username);
-		extractData(productMap,dataTable);
+		extractData(productMap,reworkMap,dataTable);
 		if(reworkOrderNum.length() > 0)
 		{
 			System.out.println("Found rework!!");
 			Element dataTableRework = getData(reworkOrderNum,username);
 			if(dataTableRework != null)
 			{
-				extractData(productMap,dataTableRework);
+				extractData(productMap,reworkMap,dataTableRework);
 			}
 			getIssuedData(reworkOrderNum);
 		}
 		
-		evaluateData(productMap);
+		evaluateData(productMap,reworkMap);
 	}
 	
 	public void getIssuedData(String orderNum)
@@ -281,7 +291,7 @@ public class paperworkMarelGen{
 		return null;
 	}
 	
-	public void extractData(Map<String,Product> map,Element table) throws ParseException
+	public void extractData(Map<String,Product> map,Map<String,List<Product>> reworkMap,Element table) throws ParseException
 	{
 		InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/product_data.json");
         String inputData = new BufferedReader(new InputStreamReader(inputStream))
@@ -337,6 +347,15 @@ public class paperworkMarelGen{
 				}
 				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
 				String type = getType(description);
+				if(reworkProductCodeList.contains(itemPack))
+				{
+					if(!reworkMap.containsKey(itemPack))
+					{
+						reworkMap.put(itemPack, new ArrayList<Product>());
+					}
+					reworkMap.get(itemPack).add(new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
+					continue;
+				}
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
 			}
 		}
@@ -360,7 +379,7 @@ public class paperworkMarelGen{
 		return 0;
 	}
 	
-	public void evaluateData(Map<String,Product> map) throws InterruptedException, IOException
+	public void evaluateData(Map<String,Product> map,Map<String,List<Product>> reworkMap) throws InterruptedException, IOException
 	{
     	thighGen thighExcel = new thighGen(times);
     	wingGen wingExcel = new wingGen(times);
@@ -394,7 +413,7 @@ public class paperworkMarelGen{
 		wingExcel.generateExcel();
 		drumExcel.generateExcel();
 		
-		recapGenMarel recapGen = new recapGenMarel(name,floormanName, thighExcel, drumExcel, wingExcel,condemnMap); 
+		recapGenMarel recapGen = new recapGenMarel(name,floormanName,reworkMap,thighExcel, drumExcel, wingExcel,condemnMap); 
 		recapGen.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);

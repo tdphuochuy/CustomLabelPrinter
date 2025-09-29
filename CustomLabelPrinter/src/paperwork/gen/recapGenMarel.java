@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import config.Config;
+import paperwork.Product;
 
 public class recapGenMarel extends excelGen{
 	private String name,floormanName;
@@ -17,18 +18,24 @@ public class recapGenMarel extends excelGen{
 	private drumGen drum;
 	private wingGen wing;
 	private Map<String,List<List<Integer>>> condemnMap;
-	public recapGenMarel(String name, String floormanName, thighGen thigh, drumGen drum, wingGen wing, Map<String,List<List<Integer>>> condemnMap) {
+	private Map<String,List<Product>> reworkMap;
+	public recapGenMarel(String name, String floormanName,Map<String,List<Product>> reworkMap, thighGen thigh, drumGen drum, wingGen wing, Map<String,List<List<Integer>>> condemnMap) {
 		this.name = name;
 		this.floormanName = floormanName;
 		this.thigh = thigh;
 		this.drum = drum;
 		this.wing = wing;
 		this.condemnMap = condemnMap;
+		this.reworkMap = reworkMap;
 	}
 	
 	@Override
 	public void setDate(Sheet sheet) {
     	setCellValue(sheet, "E", 6, getDate("MM/dd/yyyy"));
+	}
+	
+	public void setDate2(Sheet sheet) {
+    	setCellValue(sheet, "C", 3, getDate("MM/dd/yyyy"));
 	}
 	
 	public void setName(Sheet sheet) {
@@ -133,7 +140,36 @@ public class recapGenMarel extends excelGen{
 	
 	public void generateRecap2()
 	{
-		
+		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
+	             Workbook workbook = new XSSFWorkbook(fis)) {
+
+	            Sheet sheet = workbook.getSheetAt(4); 
+
+	            setDate2(sheet);
+	            //clear(workbook,sheet);
+	            
+	            
+	            //set rework
+	            if(reworkMap.containsKey("248422"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("248422"))
+	            	{
+	            		setCellValue(sheet,i,29,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            }
+	        	
+	            // Save changes
+	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
+	                workbook.write(fos);
+	            }
+
+	            System.out.println("Cell updated successfully!");
+	            
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 	}
 	
 	public int getCondemnWeight(List<Integer> list)

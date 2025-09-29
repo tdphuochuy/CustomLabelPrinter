@@ -59,7 +59,7 @@ public class NeoWhistlePanel extends JPanel {
         hourSequenceMap.put("16605", new TableEntry("now","8000"));
         hourSequenceMap.put("17333", new TableEntry("now","8000"));
         hourSequenceMap.put("22258", new TableEntry("now","8000"));
-        hourSequenceMap.put("21102", new TableEntry("now","8000"));
+        //hourSequenceMap.put("21102", new TableEntry("now","8000"));
         hourSequenceMap.put("22777", new TableEntry("now","8000"));
 
         // User Input Console
