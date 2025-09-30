@@ -150,6 +150,7 @@ public class recapGenMarel extends excelGen{
 	            
 	            
 	            //set rework
+	            //coneline
 	            if(reworkMap.containsKey("248422"))
 	            {
 	            	int i = 3;
@@ -158,6 +159,73 @@ public class recapGenMarel extends excelGen{
 	            		setCellValue(sheet,i,29,formatDouble(product.getWeight()));
 	            		i = i+ 2;
 	            	}
+	            	
+	            	setCellValue(sheet,"P",29,formatDouble(getReworkWeightTotal("248422")));
+	            }
+	            
+	            //thigh
+	            if(reworkMap.containsKey("100504"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("100504"))
+	            	{
+	            		setCellValue(sheet,i,30,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            	
+	            	setCellValue(sheet,"P",30,formatDouble(getReworkWeightTotal("100504")));
+	            }
+	            
+	            //leg 1/4
+	            if(reworkMap.containsKey("101047"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("101047"))
+	            	{
+	            		setCellValue(sheet,i,31,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            	
+	            	setCellValue(sheet,"P",31,formatDouble(getReworkWeightTotal("101047")));
+	            }
+	            
+	            //drum stick
+	            if(reworkMap.containsKey("100570"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("100570"))
+	            	{
+	            		setCellValue(sheet,i,32,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            	
+	            	setCellValue(sheet,"P",32,formatDouble(getReworkWeightTotal("100570")));
+	            }
+	            
+	            //Whole wings
+	            if(reworkMap.containsKey("100627"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("100627"))
+	            	{
+	            		setCellValue(sheet,i,33,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            	
+	            	setCellValue(sheet,"P",33,formatDouble(getReworkWeightTotal("100627")));
+	            }
+	            
+	          //Split wings
+	            if(reworkMap.containsKey("100590"))
+	            {
+	            	int i = 3;
+	            	for(Product product: reworkMap.get("100590"))
+	            	{
+	            		setCellValue(sheet,i,34,formatDouble(product.getWeight()));
+	            		i = i+ 2;
+	            	}
+	            	
+	            	setCellValue(sheet,"P",34,formatDouble(getReworkWeightTotal("100590")));
 	            }
 	        	
 	            // Save changes
@@ -197,5 +265,17 @@ public class recapGenMarel extends excelGen{
 		}
 		
 		return weight;
+	}
+	
+	public double getReworkWeightTotal(String itemPack)
+	{
+		double total = 0;
+		
+		for(Product product: reworkMap.get(itemPack))
+		{
+			total += product.getWeight();
+		}
+		
+		return total;
 	}
 }
