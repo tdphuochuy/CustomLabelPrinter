@@ -53,6 +53,7 @@ public class recapGenMarel extends excelGen{
 		// TODO Auto-generated method stub
 		generateRecap1();
 		generateRecap2();
+		generateCondemnSheet();
 	}
 	
 	public void generateRecap1()
@@ -227,6 +228,29 @@ public class recapGenMarel extends excelGen{
 	            	
 	            	setCellValue(sheet,"P",34,formatDouble(getReworkWeightTotal("100590")));
 	            }
+	        	
+	            // Save changes
+	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
+	                workbook.write(fos);
+	            }
+
+	            System.out.println("Cell updated successfully!");
+	            
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	}
+	
+	public void generateCondemnSheet()
+	{
+		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
+	             Workbook workbook = new XSSFWorkbook(fis)) {
+
+	            Sheet sheet = workbook.getSheetAt(4); 
+
+	            setDate2(sheet);
+	            //clear(workbook,sheet);
+	            
 	        	
 	            // Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
