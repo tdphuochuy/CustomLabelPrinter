@@ -38,6 +38,10 @@ public class recapGenMarel extends excelGen{
     	setCellValue(sheet, "C", 3, getDate("MM/dd/yyyy"));
 	}
 	
+	public void setDate3(Sheet sheet) {
+    	setCellValue(sheet, "B", 2, getDate("MM/dd/yyyy"));
+	}
+	
 	public void setName(Sheet sheet) {
     	setCellValue(sheet, "B", 6, name);
 	}
@@ -246,12 +250,139 @@ public class recapGenMarel extends excelGen{
 		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
-	            Sheet sheet = workbook.getSheetAt(4); 
+	            Sheet sheet = workbook.getSheetAt(5); 
 
-	            setDate2(sheet);
+	            setDate3(sheet);
 	            //clear(workbook,sheet);
 	            
-	        	
+	            int currentRow = 5;
+	            
+            	setCellValue(sheet,"B",currentRow,floormanName);
+            	
+            	//Set wings break 1
+	            for(Integer weight: condemnMap.get("wings").get(0))
+	            {
+	            	setCellValue(sheet,"C",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //set wingtips break1
+	            int currentColumn = 3;
+	            for(Integer weight: condemnMap.get("wingtips").get(0))
+	            {
+	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
+	            	currentColumn++;
+	            	if(currentColumn > 3)
+	            	{ 
+	            		currentColumn = 3;
+	            		currentRow++;
+	            	}
+	            }
+	            if(currentColumn > 3)
+	            {
+	            	currentRow++;
+	            }
+	            
+	            //Set lollipop break 1
+	            for(Integer weight: condemnMap.get("lollipop").get(0))
+	            {
+	            	setCellValue(sheet,"G",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //Set miscut break 1
+	            for(Integer weight: condemnMap.get("miscut").get(0))
+	            {
+	            	setCellValue(sheet,"H",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+            	setCellValue(sheet,"B",currentRow,floormanName);
+            	
+            	//Set wings break 2
+	            for(Integer weight: condemnMap.get("wings").get(1))
+	            {
+	            	setCellValue(sheet,"C",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //set wingtips break 2
+	            currentColumn = 3;
+	            for(Integer weight: condemnMap.get("wingtips").get(1))
+	            {
+	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
+	            	currentColumn++;
+	            	if(currentColumn > 3)
+	            	{ 
+	            		currentColumn = 3;
+	            		currentRow++;
+	            	}
+	            }
+	            if(currentColumn > 3)
+	            {
+	            	currentRow++;
+	            }
+	            
+	            //Set lollipop break 2
+	            for(Integer weight: condemnMap.get("lollipop").get(1))
+	            {
+	            	setCellValue(sheet,"G",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //Set miscut break 2
+	            for(Integer weight: condemnMap.get("miscut").get(1))
+	            {
+	            	setCellValue(sheet,"H",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+            	setCellValue(sheet,"B",currentRow,floormanName);
+
+            	//Set wings break 3
+	            for(Integer weight: condemnMap.get("wings").get(2))
+	            {
+	            	setCellValue(sheet,"C",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //set wingtips break 3
+	            currentColumn = 3;
+	            for(Integer weight: condemnMap.get("wingtips").get(2))
+	            {
+	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
+	            	currentColumn++;
+	            	if(currentColumn > 3)
+	            	{ 
+	            		currentColumn = 3;
+	            		currentRow++;
+	            	}
+	            }
+	            if(currentColumn > 3)
+	            {
+	            	currentRow++;
+	            }
+	            
+	            //Set lollipop break 3
+	            for(Integer weight: condemnMap.get("lollipop").get(2))
+	            {
+	            	setCellValue(sheet,"G",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	            //Set miscut break 3
+	            for(Integer weight: condemnMap.get("miscut").get(2))
+	            {
+	            	setCellValue(sheet,"H",currentRow,String.valueOf(weight));
+	            	currentRow++;
+	            }
+	            
+	        	setCellValue(sheet, "C", 30, String.valueOf(getCondemnWeightTotal(condemnMap.get("wings"))));
+	        	setCellValue(sheet, "D", 30, String.valueOf(getCondemnWeightTotal(condemnMap.get("wingtips"))));
+	        	setCellValue(sheet, "G", 30, String.valueOf(getCondemnWeightTotal(condemnMap.get("lollipop"))));
+	        	setCellValue(sheet, "H", 30, String.valueOf(getCondemnWeightTotal(condemnMap.get("miscut"))));
+
+	            
 	            // Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
