@@ -272,7 +272,7 @@ public class recapGenMarel extends excelGen{
 	            {
 	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
 	            	currentColumn++;
-	            	if(currentColumn > 3)
+	            	if(currentColumn > 5)
 	            	{ 
 	            		currentColumn = 3;
 	            		currentRow++;
@@ -312,7 +312,7 @@ public class recapGenMarel extends excelGen{
 	            {
 	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
 	            	currentColumn++;
-	            	if(currentColumn > 3)
+	            	if(currentColumn > 5)
 	            	{ 
 	            		currentColumn = 3;
 	            		currentRow++;
@@ -352,7 +352,7 @@ public class recapGenMarel extends excelGen{
 	            {
 	            	setCellValue(sheet,currentColumn,currentRow,String.valueOf(weight));
 	            	currentColumn++;
-	            	if(currentColumn > 3)
+	            	if(currentColumn > 5)
 	            	{ 
 	            		currentColumn = 3;
 	            		currentRow++;
