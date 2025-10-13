@@ -13,8 +13,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,8 +41,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import config.Config;
@@ -142,7 +149,20 @@ public class paperworkMarelPanel extends JPanel{
         Object[][] data = new Object[7][4];
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
 
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+					saveTableData(model, "1");
+				} catch (IOException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+        });
+        
         JTable table = new JTable(model);
+        table.putClientProperty("terminateEditOnFocusLost", true);
         // Scroll pane with table
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(275, 100));
@@ -151,7 +171,21 @@ public class paperworkMarelPanel extends JPanel{
         
         Object[][] data2 = new Object[7][4];
         DefaultTableModel model2 = new DefaultTableModel(data2, columnNames);
+        
+        model2.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+					saveTableData(model2, "2");
+				} catch (IOException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+        });
+        
         JTable table2 = new JTable(model2);
+        table2.putClientProperty("terminateEditOnFocusLost", true);
         // Scroll pane with table
         JScrollPane scrollPane2 = new JScrollPane(table2);
         scrollPane2.setPreferredSize(new Dimension(275, 100));
@@ -160,7 +194,21 @@ public class paperworkMarelPanel extends JPanel{
         
         Object[][] data3 = new Object[7][4];
         DefaultTableModel model3 = new DefaultTableModel(data3, columnNames);
+        
+        model3.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                try {
+					saveTableData(model3, "3");
+				} catch (IOException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+        });
+        
         JTable table3 = new JTable(model3);
+        table3.putClientProperty("terminateEditOnFocusLost", true);
         // Scroll pane with table
         JScrollPane scrollPane3 = new JScrollPane(table3);
         scrollPane3.setPreferredSize(new Dimension(275, 100));
@@ -170,6 +218,29 @@ public class paperworkMarelPanel extends JPanel{
         JTextField floormanName = new JTextField("Donovan",8);
         floormanPanel.add(new JLabel("Floor man: "));
         floormanPanel.add(floormanName);
+        
+        JButton clearTableButton = new JButton("Clear tables");
+        
+        clearTableButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int rowCount = model.getRowCount();
+            	int colCount = model.getColumnCount();
+
+            	for (int row = 0; row < rowCount; row++) {
+            	    for (int col = 0; col < colCount; col++) {
+            	        model.setValueAt(null, row, col);  // or "" for empty string
+            	        model2.setValueAt(null, row, col);  // or "" for empty string
+            	        model3.setValueAt(null, row, col);  // or "" for empty string
+            	    }
+            	}
+            }
+        });
+        
+        clearTableButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        clearTableButton.setBackground(Color.white);
+        floormanPanel.add(clearTableButton);
+
         
         comdemnPanel.add(floormanPanel);
         comdemnPanel.add(scrollPane);        
@@ -251,6 +322,54 @@ public class paperworkMarelPanel extends JPanel{
         
         this.add(splitPanel);
 
+        LocalTime now = LocalTime.now();
+        LocalTime start = LocalTime.of(17, 0); // 5:00 PM
+        LocalTime end = LocalTime.of(5, 0);    // 5:00 AM
+
+        boolean isBetween;
+
+        // handle the overnight range (crossing midnight)
+        if (start.isBefore(end)) {
+            // e.g. 5 AM to 5 PM — same day range
+            isBetween = !now.isBefore(start) && now.isBefore(end);
+        } else {
+            // e.g. 5 PM to 5 AM — crosses midnight
+            isBetween = !now.isBefore(start) || now.isBefore(end);
+        }
+        
+        if(isBetween)
+        {
+        	try {
+				loadCondemnData(model,"1");
+	        	loadCondemnData(model2,"2");
+	        	loadCondemnData(model3,"3");
+			} catch (IOException | ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        } else {
+        	clearTableButton.doClick();
+        }
+	}
+	
+	public void loadCondemnData(DefaultTableModel model, String tableName) throws IOException, ParseException
+	{
+		JSONParser jsonParser = new JSONParser();
+		FileReader reader = new FileReader("condemn.json");
+	    JSONObject obj = (JSONObject)jsonParser.parse(reader);
+	    
+	    if(obj.get(tableName) != null)
+	    {
+	    	JSONArray array = (JSONArray) obj.get(tableName);
+	    	for(int i = 0; i < array.size();i++)
+	    	{
+	    		JSONArray valueArray = (JSONArray) array.get(i);
+	    		for(int j = 0; j < valueArray.size();j++)
+	    		{
+		    		model.setValueAt(valueArray.get(j),j,i);
+	    		}
+	    	}
+	    }
 	}
 	
 	public void setCondemnMap(Map<String,List<List<Integer>>> condemnMap,String key,int position,JTable table1,JTable table2, JTable table3)
@@ -282,6 +401,43 @@ public class paperworkMarelPanel extends JPanel{
 		}
 		
 		return list;
+	}
+	
+	public void saveTableData(DefaultTableModel model, String tableName) throws IOException, ParseException
+	{
+		JSONParser jsonParser = new JSONParser();
+		FileReader reader = new FileReader("condemn.json");
+	    JSONObject obj = (JSONObject)jsonParser.parse(reader);
+	    
+	    JSONArray array = new JSONArray();
+	    
+	    int rowCount = model.getRowCount();
+        int colCount = model.getColumnCount();
+	    for(int i = 0;i < colCount; i++)
+	    {
+	    	JSONArray valueArray = new JSONArray();
+	    	for(int j = 0; j < rowCount; j++)
+	    	{
+	    		if( model.getValueAt(j,i) != null)
+	    		{
+		    		String valueString =  model.getValueAt(j,i).toString().trim();
+		    		if(valueString.length() > 0)
+					{
+						int value = Integer.valueOf(valueString);
+						valueArray.add(value);
+					}
+	    		}
+	    	}
+	    	array.add(valueArray);
+	    }
+	    
+	    obj.put(tableName,array);
+	    
+	    
+	    FileWriter file = new FileWriter("condemn.json");
+        file.write(obj.toJSONString());
+        file.flush();
+        file.close();
 	}
 	
     // Method to set the placeholder text
