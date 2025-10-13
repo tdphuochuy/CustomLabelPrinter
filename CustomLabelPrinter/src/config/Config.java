@@ -7,10 +7,10 @@ public class Config {
     public static String officePrinterIP = "167.110.88.204";
     public static String officePrinter2IP = "167.110.88.200";
     
-    public static String username = "lcuevas";
-    public static String password = "0403";
+    public static String username = "pmambo";
+    public static String password = "4292";
     
-    public static String neowhistlePassword = "thanhnhan011695";
+    public static String neowhistlePassword = "huyhuyhuy123";
     
     public static String webSocketproxyIP = "154.12.13.186";
     public static int webSocketproxyPort = 5490;
