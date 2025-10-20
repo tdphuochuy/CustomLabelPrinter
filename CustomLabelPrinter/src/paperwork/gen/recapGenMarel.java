@@ -153,7 +153,22 @@ public class recapGenMarel extends excelGen{
 	            setDate2(sheet);
 	            //clear(workbook,sheet);
 	            
+	            //set wing
+	        	setCellValue(sheet, "H", 8, formatDouble(wing.getTotalWeight()));
 	            
+	        	//set thigh
+	        	setCellValue(sheet, "H", 13, formatDouble(thigh.getTotalWeight()));
+	        	
+	        	//set drumstick
+	        	setCellValue(sheet, "H", 18, formatDouble(drum.getTotalWeight()));
+	        	
+	        	//set carcass
+	        	setCellValue(sheet, "H", 21, formatDouble(drum.getTotalCarcass()));
+	        	
+	        	//set wogs & legs
+	        	setCellValue(sheet, "H", 22, formatDouble(drum.getTotalWog()));
+	        	setCellValue(sheet, "H", 23, formatDouble(drum.getTotalLeg()));
+
 	            //set rework
 	            //coneline
 	            if(reworkMap.containsKey("248422"))
