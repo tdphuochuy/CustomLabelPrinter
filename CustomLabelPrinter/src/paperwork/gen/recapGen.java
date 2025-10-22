@@ -148,7 +148,7 @@ public class recapGen extends excelGen{
 	        			currentRow = 36;
 	        		}
 	        		String weightString = formatDouble(product.getWeight());
-	        		if(!weightString.endsWith("40") && product.getWeight() >= 100) 
+	        		if(!weightString.endsWith("40") && product.getWeight() >= 100)
 	        		{
 	        			setCellValue(sheet, currentColumn, currentRow, weightString + " lbs*");
 	        		} else {
