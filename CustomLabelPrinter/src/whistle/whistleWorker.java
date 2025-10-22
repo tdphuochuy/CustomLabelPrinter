@@ -239,6 +239,10 @@ public class whistleWorker{
 				{
 					break;
 				}
+				if(checkCondition(telnet,"([0;7mOkay"))
+				{
+					return false;
+				}
 				if(prodNum.equals("22486") || prodNum.equals("21102"))
 				{
 					telnet.sendCommand(getArrowKey("down"));
