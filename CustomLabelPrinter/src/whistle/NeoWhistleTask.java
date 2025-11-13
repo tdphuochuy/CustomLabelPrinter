@@ -103,7 +103,7 @@ public class NeoWhistleTask implements Runnable {
 					userConsole.append("Rework type: Combo (1) or Cases (2)\n");
 	                userConsole.setCaretPosition(userConsole.getDocument().getLength());
 					String reworkType = scanner.nextLine();
-					if(reworkType.equals("2"))
+					if(reworkType.equals("2") && Integer.parseInt(quantity) > 200)
 					{
 						int newQuantity = Integer.parseInt(quantity) + 40;
 						quantity = String.valueOf(newQuantity);
