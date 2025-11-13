@@ -23,6 +23,6 @@ public class Config {
     public static String serverDomain = "erp-app-dc3826c87da0.herokuapp.com";
 
     public static String chatId = "DSI ERP";
-    public static int dayTimeSaving = 1;
+    public static int dayTimeSaving = 0;
     public static boolean chatServer = true;
 }
