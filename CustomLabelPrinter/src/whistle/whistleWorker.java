@@ -191,7 +191,7 @@ public class whistleWorker{
 		       {
 		    	   continue;
 		       }
-		       /*if(prodNum.equals("22486") || prodNum.equals("21102"))
+		       if(prodNum.equals("22486") || prodNum.equals("21102"))
 		       {
 		    	   String copiesNum = "4";
 		    	   if(!setCopiesQuantity(telnet,copiesNum))
@@ -200,7 +200,7 @@ public class whistleWorker{
 		    		   continue;
 		    	   }
 		    	   Thread.sleep(300);
-		       }*/
+		       }
 		       appendConsole("Bulding label\n");
 		       boolean success = buildLabel(telnet);
 		       if(success)
