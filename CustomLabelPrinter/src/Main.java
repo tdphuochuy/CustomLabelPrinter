@@ -301,7 +301,7 @@ public class Main {
        if (todayStr.equals("01-16")) {
            JOptionPane.showMessageDialog(
                null,
-               "Chúc mừng sinh nhật 😁\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh hay bệnh vặt nữa\nMong Nhãn luôn hạnh phúc dù sau này có ra sao.\nHơi khô khan nên chỉ chúc được nhiêu đây thui (┬﹏┬)\nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ❤️\n\nFrom: Người dưng ngược lối...",
+               "Chúc mừng sinh nhật 😁\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa\nMong Nhãn luôn hạnh phúc dù sau này có ra sao.\nHơi khô khan nên chỉ chúc được nhiêu đây thui (┬﹏┬)\nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ❤️\n\nFrom: Người dưng / hến vương",
                "Happy birthday!!!",
                JOptionPane.INFORMATION_MESSAGE
            );
