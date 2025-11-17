@@ -41,7 +41,9 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -287,5 +289,22 @@ public class Main {
                } catch (InterruptedException ignored) {}
            }
        });
+       
+       checkBirthday();
+   }
+   
+   private static void checkBirthday() {
+       LocalDate today = LocalDate.now();
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+       String todayStr = today.format(formatter);
+
+       if (todayStr.equals("01-16")) {
+           JOptionPane.showMessageDialog(
+               null,
+               "Chúc mừng sinh nhật 😁\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh hay bệnh vặt nữa\nMong Nhãn luôn hạnh phúc dù sau này có ra sao.\nHơi khô khan nên chỉ chúc được nhiêu đây thui (┬﹏┬)\nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ❤️\n\nFrom: Người dưng ngược lối...",
+               "Happy birthday!!!",
+               JOptionPane.INFORMATION_MESSAGE
+           );
+       }
    }
 }
