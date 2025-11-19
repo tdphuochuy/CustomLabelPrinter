@@ -54,7 +54,10 @@ public class carcassGen extends excelGen{
             //set total weight boxes
 	    	if(productMap.keySet().size() > 1)
 	    	{
-		    	setCellValue(sheet, "O", 39, formatDouble(getTotalWeightByProduct(productMap.get("10468"))) + " lbs");
+	        	String total = formatDouble(getTotalWeightByProduct(productMap.get("10468"))) + " lbs";
+        		total = total + "\n\n" + getTotalCaseByProduct(productMap.get("10468")) + " cs";
+
+		    	setCellValue(sheet, "O", 39, total);
 	    	}
 	    	
             // Save changes
