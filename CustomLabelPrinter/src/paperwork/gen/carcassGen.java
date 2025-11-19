@@ -38,15 +38,25 @@ public class carcassGen extends excelGen{
             		List<Product> list = map.get(hour); 
             		for(int i = 0; i < list.size();i++) { //for each product
             			Product product = list.get(i);
-            	    	setCellValue(sheet, columnLetter, i + 5, String.valueOf(product.getQuantity()));
+            			if(key.equals("21102"))
+            			{
+            				setCellValue(sheet, columnLetter, i + 5, String.valueOf(product.getQuantity()));
+            			} else {
+            				setCellValue(sheet, columnLetter, i + 39, String.valueOf(product.getQuantity()));
+            			}
             		}
             	}
             }
             
-            //set total weight
+            //set total weight 21102
 	    	setCellValue(sheet, "O", 5, formatDouble(getTotalWeightByProduct(productMap.get("21102"))) + " lbs");
 
-            
+            //set total weight boxes
+	    	if(productMap.keySet().size() > 1)
+	    	{
+		    	setCellValue(sheet, "O", 39, formatDouble(getTotalWeightByProduct(productMap.get("10468"))) + " lbs");
+	    	}
+	    	
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
                 workbook.write(fos);
