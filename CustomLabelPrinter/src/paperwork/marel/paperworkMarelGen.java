@@ -471,14 +471,14 @@ public class paperworkMarelGen{
 		if(description.contains("THGH"))
 		{
 			type = "thigh";
+		} else if (description.contains("FRNT 1/2 W/O")) {
+			type = "wog";
 		} else if (description.contains("WING"))
 		{
 			type = "wing";
 		} else if (description.contains("DRMS")) {
 			type = "drums";
-		} else if (description.contains("FRNT 1/2 W/O")) {
-			type = "wog";
-		} else if (description.contains("CARC") || description.contains("CKN BACKBONE AND TAILS"))
+		}  else if (description.contains("CARC") || description.contains("CKN BACKBONE AND TAILS"))
 		{
 			type = "carcass";
 		} 
