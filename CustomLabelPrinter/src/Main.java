@@ -298,11 +298,11 @@ public class Main {
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
        String todayStr = today.format(formatter);
 
-       if (todayStr.equals("01-16")) {
+       if (todayStr.equals("11-21")) {
            JOptionPane.showMessageDialog(
                null,
                "Chúc mừng sinh nhật 😁\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa\nMong Nhãn luôn mỉm cười dù sau này có ra sao, Nhãn cười xinh lắm :D\nHơi khô khan nên chỉ chúc được nhiêu đây thui (┬﹏┬)\nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ❤️\n\nLời chúc này được lập trình vào ngày 11/16/2025\nkhông biết lúc Nhãn đọc"+
-               " được những lời này thì mọi chuyện đã ra sao...\nFrom: Người dưng / hến vương",
+               " được những lời này thì mọi chuyện sẽ ra sao,\nchỉ cần biết mình từng thương Nhãn rất rất nhiều\n\nFrom: Người dưng / hến vương",
                "Happy birthday!!!",
                JOptionPane.INFORMATION_MESSAGE
            );
