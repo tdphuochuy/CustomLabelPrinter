@@ -302,7 +302,7 @@ public class Main {
            JOptionPane.showMessageDialog(
                null,
                "Chúc mừng tuổi 19 của Nhãnnnn!!! 😁\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa\nMong Nhãn luôn mỉm cười, như món quà, dù sau này có ra sao\nNhãn luôn xinh đẹp trong mắt mình, nhưng đẹp nhất khi cười đó :D\nHơi khô khan nên chỉ chúc được nhiêu đây thui (┬﹏┬)\nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ❤️\n\nLời chúc này được lập trình vào ngày 11/16/2025\nkhông biết lúc Nhãn đọc"+
-               " được những lời này thì mọi thứ sẽ thay đổi ra sao nhỉ?\nP.S: Dùng nó làm móc khóa xe nha...hay gì tùy Nhãn :/\n\nFrom: Người dưng / hến vương",
+               " được những lời này thì mọi thứ sẽ thay đổi ra sao nhỉ?\n\n\nFrom: Người dưng / hến vương",
                "Happy birthday!!!",
                JOptionPane.INFORMATION_MESSAGE
            );
