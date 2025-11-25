@@ -52,6 +52,11 @@
         <artifactId>poi-ooxml</artifactId>
         <version>5.2.3</version> <!-- use the latest version -->
     </dependency>
+    <dependency>
+    <groupId>com.github.DJ-Raven</groupId>
+    <artifactId>swing-emoji</artifactId>
+    <version>v1.0.1</version>
+</dependency>
 <dependency>
     <groupId>com.github.jiconfont</groupId>
     <artifactId>jiconfont-font_awesome</artifactId>
@@ -84,4 +89,10 @@
      <version>1.6.2</version>
  </dependency>
   </dependencies>
+  <repositories>
+	  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+  </repositories>
 </project>
