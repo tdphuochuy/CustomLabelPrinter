@@ -325,7 +325,7 @@ public class paperworkDSIPanel extends JPanel{
 				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
-										} catch (ParseException | InterruptedException | IOException e1) {
+										} catch (Exception e1) {
 											// TODO Auto-generated catch block
 											e1.printStackTrace();
 										}
