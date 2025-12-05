@@ -300,7 +300,7 @@ public class Main {
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
        String todayStr = today.format(formatter);
 
-       if (todayStr.equals("12-05")) {
+       if (todayStr.equals("01-16")) {
     	   EmojiIcon.getInstance().installEmojiSvg();
     	   
     	   JTextPane messageLabel = new JTextPane();
