@@ -306,7 +306,7 @@ public class Main {
 	           
 	           JPanel panel = new JPanel();
 	           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-	           panel.add(new Label("Bạn nhận được 1 lời nhắn. Nhập ngày sinh nhật (ddmmyy) của người dưng để xem!"));
+	           panel.add(new Label("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!"));
 	           panel.add(Box.createVerticalStrut(5));
 	           panel.add(passwordField);
 	           
