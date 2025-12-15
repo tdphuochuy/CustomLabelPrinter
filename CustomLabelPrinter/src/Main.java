@@ -301,26 +301,68 @@ public class Main {
        String todayStr = today.format(formatter);
 
        if (todayStr.equals("01-16")) {
-    	   EmojiIcon.getInstance().installEmojiSvg();
-    	   
-    	   JTextPane messageLabel = new JTextPane();
-    	   messageLabel.setEditorKit(new AutoWrapText(messageLabel));
+    	   while (true) {
+	           JPasswordField passwordField = new JPasswordField();
+	           
+	           JPanel panel = new JPanel();
+	           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	           panel.add(new Label("Bạn nhận được 1 lời nhắn. Nhập ngày sinh nhật (ddmmyy) của người dưng để xem!"));
+	           panel.add(Box.createVerticalStrut(5));
+	           panel.add(passwordField);
+	           
+	    	   int option = JOptionPane.showConfirmDialog(
+	                   null,
+	                   panel
+	                   ,
+	                   "Một thứ gì đó kì lạ vừa xuất hiện :D",
+	                   JOptionPane.OK_CANCEL_OPTION,
+	                   JOptionPane.PLAIN_MESSAGE
+	           );
+	
+        	   if (option != JOptionPane.OK_OPTION) {
+        		   System.out.println("hello there");
+                   break;
+               }
+        	   
+               String enteredPassword = new String(passwordField.getPassword());
 
-    	   // install this jtextpane to use emoji
-    	   EmojiIcon.getInstance().installTextPane(messageLabel);
+               // Correct password
+               String correctPassword = "270899";
 
-    	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, như món quà, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳 \nHơi khô khan, lạnh lùng boy nên chỉ chúc được nhiêu đây thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
-                   " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì xọt rác kế bên 😀😀\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
-    	   
-    	   messageLabel.setEditable(false);
-    	   
-           JOptionPane.showMessageDialog(
-               null,
-               messageLabel,
-               "Happy birthday!!!"
-               ,
-               JOptionPane.INFORMATION_MESSAGE
-           );
+               if (enteredPassword.equals(correctPassword)) {
+              	   EmojiIcon.getInstance().installEmojiSvg();
+            	   
+            	   JTextPane messageLabel = new JTextPane();
+            	   messageLabel.setEditorKit(new AutoWrapText(messageLabel));
+
+            	   // install this jtextpane to use emoji
+            	   EmojiIcon.getInstance().installTextPane(messageLabel);
+
+            	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, như món quà, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳 \nHơi khô khan, lạnh lùng boy nên chỉ chúc được nhiêu đây thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
+                           " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì xọt rác kế bên 😀😀\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
+            	   
+            	   messageLabel.setEditable(false);
+            	   
+                   JOptionPane.showMessageDialog(
+                       null,
+                       messageLabel,
+                       "Happy birthday!!!"
+                       ,
+                       JOptionPane.INFORMATION_MESSAGE
+                   );
+                   
+                   break;
+               } else {
+            	   JOptionPane.showMessageDialog(
+                           null,
+                           "Incorrect password. Try again.",
+                           "Error",
+                           JOptionPane.ERROR_MESSAGE
+                   );
+            	   
+            	   passwordField.setText("");
+               }
+    	   }
        }
    }
 }
