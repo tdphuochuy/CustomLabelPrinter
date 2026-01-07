@@ -212,7 +212,7 @@ public class countComboPanel extends JPanel{
             sbplCommand = sbplCommand + (productCode.length() > 0? "\u001BH410":"\u001BH360")  // Set horizontal position (H)
                                + "\u001BV" + startX2                                                                                           // Set vertical position (V)        // Print "G"
                                + "\u001BRH0,SATO0.ttf,0," + fontSizeString2 + "," + fontSizeString2 + "," + text2
-                               + "\u001BCS6"
+                               + "\u001BCS10"
                                + "\u001BQ" + quantity     // Print one label
                                + "\u001BZ";     // End SBPL command
 
