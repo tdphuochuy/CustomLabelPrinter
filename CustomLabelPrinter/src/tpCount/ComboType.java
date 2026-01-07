@@ -207,7 +207,7 @@ public class ComboType extends JPanel{
         }
         
         
-        sbplCommand = sbplCommand + "\u001BC10" + "\u001BQ" + quantity + "\u001BZ";     // End SBPL command
+        sbplCommand = sbplCommand + "\u001BCS10" + "\u001BQ" + quantity + "\u001BZ";     // End SBPL command
 
         try (Socket socket = new Socket(printerIP, port)) {
             OutputStream outputStream = socket.getOutputStream();
