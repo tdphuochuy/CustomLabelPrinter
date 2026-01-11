@@ -18,6 +18,8 @@ import chatSystem.ChatPanel;
 import config.Config;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
+import noclue.BFlookup;
+import noclue.FreePanel;
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -40,7 +42,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
@@ -59,7 +60,7 @@ public class Main {
    private static buttonsPanel buttons;
    private static paperworkDSIPanel ppwDSI;
    private static paperworkMarelPanel ppwMarel;
-   public static void main(String[] args) throws UnknownHostException, URISyntaxException, InterruptedException, ParseException {
+   public static void main(String[] args) throws URISyntaxException, InterruptedException, ParseException, IOException {
        // Create the main frame
        JFrame frame = new JFrame("Custom Label Printer");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,6 +98,9 @@ public class Main {
        JPanel freePanel = new JPanel();
        freePanel.add(new FreePanel(frame));
        
+       JPanel bfLookupPanel = new JPanel();
+       bfLookupPanel.add(new BFlookup(frame));
+       
        JPanel ppwDSIPanel = new JPanel();
        ppwDSI = new paperworkDSIPanel(frame);
        ppwDSIPanel.add(ppwDSI);
@@ -122,17 +126,23 @@ public class Main {
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, 12, Color.red), neoWhistlePanel);
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
        
-       JTabbedPane nestedTabs = new JTabbedPane();
-       nestedTabs.addTab("DSI", ppwDSIPanel);
-       nestedTabs.addTab("Marel", ppwMarelPanel);
-       tabbedPane.addTab("Paperwork", nestedTabs);
+       JTabbedPane paperworkTabs = new JTabbedPane();
+       paperworkTabs.addTab("DSI", ppwDSIPanel);
+       paperworkTabs.addTab("Marel", ppwMarelPanel);
+       tabbedPane.addTab("Paperwork", paperworkTabs);
+       
        tabbedPane.addTab("Reprint", reprintPanel);
        tabbedPane.addTab("Chat", new ChatPanel(frame,tabbedPane));
-       tabbedPane.addTab("no clue", freePanel);
+       
+       JTabbedPane noclueTabs = new JTabbedPane();
+       noclueTabs.addTab("Printing", freePanel);
+       noclueTabs.addTab("Backflush lookup", bfLookupPanel);
+       
+       tabbedPane.addTab("no clue", noclueTabs);
        
        //change nested tab color to be looking transparent
        UIManager.put("TabbedPane.contentAreaColor", new Color(238,238,238,255));		
-       SwingUtilities.updateComponentTreeUI(nestedTabs);
+       SwingUtilities.updateComponentTreeUI(paperworkTabs);
 
        // Add the tabbedPane to the frame
        frame.setLayout(new BorderLayout());
