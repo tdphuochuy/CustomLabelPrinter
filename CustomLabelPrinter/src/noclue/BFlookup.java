@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -151,11 +152,36 @@ public class BFlookup extends JPanel{
         // Preselect first key
         if (keysModel.getRowCount() > 0) keysTable.setRowSelectionInterval(0, 0);
 
+        JScrollPane keyScrollPane = new JScrollPane(keysTable);
+        
+        JScrollBar verticalScrollBar = keyScrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+        	@Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(Color.WHITE);
+                return button;
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+            	JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(Color.WHITE);
+                return button;
+            }
+
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(200, 200, 200);
+            }
+        });
+        
+        JScrollPane itemScrollPane = new JScrollPane(itemsTable);
 
     	JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
-                new JScrollPane(keysTable),
-                new JScrollPane(itemsTable)
+                keyScrollPane,
+                itemScrollPane
         );
     	splitPane.setResizeWeight(0.35);
     	
