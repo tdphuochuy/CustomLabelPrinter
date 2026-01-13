@@ -20,6 +20,7 @@ import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 import noclue.BFlookup;
 import noclue.FreePanel;
+import noclue.realWeight;
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -104,6 +105,9 @@ public class Main {
        JPanel bfLookupPanel = new JPanel();
        bfLookupPanel.add(new BFlookup(frame));
        
+       JPanel realWeightPanel = new JPanel();
+       realWeightPanel.add(new realWeight(frame));
+       
        JPanel ppwDSIPanel = new JPanel();
        ppwDSI = new paperworkDSIPanel(frame);
        ppwDSIPanel.add(ppwDSI);
@@ -140,7 +144,8 @@ public class Main {
        JTabbedPane noclueTabs = new JTabbedPane();
        noclueTabs.addTab("Printing", freePanel);
        noclueTabs.addTab("Backflush lookup", bfLookupPanel);
-       
+       noclueTabs.addTab("real Adage Weight", realWeightPanel);
+
        tabbedPane.addTab("no clue", noclueTabs);
        
        //change nested tab color to be looking transparent
