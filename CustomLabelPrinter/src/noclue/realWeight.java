@@ -88,7 +88,7 @@ public class realWeight extends JPanel{
         JLabel result = new JLabel("");
         resultPanel.add(result);
         
-        JButton button = new JButton("Submit");
+        JButton button = new JButton("Calculate");
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(Color.white);
         button.addActionListener(new ActionListener() {
