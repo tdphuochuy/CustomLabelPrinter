@@ -42,9 +42,12 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -360,6 +363,18 @@ public class Main {
                        ,
                        JOptionPane.INFORMATION_MESSAGE
                    );
+                   
+                   LocalDateTime now = LocalDateTime.now();
+                   formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                   String content = now.format(formatter);
+
+                   // Write to read.txt
+                   try {
+                       Files.write(Path.of("read.txt"), content.getBytes());
+                       System.out.println("File created and written successfully.");
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                    
                    break;
                } else {
