@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +18,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import paperwork.Product;
 
 public class SequenceGetter{
 	String sessionId = "";
@@ -146,6 +148,62 @@ public class SequenceGetter{
         }
 		
 		return "<h1>Error occured! Unable to get order response</h1>";
+	}
+	
+	public double getRealAdageWeight(String orderNum,String itemPack)
+	{
+		OkHttpClient client = new OkHttpClient();
+		FormBody formBody = new FormBody.Builder()
+                .add("fileName", "reports/SingleOrderProductionViewer.txt")
+                .add("Order", orderNum)
+                .add("submit1", "Go")
+                .add("r", "XMLReport")
+                .add("f", "n")
+                .add("session", sessionId)
+                .build();
+		
+		Request request = new Request.Builder()
+                .url("http://whistleclient/cgi-bin/yield/") // Example URL
+                .post(formBody)
+                .build();
+		
+		try (
+				Response response = client.newCall(request).execute()) {
+            if (response.code() == 200) {
+            	String body = response.body().string();
+            	Document doc = Jsoup.parse(body);
+            	Element bodyElement = doc.body();
+            	Element inputElement = bodyElement.select("[name=unnamed]").first();
+            	double totalWeight = 0;
+            	for(Element table : inputElement.getElementsByTag("table"))
+            	{
+            		if(table.html().contains("Reported At"))
+            		{
+            			for(Element tr : table.getElementsByTag("tr"))
+            			{            			
+            					String content = tr.html();
+            					if(content.toLowerCase().contains("href"))
+            					{
+	            					Elements td = tr.getElementsByTag("td");
+	            					String webItemPack = td.get(2).text() + td.get(3).text();
+	            					if(webItemPack.equals(itemPack))
+	            					{
+		            					double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
+		            					totalWeight = totalWeight + weight;
+	            					}
+            					}
+            			}
+            			return totalWeight;
+            		}
+            	}      
+            } else {
+            	System.out.println(response.code());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+		return 0;
 	}
 	
 	public int getSequenceLocal(String itemNum,String packNum,int hour,int sequence)

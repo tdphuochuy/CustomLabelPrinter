@@ -61,12 +61,71 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import config.Config;
 import paperwork.marel.paperworkMarelGen;
+import whistle.SequenceGetter;
 
 public class realWeight extends JPanel{
 	private JFrame frame;
 	public realWeight(JFrame frame) throws IOException, ParseException {
     	this.frame = frame;
-
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        JPanel orderNumPanel = new JPanel();
+        orderNumPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+        JLabel orderNumLbl = new JLabel("Order #");
+        JTextField orderNumInput = new JTextField(10);
+        orderNumPanel.add(orderNumLbl);
+        orderNumPanel.add(orderNumInput);
+        
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+        JLabel productLbl = new JLabel("ItemPack");
+        JTextField productInput = new JTextField(10);
+        productPanel.add(productLbl);
+        productPanel.add(productInput);
+        
+        JPanel resultPanel = new JPanel();
+        resultPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); 
+        JLabel result = new JLabel("");
+        resultPanel.add(result);
+        
+        JButton button = new JButton("Submit");
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setBackground(Color.white);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                button.setEnabled(false);
+                try {
+                	String orderNum = orderNumInput.getText();
+                	String product = productInput.getText();
+                	if(orderNum.length() > 0 && product.length() > 0)
+                	{
+                  	  SequenceGetter sequenceGetter = new SequenceGetter(Config.username,Config.password);
+                  	  double weight = sequenceGetter.getRealAdageWeight(orderNum, product);
+                  	  result.setText("Total: " + weight + " lbs");
+                	} else {
+	                       JOptionPane.showMessageDialog(frame, "Missing required input", "Error", JOptionPane.ERROR_MESSAGE);
+                	}
+                } catch (Exception ex)
+                {
+             	   
+                }
+                // Create a Timer to re-enable the button after a delay
+                Timer timer = new Timer(300, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        button.setEnabled(true); // Re-enable the button
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
+            }
+        });
+        
+        this.add(orderNumPanel);
+        this.add(productPanel);
+        this.add(resultPanel);
+        this.add(button);
 	}
 
     // Method to set the placeholder text

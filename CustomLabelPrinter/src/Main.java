@@ -143,8 +143,8 @@ public class Main {
        
        JTabbedPane noclueTabs = new JTabbedPane();
        noclueTabs.addTab("Printing", freePanel);
-       noclueTabs.addTab("Backflush lookup", bfLookupPanel);
-       noclueTabs.addTab("real Adage Weight", realWeightPanel);
+       noclueTabs.addTab("Backflush Lookup", bfLookupPanel);
+       noclueTabs.addTab("Adage's Real Weight", realWeightPanel);
 
        tabbedPane.addTab("no clue", noclueTabs);
        
