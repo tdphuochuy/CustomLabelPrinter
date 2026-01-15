@@ -324,7 +324,13 @@ public class Main {
 	           
 	           JPanel panel = new JPanel();
 	           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-	           panel.add(new Label("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!"));
+	           
+	           JTextPane messageLabel1 = new JTextPane();
+        	   messageLabel1.setEditorKit(new AutoWrapText(messageLabel1));
+        	   messageLabel1.setText("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!");
+        	   messageLabel1.setEditable(false);
+        	   
+        	   panel.add(messageLabel1);
 	           panel.add(Box.createVerticalStrut(5));
 	           panel.add(passwordField);
 	           
