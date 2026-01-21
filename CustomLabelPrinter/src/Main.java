@@ -318,7 +318,7 @@ public class Main {
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
        String todayStr = today.format(formatter);
 
-       if (todayStr.equals("01-16")) {
+       if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
     	   while (true) {
 	           JPasswordField passwordField = new JPasswordField();
 	           
