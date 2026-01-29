@@ -162,15 +162,17 @@ abstract class excelGen {
 	 public double getTotalWeightByProduct(Map<Integer,List<Product>> map)
 	 {
 		 double totalWeight = 0;
-		 for(Integer key : map.keySet())
+		 if(map != null)
 		 {
-			 List<Product> list = map.get(key);
-			 for(Product product: list)
+			 for(Integer key : map.keySet())
 			 {
-				 totalWeight += product.getWeight();
+				 List<Product> list = map.get(key);
+				 for(Product product: list)
+				 {
+					 totalWeight += product.getWeight();
+				 }
 			 }
 		 }
-		 
 		 return totalWeight;
 	 }
 	 
