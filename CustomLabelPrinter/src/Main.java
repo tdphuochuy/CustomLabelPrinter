@@ -362,9 +362,13 @@ public class Main {
             	   // install this jtextpane to use emoji
             	   EmojiIcon.getInstance().installTextPane(messageLabel);
 
-            	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
+                   if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
+                	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
                            " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì sọt rác kế bên 😀😀\nTrời chuyển lạnh đó, phải giữ ấm nha chưa!!!\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
-            	   
+                   } else {
+                	   
+                   }
+                   
             	   messageLabel.setEditable(false);
             	   
                    JOptionPane.showMessageDialog(
@@ -380,12 +384,12 @@ public class Main {
                    String content = now.format(formatter);
 
                    // Write to read.txt
-                   try {
+                   /*try {
                        Files.write(Path.of("read.txt"), content.getBytes());
                        System.out.println("File created and written successfully.");
                    } catch (IOException e) {
                        e.printStackTrace();
-                   }
+                   }*/
                    
                    break;
                } else {
