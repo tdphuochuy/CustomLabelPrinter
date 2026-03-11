@@ -27,9 +27,12 @@ import noclue.FreePanel;
 import noclue.realWeight;
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.Route;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import paperwork.paperworkDSIPanel;
@@ -457,6 +460,13 @@ public class Main {
                    e.printStackTrace();
                }*/
                
+               try {
+				updateMessage("Đã đọc");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+               
                break;
            } else {
         	   JOptionPane.showMessageDialog(
@@ -469,5 +479,59 @@ public class Main {
         	   passwordField.setText("");
            }
 	   }
+   }
+   
+   private static void updateMessage(String message) throws IOException
+   {
+       // Define JSON body
+	   
+	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+       LocalDateTime now = LocalDateTime.now();
+       String formattedDateTime = now.format(formatter);
+       
+	   message = "Last updated: " + formattedDateTime + "\n" + message;
+	   	
+	   	JSONObject obj = new JSONObject();
+	   	obj.put("message", message);
+
+       
+
+       String url = "https://" + Config.serverDomain + "/recap";
+
+       Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Config.webSocketproxyIP, Config.webSocketproxyPort));
+
+		okhttp3.Authenticator proxyAuthenticator = new okhttp3.Authenticator() {
+			  @Override public Request authenticate(Route route, Response response) throws IOException {
+			       String credential = Credentials.basic(Config.webSocketproxyIP,Config.webSocketproxyPass);
+			       return response.request().newBuilder()
+			           .header("Proxy-Authorization", credential)
+			           .build();
+			  }
+			};
+
+       OkHttpClient client = new OkHttpClient.Builder()
+               //.proxy(proxy)
+               //.proxyAuthenticator(proxyAuthenticator)
+               .hostnameVerifier((hostname, session) -> true)
+               .build();
+
+
+       RequestBody body = RequestBody.create(
+       		obj.toJSONString(), 
+               MediaType.get("application/json; charset=utf-8")
+       );
+
+       Request request = new Request.Builder()
+               .url(url)
+               .post(body)
+               .build();
+
+       try (Response response = client.newCall(request).execute()) {
+           if (response.isSuccessful()) {
+               System.out.println("Response: " + response.body().string());
+           } else {
+               System.err.println("Request failed: " + response.code());
+           }
+       }
    }
 }
