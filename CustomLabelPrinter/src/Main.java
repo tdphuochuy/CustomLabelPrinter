@@ -326,7 +326,7 @@ public class Main {
 
        if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
     	   showMessage(formatter,todayStr);
-       } else if (todayStr.equals("03-13"))
+       } else if (todayStr.equals("03-11"))
        {
     	   LocalTime showTime = LocalTime.of(13, 30);
            LocalTime currentTime = LocalTime.now();
@@ -411,23 +411,28 @@ public class Main {
             	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
                        " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì sọt rác kế bên 😀😀\nTrời chuyển lạnh đó, phải giữ ấm nha chưa!!!\n\n----2/5/2026----\nLúc đọc được tin nhắn này, mình hy vọng, à không, chắc chắn cả 2 đều đang hạnh phúc\ndù có còn thấy nhau nữa hay không 😁\n--------------------\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
                } else {
-            	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn gì không.\nTuy nhiên, mình lại không đủ tàn nhẫn để cứ im lặng mà ra đi..."
+            	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn này không.\nNhưng mà mình lại không đủ vô tâm để cứ im lặng mà đi..."
             	   		+ "\n\nHôm nay là ngày cuối mình làm việc ở đây\nBắt đầu từ tuần sau, mình sẽ làm việc trong office.\n\n"
             	   		+ "Mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
-            	   		+ "Mình không đủ vô tâm để tiếp tục lờ đi những tin nhắn của Nhãn\n"
+            	   		+ "Mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
             	   		+ "Mình không đủ ngốc để không hiểu ý của chúng\n"
-            	   		+ "Nhưng tiếc rằng mình không đủ mạnh mẽ để thắng lại được lí trí...\n"
+            	   		+ "Tiếc rằng mình không đủ mạnh mẽ để thắng được lí trí và cho phép bản thân quay lại...\n"
             	   		+ "Mọi thứ đã sai từ lúc đầu...Tất cả đều lỗi do mình gây ra\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
-            	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau và giữ nhau\n"
+            	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
             	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và may mắn lắm rồi\n\n"
             	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
             	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
             	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
             	   		+ "Coi như việc tốt cuối mình làm cho Nhãn đi\n"
             	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
-            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCho mình làm người nói lời cuối đi\nNhắn là bị ghost hoặc cãi lộn đó!\n\n"
-            	   		+ "Ở lại mạnh giỏi nha\n\nNgười dưng tôi thương nhất 😁");
+            	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi\n"
+            	   		+ "Mình restrict Nhãn với không còn dõi theo từ lâu rồi\n"
+            	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp...Ừ đang trách đó!\n"
+            	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
+            	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
+            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCòn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối đi\nNhắn là bị ghost hoặc lại cãi lộn đó!\n\n"
+            	   		+ "Ở lại mạnh giỏi và phải thật hạnh phúc nha\nCảm ơn vì đã xuất hiện\n\nNgười dưng tôi thương nhất 😁");
                }
                
         	   messageLabel.setEditable(false);
