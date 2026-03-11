@@ -11,6 +11,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinUser;
+
 import buttons.ButtonObj;
 import buttons.TableEntry;
 import buttons.buttonsPanel;
@@ -54,6 +58,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -319,90 +325,144 @@ public class Main {
        String todayStr = today.format(formatter);
 
        if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
-    	   while (true) {
-	           JPasswordField passwordField = new JPasswordField();
-	           
-	           JPanel panel = new JPanel();
-	           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-	           
-	           JTextPane messageLabel1 = new JTextPane();
-        	   messageLabel1.setEditorKit(new AutoWrapText(messageLabel1));
-        	   messageLabel1.setText("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!");
-        	   messageLabel1.setEditable(false);
-        	   
-        	   panel.add(messageLabel1);
-	           panel.add(Box.createVerticalStrut(5));
-	           panel.add(passwordField);
-	           
-	    	   int option = JOptionPane.showConfirmDialog(
-	                   null,
-	                   panel
-	                   ,
-	                   "Một thứ gì đó kì lạ vừa xuất hiện :D",
-	                   JOptionPane.OK_CANCEL_OPTION,
-	                   JOptionPane.PLAIN_MESSAGE
-	           );
-	
-        	   if (option != JOptionPane.OK_OPTION) {
-        		   System.out.println("hello there");
-                   break;
-               }
-        	   
-               String enteredPassword = new String(passwordField.getPassword());
-
-               // Correct password
-               String correctPassword = "270899";
-
-               if (enteredPassword.equals(correctPassword)) {
-              	   EmojiIcon.getInstance().installEmojiSvg();
-            	   
-            	   JTextPane messageLabel = new JTextPane();
-            	   messageLabel.setEditorKit(new AutoWrapText(messageLabel));
-
-            	   // install this jtextpane to use emoji
-            	   EmojiIcon.getInstance().installTextPane(messageLabel);
-
-                   if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
-                	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
-                           " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì sọt rác kế bên 😀😀\nTrời chuyển lạnh đó, phải giữ ấm nha chưa!!!\n\n----2/5/2026----\nLúc đọc được tin nhắn này, mình hy vọng, à không, chắc chắn cả 2 đều đang hạnh phúc\ndù có còn thấy nhau nữa hay không 😁\n--------------------\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
-                   } else {
-                	   
+    	   showMessage(formatter,todayStr);
+       } else if (todayStr.equals("03-13"))
+       {
+    	   LocalTime showTime = LocalTime.of(13, 30);
+           LocalTime currentTime = LocalTime.now();
+           
+           if (currentTime.isBefore(showTime)) {
+        	   long delay = java.time.Duration.between(LocalTime.now(), showTime).toMillis();
+        	   System.out.println(delay);
+               Timer scheduleTimer = new Timer();
+               scheduleTimer.schedule(new TimerTask() {
+                   @Override
+                   public void run() {
+                	   User32 user32 = User32.INSTANCE;
+               		  WinDef.HWND hWnd = User32.INSTANCE.FindWindow(null, "Custom Label Printer");
+               	      
+               		      if (hWnd != null) {
+               		          WinUser.FLASHWINFO flashInfo = new WinUser.FLASHWINFO();
+               		          flashInfo.hWnd = hWnd;
+               		          flashInfo.uCount = WinUser.FLASHW_TIMERNOFG; // Flash until window is focused
+               		          flashInfo.dwFlags = WinUser.FLASHW_ALL; // Flash title bar & taskbar button
+               		          flashInfo.dwTimeout = 0;
+               		
+               		          user32.FlashWindowEx(flashInfo);
+               		      }
+                	   showMessage(formatter,todayStr);
                    }
-                   
-            	   messageLabel.setEditable(false);
-            	   
-                   JOptionPane.showMessageDialog(
-                       null,
-                       messageLabel,
-                       "Happy birthday!!!"
-                       ,
-                       JOptionPane.INFORMATION_MESSAGE
-                   );
-                   
-                   LocalDateTime now = LocalDateTime.now();
-                   formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                   String content = now.format(formatter);
-
-                   // Write to read.txt
-                   /*try {
-                       Files.write(Path.of("read.txt"), content.getBytes());
-                       System.out.println("File created and written successfully.");
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }*/
-                   
-                   break;
-               } else {
-            	   JOptionPane.showMessageDialog(
-                           null,
-                           "Incorrect password. Try again.",
-                           "Error",
-                           JOptionPane.ERROR_MESSAGE
-                   );
-            	   
-            	   passwordField.setText("");
-               }
-    	   }
+               }, delay);
+           } else {
+        	   showMessage(formatter,todayStr);
+           }
        }
+   }
+   
+   private static void showMessage(DateTimeFormatter formatter,String todayStr)
+   {
+   	   while (true) {
+           JPasswordField passwordField = new JPasswordField();
+           
+           JPanel panel = new JPanel();
+           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+           
+           JTextPane messageLabel1 = new JTextPane();
+    	   messageLabel1.setEditorKit(new AutoWrapText(messageLabel1));
+    	   messageLabel1.setText("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!");
+    	   messageLabel1.setEditable(false);
+    	   
+    	   panel.add(messageLabel1);
+           panel.add(Box.createVerticalStrut(5));
+           panel.add(passwordField);
+           
+    	   int option = JOptionPane.showConfirmDialog(
+                   null,
+                   panel
+                   ,
+                   "Một thứ gì đó kì lạ vừa xuất hiện :D",
+                   JOptionPane.OK_CANCEL_OPTION,
+                   JOptionPane.PLAIN_MESSAGE
+           );
+
+    	   if (option != JOptionPane.OK_OPTION) {
+    		   System.out.println("hello there");
+               break;
+           }
+    	   
+           String enteredPassword = new String(passwordField.getPassword());
+
+           // Correct password
+           String correctPassword = "270899";
+
+           if (enteredPassword.equals(correctPassword)) {
+        	   String title = "";
+        	   
+          	   EmojiIcon.getInstance().installEmojiSvg();
+        	   
+        	   JTextPane messageLabel = new JTextPane();
+        	   messageLabel.setEditorKit(new AutoWrapText(messageLabel));
+        	   
+        	   // install this jtextpane to use emoji
+        	   EmojiIcon.getInstance().installTextPane(messageLabel);
+
+               if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
+            	   title = "Happy birthday!!!";
+            	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
+                       " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì sọt rác kế bên 😀😀\nTrời chuyển lạnh đó, phải giữ ấm nha chưa!!!\n\n----2/5/2026----\nLúc đọc được tin nhắn này, mình hy vọng, à không, chắc chắn cả 2 đều đang hạnh phúc\ndù có còn thấy nhau nữa hay không 😁\n--------------------\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
+               } else {
+            	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn gì không.\nTuy nhiên, mình lại không đủ tàn nhẫn để cứ im lặng mà ra đi..."
+            	   		+ "\n\nHôm nay là ngày cuối mình làm việc ở đây\nBắt đầu từ tuần sau, mình sẽ làm việc trong office.\n\n"
+            	   		+ "Mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
+            	   		+ "Mình không đủ vô tâm để tiếp tục lờ đi những tin nhắn của Nhãn\n"
+            	   		+ "Mình không đủ ngốc để không hiểu ý của chúng\n"
+            	   		+ "Nhưng tiếc rằng mình không đủ mạnh mẽ để thắng lại được lí trí...\n"
+            	   		+ "Mọi thứ đã sai từ lúc đầu...Tất cả đều lỗi do mình gây ra\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
+            	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
+            	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau và giữ nhau\n"
+            	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp lắm rồi\n\n"
+            	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
+            	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
+            	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
+            	   		+ "Coi như việc tốt cuối mình làm cho Nhãn đi\n"
+            	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
+            	   		+ "À đừng có nhắn tin nữa, nhắn là bị seen hoặc cãi lộn đó.\n\n"
+            	   		+ "Ở lại mạnh giỏi nha\n\nNgười dưng tôi thương nhất 😁");
+               }
+               
+        	   messageLabel.setEditable(false);
+        	   
+               JOptionPane.showMessageDialog(
+                   null,
+                   messageLabel,
+                   title
+                   ,
+                   JOptionPane.INFORMATION_MESSAGE
+               );
+               
+               LocalDateTime now = LocalDateTime.now();
+               formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+               String content = now.format(formatter);
+
+               // Write to read.txt
+               /*try {
+                   Files.write(Path.of("read.txt"), content.getBytes());
+                   System.out.println("File created and written successfully.");
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }*/
+               
+               break;
+           } else {
+        	   JOptionPane.showMessageDialog(
+                       null,
+                       "Incorrect password. Try again.",
+                       "Error",
+                       JOptionPane.ERROR_MESSAGE
+               );
+        	   
+        	   passwordField.setText("");
+           }
+	   }
    }
 }
