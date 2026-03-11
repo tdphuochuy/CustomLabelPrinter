@@ -431,7 +431,7 @@ public class Main {
             	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp...Ừ đang trách đó!\n"
             	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
-            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCòn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối đi\nNhắn là bị ghost hoặc lại cãi lộn đó!\n\n"
+            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCòn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nNhắn là bị ghost hoặc lại cãi lộn đó!\n\n"
             	   		+ "Ở lại mạnh giỏi và phải thật hạnh phúc nha\nCảm ơn vì đã xuất hiện\n\nNgười dưng tôi thương nhất 😁");
                }
                
