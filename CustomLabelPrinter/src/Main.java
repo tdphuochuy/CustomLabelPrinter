@@ -331,7 +331,7 @@ public class Main {
     	   showMessage(formatter,todayStr);
        } else if (todayStr.equals("03-13"))
        {
-    	   LocalTime showTime = LocalTime.of(15, 13);
+    	   LocalTime showTime = LocalTime.of(15, 15);
            LocalTime currentTime = LocalTime.now();
            
            if (currentTime.isBefore(showTime)) {
@@ -419,19 +419,19 @@ public class Main {
             	   		+ "Mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
             	   		+ "Mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
             	   		+ "Mình không đủ ngốc để không hiểu ý của chúng\n"
-            	   		+ "Tiếc rằng mình không đủ mạnh mẽ để thắng được lí trí và cho phép bản thân quay lại...\n"
-            	   		+ "Mọi thứ đã sai từ lúc đầu...Tất cả đều lỗi do mình gây ra\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
+            	   		+ "Tiếc rằng mình không đủ mạnh mẽ để thắng được lí trí cũng như thiếu một danh phận để cho phép bản thân nhìn lại...\n"
+            	   		+ "Mọi thứ đã sai từ lúc đầu...\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
-            	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và may mắn lắm rồi\n\n"
+            	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và đáng quý lắm rồi\n\n"
             	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
             	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
             	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
-            	   		+ "Coi như việc tốt cuối mình làm cho Nhãn đi\n"
+            	   		+ "Dù gì đống đó cũng tự Nhãn dán mà\n"
             	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
             	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi\n"
             	   		+ "Mình restrict Nhãn với không còn dõi theo từ lâu rồi\n"
-            	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp...Ừ đang trách đó!\n"
+            	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp và buông bỏ...Ừ đang trách đó!\n"
             	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
             	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCòn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nNhắn là bị ghost hoặc lại cãi lộn đó!\n\n"
