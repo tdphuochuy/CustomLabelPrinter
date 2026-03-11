@@ -420,7 +420,7 @@ public class Main {
             	   		+ "Mọi thứ đã sai từ lúc đầu...Tất cả đều lỗi do mình gây ra\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau và giữ nhau\n"
-            	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp lắm rồi\n\n"
+            	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và may mắn lắm rồi\n\n"
             	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
             	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
             	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
