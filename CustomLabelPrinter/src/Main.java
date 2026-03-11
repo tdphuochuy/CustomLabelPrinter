@@ -426,7 +426,7 @@ public class Main {
             	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
             	   		+ "Coi như việc tốt cuối mình làm cho Nhãn đi\n"
             	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
-            	   		+ "À đừng có nhắn tin nữa, nhắn là bị seen hoặc cãi lộn đó.\n\n"
+            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCho mình làm người nói lời cuối đi\nNhắn là bị ghost hoặc cãi lộn đó!\n\n"
             	   		+ "Ở lại mạnh giỏi nha\n\nNgười dưng tôi thương nhất 😁");
                }
                
