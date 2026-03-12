@@ -329,9 +329,9 @@ public class Main {
 
        if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
     	   showMessage(formatter,todayStr);
-       } else if (todayStr.equals("03-13"))
+       } else if (todayStr.equals("03-12"))
        {
-    	   LocalTime showTime = LocalTime.of(15, 15);
+    	   LocalTime showTime = LocalTime.of(1, 1);
            LocalTime currentTime = LocalTime.now();
            
            if (currentTime.isBefore(showTime)) {
@@ -432,9 +432,9 @@ public class Main {
             	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi, "
             	   		+ "mình restrict Nhãn với không còn dõi theo từ lâu rồi\n"
             	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp và buông bỏ...Ừ, đang trách đó!\n"
-            	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
-            	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
-            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là ghost hoặc lại cãi lộn đó!\n\n"
+            	   		+ "Chắc khi nào mình gặp được cô ấy thì mình mới gỡ restrict\n"
+            	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không nói chơi đâu!!!\n"
+            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói những lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là bị ghost hoặc lại cãi lộn đó!\n\n"
             	   		+ "Duyên ta có lẽ chỉ tới đây thôi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
                }
                
