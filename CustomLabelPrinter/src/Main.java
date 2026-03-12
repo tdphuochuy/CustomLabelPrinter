@@ -329,9 +329,9 @@ public class Main {
 
        if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
     	   showMessage(formatter,todayStr);
-       } else if (todayStr.equals("03-13"))
+       } else if (todayStr.equals("03-12"))
        {
-    	   LocalTime showTime = LocalTime.of(15, 15);
+    	   LocalTime showTime = LocalTime.of(2, 1);
            LocalTime currentTime = LocalTime.now();
            
            if (currentTime.isBefore(showTime)) {
@@ -419,7 +419,7 @@ public class Main {
             	   		+ "Mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
             	   		+ "Mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
             	   		+ "Mình không đủ ngốc để không hiểu ý của chúng\n"
-            	   		+ "Tiếc rằng mình không đủ mạnh mẽ để thắng được lí trí cũng như thiếu một danh phận để cho phép bản thân nhìn lại...\n"
+            	   		+ "Tiếc rằng mình thiếu mạnh mẽ để thắng được lí trí, cũng như một danh phận để cho phép bản thân nhìn lại...\n"
             	   		+ "Mọi thứ đã sai từ lúc đầu...\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
@@ -434,8 +434,8 @@ public class Main {
             	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp và buông bỏ...Ừ đang trách đó!\n"
             	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
-            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha\nCòn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nCũng không còn lý do gì để nhắn rồi nên nhắn là bị ghost hoặc lại cãi lộn đó!\n\n"
-            	   		+ "Ở lại mạnh giỏi và phải thật hạnh phúc nha\nCảm ơn vì đã xuất hiện\n\nNgười dưng tôi thương nhất 😁");
+            	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là ghost hoặc lại cãi lộn đó!\n\n"
+            	   		+ "Duyên ta có lẽ chỉ tới đây thôi...Ở lại mạnh giỏi và phải thật hạnh phúc nha\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình!\n\nNgười dưng tôi thương nhất 😁");
                }
                
         	   messageLabel.setEditable(false);
