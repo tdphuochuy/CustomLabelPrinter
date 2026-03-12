@@ -372,7 +372,7 @@ public class Main {
            
            JTextPane messageLabel1 = new JTextPane();
     	   messageLabel1.setEditorKit(new AutoWrapText(messageLabel1));
-    	   messageLabel1.setText("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!");
+    	   messageLabel1.setText("Bạn nhận được 1 lời nhắn. Nhập mật khẩu điện thoại (ddmmyy) của người dưng để xem!\n\nNếu bận không đọc được thì tắt app rồi mở lại khi nào rảnh nha");
     	   messageLabel1.setEditable(false);
     	   
     	   panel.add(messageLabel1);
