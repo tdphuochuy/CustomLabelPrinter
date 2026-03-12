@@ -416,11 +416,11 @@ public class Main {
                } else {
             	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn này không.\nNhưng mà mình lại không đủ vô tâm để cứ im lặng mà đi..."
             	   		+ "\n\nHôm nay là ngày cuối mình làm việc ở đây\nBắt đầu từ tuần sau, mình sẽ làm việc trong office.\n\n"
-            	   		+ "Mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
-            	   		+ "Mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
-            	   		+ "Mình không đủ ngốc để không hiểu ý của chúng\n"
+            	   		+ "Tiếc rằng mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
+            	   		+ "Tiếc rằng mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
             	   		+ "Tiếc rằng mình thiếu mạnh mẽ để thắng được lí trí, cũng như một danh phận để cho phép bản thân nhìn lại...\n"
-            	   		+ "Mọi thứ đã sai từ lúc đầu...\nRa đi có lẽ là điều tốt nhất và cũng là điều mình nên làm\n\n"
+            	   		+ "Tiếc rằng chúng ta không thể cho nhau thứ người kia thiếu và muốn được\n"
+            	   		+ "Mọi thứ đã sai từ lúc đầu...Ra đi có lẽ là điều tốt nhất và cũng là điều mình nên làm.\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
             	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và đáng quý lắm rồi\n\n"
@@ -429,13 +429,13 @@ public class Main {
             	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
             	   		+ "Dù gì đống đó cũng tự Nhãn dán mà\n"
             	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
-            	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi\n"
-            	   		+ "Mình restrict Nhãn với không còn dõi theo từ lâu rồi\n"
-            	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp và buông bỏ...Ừ đang trách đó!\n"
+            	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi, "
+            	   		+ "mình restrict Nhãn với không còn dõi theo từ lâu rồi\n"
+            	   		+ "Lẽ ra nên làm vậy từ trước tết để không phải học bài học về sự cố chấp và buông bỏ...Ừ, đang trách đó!\n"
             	   		+ "Chắc khi nào mình gặp được cô ấy, may ra mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không đùa đâu!!!\n"
             	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là ghost hoặc lại cãi lộn đó!\n\n"
-            	   		+ "Duyên ta có lẽ chỉ tới đây thôi...Ở lại mạnh giỏi và phải thật hạnh phúc nha\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
+            	   		+ "Duyên ta có lẽ chỉ tới đây thôi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
                }
                
         	   messageLabel.setEditable(false);
