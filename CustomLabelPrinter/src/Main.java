@@ -329,9 +329,9 @@ public class Main {
 
        if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
     	   showMessage(formatter,todayStr);
-       } else if (todayStr.equals("03-13"))
+       } else if (todayStr.equals("03-12"))
        {
-    	   LocalTime showTime = LocalTime.of(15, 15);
+    	   LocalTime showTime = LocalTime.of(12, 12);
            LocalTime currentTime = LocalTime.now();
            
            if (currentTime.isBefore(showTime)) {
@@ -417,7 +417,7 @@ public class Main {
             	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn này không.\nNhưng mà mình lại không đủ vô tâm để cứ im lặng mà đi..."
             	   		+ "\n\nHôm nay là ngày cuối mình làm việc ở đây\nBắt đầu từ tuần sau, mình sẽ làm việc trong office.\n\n"
             	   		+ "Tiếc rằng mình không đủ nhẫn tâm để tiếp tục nhìn cả hai làm tổn thương nhau\n"
-            	   		+ "Tiếc rằng mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn\n"
+            	   		+ "Tiếc rằng mình không đủ tàn nhẫn để tiếp tục lờ đi những tin nhắn của Nhãn (mình hiểu mà)\n"
             	   		+ "Tiếc rằng mình thiếu mạnh mẽ để thắng được lí trí, cũng như một danh phận để cho phép bản thân nhìn lại...\n"
             	   		+ "Tiếc rằng chúng ta không thể cho nhau thứ người kia thiếu và muốn được\n"
             	   		+ "Mọi thứ đã sai từ lúc đầu...Ra đi có lẽ là điều tốt nhất và cũng là điều mình nên làm.\n\n"
@@ -435,7 +435,7 @@ public class Main {
             	   		+ "Chắc khi nào mình gặp được cô ấy thì mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không nói chơi đâu!!!\n"
             	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói những lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là bị ghost hoặc lại cãi lộn đó!\n\n"
-            	   		+ "Duyên ta có lẽ chỉ tới đây thôi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
+            	   		+ "Duyên ta có lẽ đến đây là được rồi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
                }
                
         	   messageLabel.setEditable(false);
