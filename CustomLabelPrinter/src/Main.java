@@ -425,9 +425,7 @@ public class Main {
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
             	   		+ "Có lẽ đôi ta không thực sự là dành cho nhau\n"
             	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và đáng quý lắm rồi\n\n"
-            	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
-            	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
-            	   		+ "À tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
+            	   		+ "Tp cho nguyên tuần mình để trên boxroom á, có gì lên lấy xuống dùng cho hết nha\n"
             	   		+ "Dù gì đống đó cũng tự Nhãn dán mà\n"
             	   		+ "Với có gì giúp đỡ chị da trắng với nha, train mới có 1 tuần thôi nên cũng tội\n"
             	   		+ "À với có đăng hình hay đổi ảnh đại diện gì thì cứ thoải mái đi, "
@@ -436,6 +434,8 @@ public class Main {
             	   		+ "Chắc khi nào mình gặp được cô ấy thì mình mới gỡ restrict\n"
             	   		+ "À với đừng mời cưới mình nha, cho bung bét đó không nói chơi đâu!!!\n"
             	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói những lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là bị ghost hoặc lại cãi lộn đó!\n\n"
+            	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
+            	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
             	   		+ "Duyên ta có lẽ đến đây là được rồi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
                }
                
