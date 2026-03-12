@@ -423,6 +423,7 @@ public class Main {
             	   		+ "Mọi thứ đã sai từ lúc đầu...Ra đi có lẽ là điều tốt nhất và cũng là điều mình nên làm.\n\n"
             	   		+ "Chúng ta có duyên, nhưng chắc không có nợ\n"
             	   		+ "Có tình yêu, nhưng chắc không đủ lớn để vì nhau, chọn nhau và giữ nhau\n"
+            	   		+ "Có lẽ đôi ta không thực sự là dành cho nhau\n"
             	   		+ "Gặp nhau, biết nhau và dành tình cảm cho nhau có lẽ là đẹp và đáng quý lắm rồi\n\n"
             	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
             	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
