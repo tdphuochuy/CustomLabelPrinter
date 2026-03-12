@@ -436,7 +436,7 @@ public class Main {
             	   		+ "À đừng có nhắn tin tạm biệt, cảm ơn hay gì gì nha, còn nếu muốn trách móc gì thì chịu khó giữ trong lòng đi\nNhường mình làm người nói những lời cuối nha...\nCũng không còn lý do gì để nhắn nữa rồi nên nhắn nữa là bị ghost hoặc lại cãi lộn đó!\n\n"
             	   		+ "Dù sau này có chuyện gì, mình mong...à không, mình tin chắc Nhãn sẽ mạnh mẽ và vững vàng vượt qua mà\n"
             	   		+ "Tình đầu của mình train có 3 ngày mà còn làm việc ngon ơ thì có gì mà làm khó được!!!\n\n"
-            	   		+ "Duyên ta có lẽ đến đây là được rồi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
+            	   		+ "Duyên ta có lẽ đến đây là được rồi...Ở lại mạnh giỏi, chăm sóc bản thân thật tốt và phải thật hạnh phúc nha!\nĐừng để ai khác làm tổn thương Nhãn như mình nha!\nCảm ơn vì đã xuất hiện và có mặt trong cuộc đời mình\n\nNgười dưng tôi thương nhất 😁");
                }
                
         	   messageLabel.setEditable(false);
