@@ -331,7 +331,7 @@ public class Main {
     	   showMessage(formatter,todayStr);
        } else if (todayStr.equals("03-13"))
        {
-    	   LocalTime showTime = LocalTime.of(15, 13);
+    	   LocalTime showTime = LocalTime.of(15, 03);
            LocalTime currentTime = LocalTime.now();
            
            if (currentTime.isBefore(showTime)) {
