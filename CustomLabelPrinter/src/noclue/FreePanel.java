@@ -158,7 +158,7 @@ public class FreePanel extends JPanel{
             }
         });
         
-        JButton buttonNhan = new JButton("Click here :)");
+        JButton buttonNhan = new JButton("Click here :D");
         buttonNhan.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonNhan.setBackground(Color.white);
         buttonNhan.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -176,6 +176,7 @@ public class FreePanel extends JPanel{
         buttonNhan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Programmed by Huy Tran, for NP :D", "Credit", JOptionPane.INFORMATION_MESSAGE);
             	int quantity = quantityField.getText().length() > 0 ? Integer.valueOf(quantityField.getText()) : 1;
          		 for(int i = 0; i < quantity;i++)
          		 {
