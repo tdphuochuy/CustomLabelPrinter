@@ -194,7 +194,7 @@ public class paperworkDSIPanel extends JPanel{
         });
         
         JLabel nameLabel = new JLabel("Name");
-        JTextField  nameField = new JTextField("Huy",5);
+        JTextField  nameField = new JTextField("Ansley",5);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
         
