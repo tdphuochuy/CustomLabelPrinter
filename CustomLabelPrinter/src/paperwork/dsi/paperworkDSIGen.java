@@ -79,7 +79,6 @@ public class paperworkDSIGen{
 	private List<Integer> bloodcondemnList,greencondemnList;
 	private String sessionId = "";
 	private String tenderCondemnTotal;
-	private String recipient = "tdphuochuy@gmail.com";
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
@@ -359,7 +358,8 @@ public class paperworkDSIGen{
         
         if(sendEmail)
         {
-        	sendEmail();
+        	sendEmail("tdphuochuy@gmail.com");
+        	
         }
         
         if(pdfOnly)
@@ -503,7 +503,7 @@ public class paperworkDSIGen{
         }
 	}
 	
-	   public void sendEmail()
+	   public void sendEmail(String recipient)
 	   {
 	    	Properties props = new Properties();
 	        props.put("mail.smtp.auth", "true");
