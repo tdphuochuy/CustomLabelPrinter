@@ -1,5 +1,6 @@
 package paperwork;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -31,6 +32,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
@@ -99,7 +101,7 @@ public class paperworkDSIPanel extends JPanel{
         JTextField comboWeightField = new JTextField(4);
         setPlaceholder(comboWeightField,"Weight");
         comboWeightField.setText("2124");
-        comboWeightField.setForeground(Color.BLACK); 
+        comboWeightField.setForeground(Color.BLACK);
         
         typeDropDown.addItemListener(new ItemListener() {
             @Override
@@ -237,28 +239,60 @@ public class paperworkDSIPanel extends JPanel{
         
         JPanel textareaPanel = new JPanel();
         textareaPanel.setLayout(new BoxLayout(textareaPanel, BoxLayout.Y_AXIS));
-        textareaPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-        JTextArea textArea = new JTextArea(6,12);
+        JTextArea textArea = new JTextArea(6,9);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
         
-        JTextArea textArea2 = new JTextArea(6,12);
+        JTextArea textArea2 = new JTextArea(6,9);
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
-        scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
+        scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+        
+        JTextArea textArea3 = new JTextArea(6,9);
+        JScrollPane scrollPane3 = new JScrollPane(textArea3);
+        scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        labelPanel.add(new JLabel("Trim blood condemned:"));
+        labelPanel.add(new JLabel("Blood condemned:"));
         JPanel labelPanel2 = new JPanel();
         labelPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
-        labelPanel2.add(new JLabel("Trim green condemned:"));
+        labelPanel2.add(new JLabel("Green condemned:"));
+        JPanel labelPanel3 = new JPanel();
+        labelPanel3.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel3.add(new JLabel("DSI trimming weights:"));
         
-        textareaPanel.add(labelPanel2);
-        textareaPanel.add(scrollPane2);
+        JPanel bloodCondenmnedPanel = new JPanel();
+        bloodCondenmnedPanel.setLayout(new BoxLayout(bloodCondenmnedPanel, BoxLayout.Y_AXIS));
+        bloodCondenmnedPanel.add(labelPanel);
+        bloodCondenmnedPanel.add(scrollPane);
         
-        textareaPanel.add(labelPanel);
-        textareaPanel.add(scrollPane);
+        JPanel greenCondenmnedPanel = new JPanel();
+        greenCondenmnedPanel.setLayout(new BoxLayout(greenCondenmnedPanel, BoxLayout.Y_AXIS));
+        greenCondenmnedPanel.add(labelPanel2);
+        greenCondenmnedPanel.add(scrollPane2);
+        
+        JPanel DSItrimPanel = new JPanel();
+        DSItrimPanel.setLayout(new BoxLayout(DSItrimPanel, BoxLayout.Y_AXIS));
+        DSItrimPanel.add(labelPanel3);
+        DSItrimPanel.add(scrollPane3);
+
+        
+        JPanel trimCondemnedPanel = new JPanel();
+        trimCondemnedPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
+        JPanel trimCondemnLabelPanel = new JPanel();
+        JLabel trimCondemnLabel = new JLabel("Trim Condemned");
+        trimCondemnLabelPanel.add(trimCondemnLabel);
+        
+        //textareaPanel.add(trimCondemnLabelPanel);
+        
+        trimCondemnedPanel.add(greenCondenmnedPanel);
+        trimCondemnedPanel.add(bloodCondenmnedPanel);
+        
+        
+        textareaPanel.add(trimCondemnedPanel,BorderLayout.CENTER);
+        textareaPanel.add(DSItrimPanel,BorderLayout.CENTER);
         
         JPanel tenderCondenmnedPanel = new JPanel();
         tenderCondenmnedPanel.setLayout(new FlowLayout(FlowLayout.LEFT));

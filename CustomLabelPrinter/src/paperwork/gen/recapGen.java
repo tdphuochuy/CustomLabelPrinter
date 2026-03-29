@@ -159,18 +159,18 @@ public class recapGen extends excelGen{
 	        	
 	        	currentColumn = "G";
 	        	currentRow = 25;
-	        	for(int i = 1; i <= bloodcondemnList.size();i++)
+	        	for(int i = 1; i <= greencondemnList.size();i++)
 	        	{
-	        		int condemnWeight = bloodcondemnList.get(i - 1);
+	        		int condemnWeight = greencondemnList.get(i - 1);
 	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
 		        	currentRow++;
 	        	}
 	        	
 	        	currentColumn = "I";
 	        	currentRow = 25;
-	        	for(int i = 1; i <= greencondemnList.size();i++)
+	        	for(int i = 1; i <= bloodcondemnList.size();i++)
 	        	{
-	        		int condemnWeight = greencondemnList.get(i - 1);
+	        		int condemnWeight = bloodcondemnList.get(i - 1);
 	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
 		        	currentRow++;
 	        	}
