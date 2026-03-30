@@ -77,6 +77,7 @@ public class paperworkDSIGen{
 	private String username,password,orderNum,reworkOrderNum,name;
 	private int[] times;
 	private List<Integer> bloodcondemnList,greencondemnList,DsiTrimList;
+	private List<String> noRibProductCodeList = new ArrayList<>();
 	private String sessionId = "";
 	private String tenderCondemnTotal;
 	private Frame frame;
@@ -309,7 +310,12 @@ public class paperworkDSIGen{
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
 				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
 				String type = getType(description);
-				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,description,quantity,weight,isCombo));
+				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
+				
+				if(type.equals("breast") && isCombo && description.contains("NO/RIB") && !noRibProductCodeList.contains(productCode))
+				{
+					noRibProductCodeList.add(productCode);
+				}
 			}
 		}
 	}

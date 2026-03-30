@@ -6,31 +6,21 @@ public class Product{
 	private String code;
 	private String type;
 	private String trackingNum;
-	private String description;
 	private int hour;
 	private boolean isCombo;
 	private boolean isMarel;
-	public Product(String code,String trackingNum,int hour,String type,String description,int quantity,double weight,boolean isCombo)
+	public Product(String code,String trackingNum,int hour,String type,int quantity,double weight,boolean isCombo)
 	{
 		this.code = code;
 		this.quantity = quantity;
 		this.weight = weight;
 		this.isCombo = isCombo;
 		this.type = type;
-		this.description = description;
 		this.trackingNum = trackingNum;
 		this.hour = hour;
 		this.isMarel = isMarel;
 	}
 	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public double getWeight()
 	{
 		return weight;
