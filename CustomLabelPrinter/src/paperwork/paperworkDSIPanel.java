@@ -354,9 +354,16 @@ public class paperworkDSIPanel extends JPanel{
 		              	        	greencomdemnList.add(Integer.parseInt(s) - 15);
 		              	         }
 		              	         
+		              	         String DsiTrimText = textArea3.getText();
+		              			 String[] array3 = DsiTrimText.split("\n");
+		              			 List<Integer> DsiTrimList = new ArrayList<>();
+		              	         for (String s : array3) {
+		              	        	DsiTrimList.add(Integer.parseInt(s.strip()));
+		              	         }
+		              	         
 		              	         
 			              	       new Thread(() -> {
-				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
+				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
 				             			 try {
 											ppw.start();
 										} catch (Exception e1) {

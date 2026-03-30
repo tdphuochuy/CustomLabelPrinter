@@ -76,14 +76,14 @@ import paperwork.gen.tenderGen;
 public class paperworkDSIGen{
 	private String username,password,orderNum,reworkOrderNum,name;
 	private int[] times;
-	private List<Integer> bloodcondemnList,greencondemnList;
+	private List<Integer> bloodcondemnList,greencondemnList,DsiTrimList;
 	private String sessionId = "";
 	private String tenderCondemnTotal;
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
 	private boolean pdfOnly,sendEmail;
-	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
+	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -94,6 +94,7 @@ public class paperworkDSIGen{
 		this.times = times;
 		this.bloodcondemnList = bloodcondemnList;
 		this.greencondemnList = greencondemnList;
+		this.DsiTrimList = DsiTrimList;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
 		this.tenderCondemnTotal = tenderCondemnTotal;
