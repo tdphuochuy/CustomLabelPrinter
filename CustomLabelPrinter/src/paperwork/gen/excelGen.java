@@ -176,6 +176,29 @@ abstract class excelGen {
 		 return totalWeight;
 	 }
 	 
+	 public double getTotalWeightByProduct(String productCode)
+	 {
+		 if(!productMap.containsKey(productCode))
+		 {
+			 return 0;
+		 }
+		 
+		 Map<Integer,List<Product>> map = productMap.get(productCode);
+		 double totalWeight = 0;
+		 if(map != null)
+		 {
+			 for(Integer key : map.keySet())
+			 {
+				 List<Product> list = map.get(key);
+				 for(Product product: list)
+				 {
+					 totalWeight += product.getWeight();
+				 }
+			 }
+		 }
+		 return totalWeight;
+	 }
+	 
 	 public int getTotalCaseByProduct(Map<Integer,List<Product>> map)
 	 {
 		 int totalcase = 0;
