@@ -378,10 +378,22 @@ public class paperworkDSIGen{
         
         try {
 			postRecap(breastExcel);
+			updateDSItrim(breastExcel);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateDSItrim(breastGen breastExcel)
+	{
+		double totalNoRibWeight = 0;
+		for(String productCode: noRibProductCodeList)
+		{
+			totalNoRibWeight = totalNoRibWeight + breastExcel.getTotalWeightByProduct(productCode);
+		}
+		
+		//TO-DO
 	}
 	
 	public void openPDFfile()
