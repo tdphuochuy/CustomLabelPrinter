@@ -354,10 +354,10 @@ public class paperworkMarelGen{
 					{
 						reworkMap.put(itemPack, new ArrayList<Product>());
 					}
-					reworkMap.get(itemPack).add(new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
+					reworkMap.get(itemPack).add(new Product(productCode,trackingNum,hour,type,description,quantity,weight,isCombo));
 					continue;
 				}
-				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
+				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,description,quantity,weight,isCombo));
 			}
 		}
 	}

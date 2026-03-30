@@ -417,4 +417,9 @@ public class breastGen extends excelGen{
 		return weight;
 	}
 	
+	public double getNoRibComboWeight()
+	{
+		
+	}
+	
 }
