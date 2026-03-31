@@ -59,8 +59,8 @@ import config.Config;
 public class test {
 
     public static void main(String[] args) throws Exception {
-		double totalNoRibWeight = 60000;
-		double totalDSITrimWeight = 1800;
+		double totalNoRibWeight = 50000;
+		double totalDSITrimWeight = 6200;
 
 
 		
@@ -77,7 +77,7 @@ public class test {
 	            
 	            String date = getDate("MM/dd/yyyy");
 	            
-	            for(int i = rowIndex; i > Math.max(1, lastRowIndex - 5); i--)
+	            for(int i = rowIndex; i > Math.max(0, lastRowIndex - 5); i--)
 	            {
 	            	System.out.println(rowIndex);
 	            	Row row = sheet.getRow(i);
