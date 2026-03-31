@@ -406,7 +406,7 @@ public class paperworkDSIGen{
 		}
 		
 		
-		try (FileInputStream fis = new FileInputStream("");
+		try (FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx");
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
 	            Sheet sheet = workbook.getSheetAt(1); 
@@ -421,7 +421,7 @@ public class paperworkDSIGen{
 	            }
 	        	
 	            // Save changes
-	            try (FileOutputStream fos = new FileOutputStream("DSITrim.xlsx")) {
+	            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx")) {
 	                workbook.write(fos);
 	            }
 
