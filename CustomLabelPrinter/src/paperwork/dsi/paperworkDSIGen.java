@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,6 +50,10 @@ import javax.net.ssl.X509TrustManager;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -388,10 +393,45 @@ public class paperworkDSIGen{
 	public void updateDSItrim(breastGen breastExcel)
 	{
 		double totalNoRibWeight = 0;
+		double totalDSITrimWeight = 0;
+
 		for(String productCode: noRibProductCodeList)
 		{
 			totalNoRibWeight = totalNoRibWeight + breastExcel.getTotalWeightByProduct(productCode);
 		}
+		
+		for(int weight : DsiTrimList)
+		{
+			totalDSITrimWeight += weight;
+		}
+		
+		
+		try (FileInputStream fis = new FileInputStream("");
+	             Workbook workbook = new XSSFWorkbook(fis)) {
+
+	            Sheet sheet = workbook.getSheetAt(1); 
+	            
+	            int lastRowIndex = sheet.getLastRowNum();
+	            
+	            int rowIndex = lastRowIndex + 1;
+	            
+	            for(int i = lastRowIndex; i > Math.min(0, lastRowIndex - 5); i--)
+	            {
+	            	Row row = sheet.getRow(i);
+	            }
+	        	
+	            // Save changes
+	            try (FileOutputStream fos = new FileOutputStream("DSITrim.xlsx")) {
+	                workbook.write(fos);
+	            }
+
+	            System.out.println("DSI Trim updated successfully!");
+	            
+	            //File file = new File("recap_output/carcass.xlsx");
+	            //exportPDF(file.getAbsolutePath());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		
 		//TO-DO
 	}
