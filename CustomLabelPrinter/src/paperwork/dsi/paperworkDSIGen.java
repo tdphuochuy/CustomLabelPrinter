@@ -29,7 +29,9 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.mail.Authenticator;
@@ -50,6 +52,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -415,10 +418,28 @@ public class paperworkDSIGen{
 	            
 	            int rowIndex = lastRowIndex + 1;
 	            
+	            String date = getDate("MM/dd/yyyy");
+	            
 	            for(int i = lastRowIndex; i > Math.min(0, lastRowIndex - 5); i--)
 	            {
 	            	Row row = sheet.getRow(i);
+	            	if (row == null) row = sheet.createRow(rowIndex);
+
+	                Cell cell = row.getCell(0);
+	                
+	                if(cell.getStringCellValue().equals(date))
+	                {
+	                	rowIndex = i; 
+	                	break;
+	                }
 	            }
+	            
+	            Row row = sheet.getRow(rowIndex);
+	            Cell TrimCell = row.getCell(1);
+	            TrimCell.setCellValue(totalDSITrimWeight);
+	            Cell NoRibcell = row.getCell(1);
+	            NoRibcell.setCellValue(totalNoRibWeight);
+	            
 	        	
 	            // Save changes
 	            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx")) {
@@ -427,8 +448,7 @@ public class paperworkDSIGen{
 
 	            System.out.println("DSI Trim updated successfully!");
 	            
-	            //File file = new File("recap_output/carcass.xlsx");
-	            //exportPDF(file.getAbsolutePath());
+
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
@@ -703,4 +723,25 @@ public class paperworkDSIGen{
 	            }
 	        }, timeoutMillis);
 	    }
+	   
+		 public static String getDate(String dateFormat)
+			{
+				LocalDate today;
+				LocalTime currentTime = LocalTime.now();
+		        int currentHour = currentTime.getHour();
+				if(currentHour < 5)
+				{
+					today = LocalDate.now().minusDays(1);
+				} else {
+					today= LocalDate.now();
+				}
+				
+		        // Define the formatter for MMDD
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+
+		        // Format the date
+		        String formattedDate = today.format(formatter);
+		        
+		        return formattedDate;
+			}
 }

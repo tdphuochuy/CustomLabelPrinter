@@ -321,56 +321,61 @@ public class paperworkDSIPanel extends JPanel{
                  		{
               				if(textArea.getText().length() > 0 && isVerified())
               				{
-		              			 String username = userField.getText();
-		              			 String password = passField.getText();
-		              			 String orderNum = orderField.getText();
-		              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
-		              			 String name = nameField.getText();
-		              			 int break1 = Integer.parseInt(break1Field.getText());
-		              			 int break2 = Integer.parseInt(break2Field.getText());
-		              			 if(!break2cb.isSelected())
-		              			 {
-		              				 break2 = 26;
-		              			 }
-		              			 int[] times = {break1,break2};
-		              			 
-		              			 String bloodcondemnText = textArea.getText();
-		              			 String[] array = bloodcondemnText.split("\n");
-		              			 List<Integer> bloodcomdemnList = new ArrayList<>();
-		              	         for (String s : array) {
-		              	        	 int bloodweight = Integer.parseInt(s);
-		              	        	if(bloodweight > 250)
-		              	        	{
-		              	        		bloodweight = bloodweight - 138;
-		              	        	}
-		              	        	bloodcomdemnList.add(bloodweight);
-		              	         }
-		              	         
-		              	         
-		              	         String greencondemnText = textArea2.getText();
-		              			 String[] array2 = greencondemnText.split("\n");
-		              			 List<Integer> greencomdemnList = new ArrayList<>();
-		              	         for (String s : array2) {
-		              	        	greencomdemnList.add(Integer.parseInt(s) - 15);
-		              	         }
-		              	         
-		              	         String DsiTrimText = textArea3.getText();
-		              			 String[] array3 = DsiTrimText.split("\n");
-		              			 List<Integer> DsiTrimList = new ArrayList<>();
-		              	         for (String s : array3) {
-		              	        	DsiTrimList.add(Integer.parseInt(s.strip()));
-		              	         }
-		              	         
-		              	         
-			              	       new Thread(() -> {
-				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
-				             			 try {
-											ppw.start();
-										} catch (Exception e1) {
-											// TODO Auto-generated catch block
-											e1.printStackTrace();
-										}
-			              	        }).start();
+              					if(textArea3.getText().length() > 0)
+              					{
+			              			 String username = userField.getText();
+			              			 String password = passField.getText();
+			              			 String orderNum = orderField.getText();
+			              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+			              			 String name = nameField.getText();
+			              			 int break1 = Integer.parseInt(break1Field.getText());
+			              			 int break2 = Integer.parseInt(break2Field.getText());
+			              			 if(!break2cb.isSelected())
+			              			 {
+			              				 break2 = 26;
+			              			 }
+			              			 int[] times = {break1,break2};
+			              			 
+			              			 String bloodcondemnText = textArea.getText();
+			              			 String[] array = bloodcondemnText.split("\n");
+			              			 List<Integer> bloodcomdemnList = new ArrayList<>();
+			              	         for (String s : array) {
+			              	        	 int bloodweight = Integer.parseInt(s);
+			              	        	if(bloodweight > 250)
+			              	        	{
+			              	        		bloodweight = bloodweight - 138;
+			              	        	}
+			              	        	bloodcomdemnList.add(bloodweight);
+			              	         }
+			              	         
+			              	         
+			              	         String greencondemnText = textArea2.getText();
+			              			 String[] array2 = greencondemnText.split("\n");
+			              			 List<Integer> greencomdemnList = new ArrayList<>();
+			              	         for (String s : array2) {
+			              	        	greencomdemnList.add(Integer.parseInt(s) - 15);
+			              	         }
+			              	         
+			              	         String DsiTrimText = textArea3.getText();
+			              			 String[] array3 = DsiTrimText.split("\n");
+			              			 List<Integer> DsiTrimList = new ArrayList<>();
+			              	         for (String s : array3) {
+			              	        	DsiTrimList.add(Integer.parseInt(s.strip()));
+			              	         }
+			              	         
+			              	         
+				              	       new Thread(() -> {
+					             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
+					             			 try {
+												ppw.start();
+											} catch (Exception e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+				              	        }).start();
+              					} else {
+            	                       JOptionPane.showMessageDialog(frame, "Missing DSI Trim weights", "Error", JOptionPane.ERROR_MESSAGE);
+              					}
               				} else {
        	                       JOptionPane.showMessageDialog(frame, "Missing condemned weights", "Error", JOptionPane.ERROR_MESSAGE);
               				}
