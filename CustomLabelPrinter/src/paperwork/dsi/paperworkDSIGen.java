@@ -412,15 +412,16 @@ public class paperworkDSIGen{
 		try (FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx");
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
-	            Sheet sheet = workbook.getSheetAt(1); 
+	            Sheet sheet = workbook.getSheetAt(1);
 	            
+	            System.out.println(sheet.getSheetName());
 	            int lastRowIndex = sheet.getLastRowNum();
-	            
+	            System.out.println(lastRowIndex);
 	            int rowIndex = lastRowIndex + 1;
 	            
 	            String date = getDate("MM/dd/yyyy");
 	            
-	            for(int i = lastRowIndex; i > Math.min(0, lastRowIndex - 5); i--)
+	            for(int i = rowIndex; i > Math.min(0, Math.abs(lastRowIndex - 5)); i--)
 	            {
 	            	Row row = sheet.getRow(i);
 	            	if (row == null) row = sheet.createRow(rowIndex);
