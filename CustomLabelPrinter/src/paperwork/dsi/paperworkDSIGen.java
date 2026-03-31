@@ -414,31 +414,43 @@ public class paperworkDSIGen{
 
 	            Sheet sheet = workbook.getSheetAt(1);
 	            
-	            System.out.println(sheet.getSheetName());
 	            int lastRowIndex = sheet.getLastRowNum();
-	            System.out.println(lastRowIndex);
 	            int rowIndex = lastRowIndex + 1;
 	            
 	            String date = getDate("MM/dd/yyyy");
 	            
-	            for(int i = rowIndex; i > Math.min(0, Math.abs(lastRowIndex - 5)); i--)
+	            for(int i = rowIndex; i > Math.max(1, lastRowIndex - 5); i--)
 	            {
 	            	Row row = sheet.getRow(i);
 	            	if (row == null) row = sheet.createRow(rowIndex);
 
 	                Cell cell = row.getCell(0);
 	                
-	                if(cell.getStringCellValue().equals(date))
+	                if(cell != null)
 	                {
-	                	rowIndex = i; 
-	                	break;
+		                if(cell.getStringCellValue().equals(date))
+		                {
+		                	rowIndex = i; 
+		                	break;
+		                }
 	                }
 	            }
 	            
-	            Row row = sheet.getRow(rowIndex);
+		            Row row = sheet.getRow(rowIndex);
+	           	if (row == null) {
+	           		row = sheet.createRow(rowIndex);
+	           	}
+	           	if(row.getCell(0) == null)
+	           	{
+	           		row.createCell(0);
+	           		row.createCell(1);
+	           		row.createCell(2);
+	           	}
+	            Cell dateCell = row.getCell(0);
+	            dateCell.setCellValue(date);
 	            Cell TrimCell = row.getCell(1);
 	            TrimCell.setCellValue(totalDSITrimWeight);
-	            Cell NoRibcell = row.getCell(1);
+	            Cell NoRibcell = row.getCell(2);
 	            NoRibcell.setCellValue(totalNoRibWeight);
 	            
 	        	
@@ -446,13 +458,13 @@ public class paperworkDSIGen{
 	            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx")) {
 	                workbook.write(fos);
 	            }
-
+	
 	            System.out.println("DSI Trim updated successfully!");
-	            
-
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+		            
+	
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
 		
 		//TO-DO
 	}

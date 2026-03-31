@@ -9,6 +9,7 @@ import paperwork.gen.wingGen;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,169 +57,97 @@ import org.jsoup.select.Elements;
 import config.Config;
 
 public class test {
-	private static int currentRow;
 
     public static void main(String[] args) throws Exception {
-    	int[] times = {20,23};
-    	thighGen thighExcel = new thighGen(times);
-    	wingGen wingExcel = new wingGen(times);
-    	drumGen drumExcel = new drumGen(times);
+		double totalNoRibWeight = 60000;
+		double totalDSITrimWeight = 1800;
 
-		Map<String,Product> productMap = new TreeMap<>();
-		Element dataTable = getData("","lcuevas");
-		extractData(productMap,dataTable);
+
 		
-		for(String key: productMap.keySet())
-		{
-			Product product = productMap.get(key);
-			if(product.getType().equals("thigh"))
-			{
-				thighExcel.addProduct(product);
-			} else if(product.getType().equals("wing"))
-			{
-				wingExcel.addProduct(product);
-			} else if(product.getType().equals("drums"))
-			{
-				drumExcel.addProduct(product);
-			} else if(product.getType().equals("carcass"))
-			{
-				drumExcel.addCarcass(product);
-			} else if(product.getType().equals("wog"))
-			{
-				drumExcel.addWog(product);
-			}else if(product.getType().equals("leg 1/4"))
-			{
-				drumExcel.addLeg(product);
-			}
-		}
 		
-		thighExcel.generateExcel();
-		wingExcel.generateExcel();
-		drumExcel.generateExcel();
-				
-		recapGenMarel recapGen = new recapGenMarel("Lam","Donovan",null, thighExcel, drumExcel, wingExcel,null); 
-		recapGen.generateExcel();
+		try (FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx");
+	             Workbook workbook = new XSSFWorkbook(fis)) {
+
+	            Sheet sheet = workbook.getSheetAt(1);
+	            
+	            System.out.println(sheet.getSheetName());
+	            int lastRowIndex = sheet.getLastRowNum();
+	            System.out.println(lastRowIndex);
+	            int rowIndex = lastRowIndex + 1;
+	            
+	            String date = getDate("MM/dd/yyyy");
+	            
+	            for(int i = rowIndex; i > Math.max(1, lastRowIndex - 5); i--)
+	            {
+	            	System.out.println(rowIndex);
+	            	Row row = sheet.getRow(i);
+	            	if (row == null) row = sheet.createRow(rowIndex);
+
+	                Cell cell = row.getCell(0);
+	                
+	                if(cell != null)
+	                {
+		                if(cell.getStringCellValue().equals(date))
+		                {
+		                	rowIndex = i; 
+		                	break;
+		                }
+	                }
+	            }
+	            
+            	System.out.println(rowIndex);
+	            Row row = sheet.getRow(rowIndex);
+            	if (row == null) {
+            		row = sheet.createRow(rowIndex);
+            	}
+            	if(row.getCell(0) == null)
+            	{
+            		row.createCell(0);
+            		row.createCell(1);
+            		row.createCell(2);
+            	}
+	            Cell dateCell = row.getCell(0);
+	            dateCell.setCellValue(date);
+	            Cell TrimCell = row.getCell(1);
+	            TrimCell.setCellValue(totalDSITrimWeight);
+	            Cell NoRibcell = row.getCell(2);
+	            NoRibcell.setCellValue(totalNoRibWeight);
+	            
+	        	
+	            // Save changes
+	            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\DSITrim.xlsx")) {
+	                workbook.write(fos);
+	            }
+
+	            System.out.println("DSI Trim updated successfully!");
+	            
+
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
     	
     }
     
-	public static Element getData(String orderNum,String searchKey) throws IOException
-	{
 
-		File input = new File(System.getProperty("user.home") + "\\Desktop\\XMLReport.html");
-        Document doc = Jsoup.parse(input, "UTF-8");
-		Element bodyElement = doc.body();
-		Element inputElement = bodyElement.select("[name=unnamed]").first();
-		for(Element table : inputElement.getElementsByTag("table"))
+	 public static String getDate(String dateFormat)
 		{
-			if(table.html().toLowerCase().contains(searchKey))
+			LocalDate today;
+			LocalTime currentTime = LocalTime.now();
+	        int currentHour = currentTime.getHour();
+			if(currentHour < 5)
 			{
-				return table;
+				today = LocalDate.now().minusDays(1);
+			} else {
+				today= LocalDate.now();
 			}
-		}
-		
-		return null;
-	}
-	
-	public static void extractData(Map<String,Product> map,Element table) throws ParseException, IOException
-	{
-		InputStream inputStream = paperworkDSIGen.class.getClassLoader().getResourceAsStream("paperwork/product_data.json");
-        String inputData = new BufferedReader(new InputStreamReader(inputStream))
-                            .lines()
-                            .collect(Collectors.joining("\n"));
-    	JSONParser jsonParser = new JSONParser();
-    	JSONObject productObj = (JSONObject) jsonParser.parse(inputData);
-		for(Element tr : table.getElementsByTag("tr"))
-		{
-			String content = tr.html();
-			if(content.toLowerCase().contains("lcuevas"))
-			{
-				String trackingNum = tr.getElementsByTag("a").get(0).text();
-				if(content.contains("#ff0000"))
-				{
-					map.remove(trackingNum);
-					continue;
-				}
-				Elements td = tr.getElementsByTag("td");
-				String itemPack = td.get(2).text() + td.get(3).text();
-				System.out.println(itemPack);
-				String productCode = ((JSONObject)productObj.get(itemPack)).get("Product").toString();
-				String description =  td.get(4).text();
-				String lotNumber =  td.get(5).text();
-				int hour = Integer.parseInt(lotNumber.substring(lotNumber.length() - 6,lotNumber.length() - 4));
-				if(hour == 98)
-				{
-					hour = getHourby98(trackingNum,getData("","transaction id"));
-					System.out.println(hour);
-				}
-				if(hour > 35 && hour < 54)
-				{
-					hour = hour - 30;
-				} else if (hour > 29 && hour < 35) {
-					hour = hour - 6;
-				} else if (hour > 26 && hour < 29)
-				{
-					hour = 26;
-				} else if (hour >= 0 && hour < 5)
-				{
-					hour = hour + 24;
-				}
-				
-				int quantity = (int) Double.parseDouble(td.get(8).text().replace(",", ""));
-				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
-				if(productCode.equals("17333"))
-				{
-					quantity = 2000;
-				} else if (productCode.equals("15896") && quantity == 2000)
-				{
-					quantity = 1950;
-					weight = 1950;
-				}
-				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
-				String type = getType(description);
-				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
-			}
-		}
-	}
-	
-	public static int getHourby98(String tracking,Element table)
-	{
-		for(Element tr : table.getElementsByTag("tr"))
-		{
-			if(tr.html().contains(tracking))
-			{
-				Elements td = tr.getElementsByTag("td");
-				String transactionID = td.get(1).text();
-				String[] split = transactionID.split("-");
-				String time = split[2];
-				String hour = time.substring(0,2);
-				return Integer.valueOf(hour);
-			}
-		}
-		
-		return 0;
-	}
-	
-	public static String getType(String description)
-	{
-		String type = "";
-		if(description.contains("THGH"))
-		{
-			type = "thigh";
-		} else if (description.contains("FRNT 1/2 W/O")) {
-			type = "wog";
-		}else if (description.contains("LEG 1/4")) {
-			type = "leg 1/4";
-		} else if (description.contains("WING"))
-		{
-			type = "wing";
-		} else if (description.contains("DRMS")) {
-			type = "drums";
-		} else if (description.contains("CARC") || description.contains("CKN BACKBONE AND TAILS"))
-		{
-			type = "carcass";
-		} 
+			
+	        // Define the formatter for MMDD
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
 
-		return type;
-	}
+	        // Format the date
+	        String formattedDate = today.format(formatter);
+	        
+	        return formattedDate;
+		}
 
 }
