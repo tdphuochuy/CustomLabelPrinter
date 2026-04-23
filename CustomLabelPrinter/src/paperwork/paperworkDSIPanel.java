@@ -196,7 +196,7 @@ public class paperworkDSIPanel extends JPanel{
         });
         
         JLabel nameLabel = new JLabel("Name");
-        JTextField  nameField = new JTextField("Ansley",5);
+        JTextField  nameField = new JTextField("Huy",5);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
         
@@ -222,6 +222,7 @@ public class paperworkDSIPanel extends JPanel{
         JCheckBox pdfOnlycb = new JCheckBox("Generate PDF only");
         checkboxesPanel.add(pdfOnlycb);
         JCheckBox sendEmailcb = new JCheckBox("Send email");
+        sendEmailcb.setSelected(true);
         checkboxesPanel.add(sendEmailcb);
         
         JPanel mainPanel = new JPanel();

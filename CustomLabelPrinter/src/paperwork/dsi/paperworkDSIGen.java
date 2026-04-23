@@ -374,7 +374,7 @@ public class paperworkDSIGen{
         if(sendEmail)
         {
         	sendEmail("tdphuochuy@gmail.com");
-        	sendEmail("ansleymstanley.6994@gmail.com");
+        	sendEmail("umuruta145@gmail.com");
         }
         
         if(pdfOnly)
