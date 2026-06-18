@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -301,6 +302,10 @@ public class paperworkDSIGen{
 				Elements td = tr.getElementsByTag("td");
 				String itemPack = td.get(2).text() + td.get(3).text();
 				System.out.println(itemPack);
+				if(productObj.get(itemPack) == null)
+				{
+					productObj = getUpdatedProductObj();
+				}
 				String productCode = ((JSONObject)productObj.get(itemPack)).get("Product").toString();
 				String description =  td.get(4).text();
 				String lotNumber =  td.get(5).text();
@@ -327,6 +332,80 @@ public class paperworkDSIGen{
 			}
 		}
 	}
+	
+	public JSONObject getUpdatedProductObj()
+	{
+		System.out.println("getting new product database");
+		OkHttpClient client = new OkHttpClient();
+        LinkedHashMap<String, JSONObject> rootMap = new LinkedHashMap<>();
+
+		FormBody formBody = new FormBody.Builder()
+                .add("fileName", "reports/contxf.txt")
+                .add("whsx", "144")
+                .add("submit1", "Go")
+                .add("r", "XMLReport")
+                .add("f", "n")
+                .add("session", sessionId)
+                .build();
+		
+		Request request = new Request.Builder()
+                .url("http://whistleclient/cgi-bin/yield/") // Example URL
+                .post(formBody)
+                .build();
+		
+		try (
+				Response response = client.newCall(request).execute()) {
+            if (response.code() == 200) {
+            	String body = response.body().string();
+            	Document doc = Jsoup.parse(body);
+                Elements rows = doc.select("tr");
+
+                for (Element row : rows) {
+                    Elements cols = row.select("td");
+
+                    // Table rows with product data have 14 columns
+                    if (cols.size() == 14) {
+                        String item = cleanText(cols.get(1).text());
+                        String pack = cleanText(cols.get(2).text());
+                        String product = cleanText(cols.get(3).text());
+                        String description = cleanText(cols.get(5).text());
+                        String containerType = cleanText(cols.get(6).text());
+
+                        // Skip header row
+                        if (item.equalsIgnoreCase("Item") || item.isEmpty()) continue;
+
+                        // Create composite key
+                        String key = item + pack;
+
+                        // Create JSONObject for the item
+                        JSONObject jo = new JSONObject();
+                        jo.put("Item", item);
+                        jo.put("Description", description);
+                        jo.put("Container Type", containerType);
+                        jo.put("Product", product);
+                        jo.put("Pack", pack);
+
+                        rootMap.put(key, jo);
+                    }
+                }
+
+                // Convert map to final JSON structure
+                JSONObject finalJson = new JSONObject(rootMap);
+            	return finalJson;
+            	
+            } else {
+            	System.out.println(response.code());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+		return null;
+	}
+	
+    private static String cleanText(String text) {
+        return text.replace("\u00A0", "").trim();
+    }
 	
 	public void evaluateData(Map<String,Product> map) throws InterruptedException, IOException
 	{
