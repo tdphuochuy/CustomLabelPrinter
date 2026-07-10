@@ -601,7 +601,7 @@ public class paperworkDSIGen{
 	                workbook.write(fos);
 	            }
 	
-	            System.out.println("DSI Trim updated successfully!");
+	            System.out.println("DSI comdemned updated successfully!");
 		            
 	
 		        } catch (IOException e) {
