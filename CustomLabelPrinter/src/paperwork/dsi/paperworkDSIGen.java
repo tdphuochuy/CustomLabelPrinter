@@ -89,11 +89,12 @@ public class paperworkDSIGen{
 	private List<String> noRibProductCodeList = new ArrayList<>();
 	private String sessionId = "";
 	private String tenderCondemnTotal;
+	private String dsiEOSCondemnTotal;
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
 	private boolean pdfOnly,sendEmail;
-	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal)
+	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -108,6 +109,7 @@ public class paperworkDSIGen{
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
 		this.tenderCondemnTotal = tenderCondemnTotal;
+		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
 		sessionId = getSessionId();
 	}
 	
@@ -444,7 +446,7 @@ public class paperworkDSIGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal);
 		recapExcel.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);
@@ -466,6 +468,7 @@ public class paperworkDSIGen{
         try {
 			postRecap(breastExcel);
 			updateDSItrim(breastExcel);
+			updateEOScondemned();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -546,6 +549,63 @@ public class paperworkDSIGen{
 		        }
 		
 		//TO-DO
+	}
+	
+	public void updateEOScondemned()
+	{
+		try (FileInputStream fis = new FileInputStream(System.getProperty("user.home") + "\\Desktop\\ESOcondemned.xlsx");
+	             Workbook workbook = new XSSFWorkbook(fis)) {
+
+	            Sheet sheet = workbook.getSheetAt(1);
+	            
+	            int lastRowIndex = sheet.getLastRowNum();
+	            int rowIndex = lastRowIndex + 1;
+	            
+	            String date = getDate("MM/dd/yyyy");
+	            
+	            for(int i = rowIndex; i > Math.max(0, lastRowIndex - 5); i--)
+	            {
+	            	Row row = sheet.getRow(i);
+	            	if (row == null) row = sheet.createRow(rowIndex);
+
+	                Cell cell = row.getCell(0);
+	                
+	                if(cell != null)
+	                {
+		                if(cell.getStringCellValue().equals(date))
+		                {
+		                	rowIndex = i; 
+		                	break;
+		                }
+	                }
+	            }
+	            
+		            Row row = sheet.getRow(rowIndex);
+	           	if (row == null) {
+	           		row = sheet.createRow(rowIndex);
+	           	}
+	           	if(row.getCell(0) == null)
+	           	{
+	           		row.createCell(0);
+	           		row.createCell(1);
+	           	}
+	            Cell dateCell = row.getCell(0);
+	            dateCell.setCellValue(date);
+	            Cell condemnedCell = row.getCell(1);
+	            condemnedCell.setCellValue(dsiEOSCondemnTotal);
+	            
+	        	
+	            // Save changes
+	            try (FileOutputStream fos = new FileOutputStream(System.getProperty("user.home") + "\\Desktop\\ESOcondemned.xlsx")) {
+	                workbook.write(fos);
+	            }
+	
+	            System.out.println("DSI Trim updated successfully!");
+		            
+	
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
 	}
 	
 	public void openPDFfile()

@@ -22,7 +22,8 @@ public class recapGen extends excelGen{
 	private List<Double> issuedList1;
 	private List<Double> issuedList2;
 	private String tenderCondemnTotal;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal)
+	private String dsiEOSCondemnTotal;
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal,String dsiEOSCondemnTotal)
 	{
 		this.name = name;
 		this.breast = breast;
@@ -33,6 +34,7 @@ public class recapGen extends excelGen{
 		this.issuedList1 = issuedList1;
 		this.issuedList2 = issuedList2;
 		this.tenderCondemnTotal = tenderCondemnTotal;
+		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
 	}
 
 	@Override
@@ -175,7 +177,7 @@ public class recapGen extends excelGen{
 		        	currentRow++;
 	        	}
 	        	
-        		setCellValue(sheet, "H", 41, String.valueOf(getCondemnWeight()) + " lbs");
+        		setCellValue(sheet, "H", 35, String.valueOf(getCondemnWeight()) + " lbs");
         		
         		if(issuedList1.size() > 0)
         		{
@@ -187,8 +189,9 @@ public class recapGen extends excelGen{
             		setCellValue(sheet, "G", 7, "2nd: " + formatDouble(getIssuedTotal(issuedList2)) + " lbs");
         		}
         		
-        		        		
+        		
         		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
+        		setCellValue(sheet, "G", 40, dsiEOSCondemnTotal + " lbs");
 
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {

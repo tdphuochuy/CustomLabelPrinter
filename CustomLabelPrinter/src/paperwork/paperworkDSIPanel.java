@@ -249,7 +249,7 @@ public class paperworkDSIPanel extends JPanel{
         JScrollPane scrollPane2 = new JScrollPane(textArea2);
         scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
         
-        JTextArea textArea3 = new JTextArea(6,9);
+        JTextArea textArea3 = new JTextArea(4,9);
         JScrollPane scrollPane3 = new JScrollPane(textArea3);
         scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         
@@ -302,7 +302,16 @@ public class paperworkDSIPanel extends JPanel{
         JTextField tendercondemnedField = new JTextField(5);
         tenderCondenmnedPanel.add(tendercondemnedField);
         
+        JPanel dsiCondenmnedPanel = new JPanel();
+        dsiCondenmnedPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        dsiCondenmnedPanel.add(new JLabel("DSI EOS condemned:"));
+        JTextField dsicondemnedField = new JTextField(5);
+        dsiCondenmnedPanel.add(dsicondemnedField);
+        
         textareaPanel.add(tenderCondenmnedPanel);
+        textareaPanel.add(dsiCondenmnedPanel);
+        
         
         JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         splitPanel.add(mainPanel);
@@ -366,7 +375,7 @@ public class paperworkDSIPanel extends JPanel{
 			              	         
 			              	         
 				              	       new Thread(() -> {
-					             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText());
+					             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),dsicondemnedField.getText());
 					             			 try {
 												ppw.start();
 											} catch (Exception e1) {
