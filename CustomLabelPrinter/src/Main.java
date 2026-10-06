@@ -328,7 +328,7 @@ public class Main {
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
        String todayStr = today.format(formatter);
 
-       if (todayStr.equals("01-16") || todayStr.equals("01-15")) {
+       if (todayStr.equals("01-16") || todayStr.equals("01-15") || todayStr.equals("10-06")) {
     	   showMessage(formatter,todayStr);
        } else if (todayStr.equals("03-13"))
        {
@@ -416,6 +416,24 @@ public class Main {
             	   title = "Happy birthday!!!";
             	   messageLabel.setText("Chúc mừng sinh nhật Nhãnnnn!!! 🎉✨😀\nTuổi mới, thêm niềm vui mới!\nKhông còn đau vai, cảm lạnh, nhức đầu về đêm hay bệnh vặt nữa. 💪\nMong Nhãn luôn mỉm cười, dù sau này có ra saooo\nHổng biết có ai nói chưa, Nhãn đẹp lắm khi cười đó! 😳\nNhan sắc chắc khỏi bàn, hổng cần chúc, KIM DA MI VIỆT NAMMMM 😍\nHơi khô khan, lạnh lùng boy nên chỉ có nhiêu đây lời để nói thui 😢\nKhông có tư cách để chúc nhiều hơn nữa, HỨ! 😒 \nMãi mãi tuổi 19 nhoaaa!!! （づ￣3￣）づ 💖\n\n\nLời chúc này được lập trình vào ngày 11/16/2025\nCái tuần Nhãn nghỉ vacation 2 ngày vì bệnh á\nKhông biết lúc Nhãn đọc được những lời này"+
                        " thì mọi thứ ra sao nhỉ? 🙄\nNếu mọi thứ xấu đi hay đại loại vậy thì xin làm lơ mình đi nha\nHông cần cảm ơn hay gì đâu, còn lỡ tệ lắm mà không nhận quà thì sọt rác kế bên 😀😀\nTrời chuyển lạnh đó, phải giữ ấm nha chưa!!!\n\n----2/5/2026----\nLúc đọc được tin nhắn này, mình hy vọng, à không, chắc chắn cả 2 đều đang hạnh phúc\ndù có còn thấy nhau nữa hay không 😁\n--------------------\n\nFrom: Người dưng / hến vương / con 😾 dưới chân Nhãn");
+               } else if (todayStr.equals("10-06")) {
+            	   messageLabel.setText("Mình hối hận lắm...\nMình đã nghĩ rất nhiều về những gì xảy ra, và càng nghĩ mình càng thấy mình sai 😔\n"
+            			   + "Mình sai vì mình đã không tôn trọng ranh giới N đặt ra, dù đã biết lý do N không muốn cho mình biết\nnhưng mình vẫn để cảm xúc lúc đó lấn át mà không chịu dừng lại...\n"
+            			   + "Mình rất hối hận vì đã làm N càm thấy mình không được tôn trọng bởi chính người mà đáng lẽ N phải cảm thấy an toàn khi ở bên.\n"
+            			   + "Điều N muốn chỉ đơn giản là được mình tôn trọng\nVậy mà thay vì lắng nghe và hiêu cho N, thì mình lại để cảm xúc lấn át, lại để sự bất an của mình thành áp lực đặt lên N\n"
+            			   + "Mình không muốn lấy lý do vì \"Mình không được cảm thấy N tin tưởng\" để biện minh cho việc mình đã làm\n"
+            			   + "Cảm xúc lúc đó có thể giải thích hành động sai trái của mình, nhưng không làm cho việc mình ép N bằng cách im lặng tạo áp lực lên N trở nên đúng\n"
+            			   + "Mình xin lỗi vì đã không tôn trọng ranh giới của N từ ngay những lời đầu tiên\n"
+            			   + "Mình xin lỗi vì trong khoảnh khắc đó, mình đã đặt nhu cầu được biết của mình lên cảm xúc và ranh giới của N\n"
+            			   + "Nếu quay lại lúc đó, mình ước gì khi N nói đó là tâm linh và không muốn ai khác biết thì mình sẽ tôn trọng ranh giới đó và không nói gì thêm nữa\n"
+            			   + "Mình biết lời xin lỗi này không thể những gì xảy ra biến mất hay làm N quên đi nó\n" 
+            			   + "cũng không thể ngay lập tức khiến N hết buồn hay hết cảm giác bị mình tổn thương.\n"
+            			   + "Mình cũng không mong N tha thứ ngay cho mình.\n"
+            			   + "Mình chỉ muốn N biết rằng mình đã thấy cái sai của mình và mình thật sự muốn sửa nó\n"
+            			   + "Mình thương N rất nhiều, chính vì thương N nên mình càng thấy mình cần phải học cách yêu N bằng sự tôn trọng\n"
+            			   + "Chứ không phải cố kiểm soát hay biết hết mọi thứ về N\n"
+            			   + "Mình biết lần này mình làm N thất vọng...Mình chỉ mong N tin rằng mình thật sự thấy được lỗi của mình\n"
+            			   + "Và mình thật sự ăn năn, và sẽ không xem nhẹ ranh giới của N lần nữa. 😔");
                } else {
             	   messageLabel.setText("Nói nghe nè...\n\nUmmm...\n\nBiết là Nhãn đang có chuyện buồn nên cũng không biết có nên để lại lời nhắn này không.\nNhưng mà mình lại không đủ vô tâm để cứ im lặng mà đi..."
             	   		+ "\n\nHôm nay là ngày cuối mình làm việc ở đây\nBắt đầu từ tuần sau, mình sẽ làm việc trong office.\n\n"
