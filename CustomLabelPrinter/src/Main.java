@@ -35,6 +35,7 @@ import okhttp3.Response;
 import okhttp3.Route;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import paperwork.paperwork1stDSIPanel;
 import paperwork.paperworkDSIPanel;
 import paperwork.paperworkMarelPanel;
 import paperwork.dsi.comboWeightTask;
@@ -72,6 +73,7 @@ public class Main {
    private static NeoWhistlePanel neoWhistle;
    private static buttonsPanel buttons;
    private static paperworkDSIPanel ppwDSI;
+   private static paperwork1stDSIPanel ppw1stDSI;
    private static paperworkMarelPanel ppwMarel;
    public static void main(String[] args) throws URISyntaxException, InterruptedException, ParseException, IOException {
        // Create the main frame
@@ -121,6 +123,10 @@ public class Main {
        ppwDSI = new paperworkDSIPanel(frame);
        ppwDSIPanel.add(ppwDSI);
        
+       JPanel ppw1stDSIPanel = new JPanel();
+       ppw1stDSI = new paperwork1stDSIPanel(frame);
+       ppw1stDSIPanel.add(ppw1stDSI);
+       
        JPanel ppwMarelPanel = new JPanel();
        ppwMarel = new paperworkMarelPanel(frame);
        ppwMarelPanel.add(ppwMarel);
@@ -143,7 +149,8 @@ public class Main {
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
        
        JTabbedPane paperworkTabs = new JTabbedPane();
-       paperworkTabs.addTab("DSI", ppwDSIPanel);
+       paperworkTabs.addTab("DSI (2nd)", ppwDSIPanel);
+       paperworkTabs.addTab("DSI (!st)", ppw1stDSIPanel);
        paperworkTabs.addTab("Marel", ppwMarelPanel);
        tabbedPane.addTab("Paperwork", paperworkTabs);
        
