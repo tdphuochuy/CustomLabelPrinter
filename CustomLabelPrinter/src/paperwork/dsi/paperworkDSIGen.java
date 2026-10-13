@@ -94,11 +94,12 @@ public class paperworkDSIGen{
 	private String sessionId = "";
 	private String tenderCondemnTotal;
 	private String dsiEOSCondemnTotal;
+	private String bloodyCondemnTotal;
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
 	private boolean pdfOnly,sendEmail,secondshift;
-	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal,boolean secondshift)
+	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal,String bloodyCondemnTotal,boolean secondshift)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -109,6 +110,7 @@ public class paperworkDSIGen{
 		this.times = times;
 		this.bloodcondemnList = bloodcondemnList;
 		this.greencondemnList = greencondemnList;
+		this.bloodyCondemnTotal = bloodyCondemnTotal;
 		this.DsiTrimList = DsiTrimList;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
@@ -340,9 +342,10 @@ public class paperworkDSIGen{
 				String type = getType(description);
 				if(!secondshift)
 				{
-					if(type.equals("breast") && isCombo)
+					if(type.equals("breast") && isCombo && weight == 2000)
 					{
 						weight = weight + Double.parseDouble(dsiEOSCondemnTotal);
+						quantity = quantity + Integer.parseInt(dsiEOSCondemnTotal);
 					}
 				}
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
@@ -533,8 +536,8 @@ public class paperworkDSIGen{
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		//recap1stGen recapExcel = new recap1stGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal);
-		//recapExcel.generateExcel();
+		recap1stGen recapExcel = new recap1stGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal,bloodyCondemnTotal);
+		recapExcel.generateExcel();
 		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());

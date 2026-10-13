@@ -23,7 +23,8 @@ public class recap1stGen extends excelGen{
 	private List<Double> issuedList2;
 	private String tenderCondemnTotal;
 	private String dsiEOSCondemnTotal;
-	public recap1stGen(String name,breast1stGen breast,tender1stGen tender,carcass1stGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal,String dsiEOSCondemnTotal)
+	private String bloodyCondemnTotal;
+	public recap1stGen(String name,breast1stGen breast,tender1stGen tender,carcass1stGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal,String dsiEOSCondemnTotal,String bloodyCondemnTotal)
 	{
 		this.name = name;
 		this.breast = breast;
@@ -35,6 +36,7 @@ public class recap1stGen extends excelGen{
 		this.issuedList2 = issuedList2;
 		this.tenderCondemnTotal = tenderCondemnTotal;
 		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
+		this.bloodyCondemnTotal = bloodyCondemnTotal;
 	}
 
 	@Override
@@ -70,6 +72,12 @@ public class recap1stGen extends excelGen{
 	            
 	            //Set breast values
 	        	setCellValue(sheet, "C", 4, formatDouble(breast.getTotalWeight()));
+	        	
+	        	//Set Defat LBS
+	        	setCellValue(sheet, "D", 7, formatDouble(breast.getDefatWeight()));
+	        	
+	        	//set Defat Cases
+	        	setCellValue(sheet, "D", 8, formatDouble(breast.getDefatTotalCase()));
 
 	        	//set trim values
 	        	setCellValue(sheet, "C", 10, formatDouble(tender.getTotalTrimWeight()));
@@ -84,7 +92,7 @@ public class recap1stGen extends excelGen{
 	        	setCellValue(sheet, "C", 22, formatDouble(tender.getTotalSkinWeight()));
 	        	
 	        	//set Bloody Condemn
-	        	setCellValue(sheet, "D", 26, formatDouble(getCondemnWeight()));
+	        	setCellValue(sheet, "D", 26, bloodyCondemnTotal);
 	        	
 	        	//set Rework weight
 	        	setCellValue(sheet, "C", 30, formatDouble(breast.getReworkWeight()));

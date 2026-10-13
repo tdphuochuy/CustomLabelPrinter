@@ -131,21 +131,12 @@ public class paperwork1stDSIPanel extends JPanel{
 
         
         JPanel bloodCondenmnedPanel = new JPanel();
-        bloodCondenmnedPanel.setLayout(new BoxLayout(bloodCondenmnedPanel, BoxLayout.Y_AXIS));
-        bloodCondenmnedPanel.add(labelPanel);
-        bloodCondenmnedPanel.add(scrollPane);
+        bloodCondenmnedPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         
- 
-
+        bloodCondenmnedPanel.add(new JLabel("Bloody Condemn"));
+        JTextField bloodcondemnedField = new JTextField(5);
+        bloodCondenmnedPanel.add(bloodcondemnedField);
         
-        JPanel trimCondemnedPanel = new JPanel();
-        trimCondemnedPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                
-        
-        trimCondemnedPanel.add(bloodCondenmnedPanel);
-        
-        
-        textareaPanel.add(trimCondemnedPanel,BorderLayout.CENTER);
         
         JPanel tenderCondenmnedPanel = new JPanel();
         tenderCondenmnedPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -161,6 +152,7 @@ public class paperwork1stDSIPanel extends JPanel{
         JTextField breastSurplusField = new JTextField("30",5);
         breastSurplusPanel.add(breastSurplusField);
         
+        textareaPanel.add(bloodCondenmnedPanel);
         textareaPanel.add(tenderCondenmnedPanel);
         textareaPanel.add(breastSurplusPanel);
         
@@ -185,43 +177,33 @@ public class paperwork1stDSIPanel extends JPanel{
               		 {
               			if(passField.getText().length() > 0)
                  		{
-              				if(textArea.getText().length() > 0)
-              				{
-		              			 String username = userField.getText();
-		              			 String password = passField.getText();
-		              			 String orderNum = orderField.getText();
-		              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
-		              			 String name = nameField.getText();
-		              			 int[] times = {11,14};
-		              			 
-		              			 String bloodcondemnText = textArea.getText();
-		              			 String[] array = bloodcondemnText.split("\n");
-		              			 List<Integer> bloodcomdemnList = new ArrayList<>();
-		              	         for (String s : array) {
-		              	        	 int bloodweight = Integer.parseInt(s);
-		              	        	bloodcomdemnList.add(bloodweight);
-		              	         }
-		              	         
 
-		              			 List<Integer> greencomdemnList = new ArrayList<>();
-		              	         
+	              			 String username = userField.getText();
+	              			 String password = passField.getText();
+	              			 String orderNum = orderField.getText();
+	              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+	              			 String name = nameField.getText();
+	              			 int[] times = {11,14};
+	              			 
+	              			 List<Integer> bloodcomdemnList = new ArrayList<>();
+	              	         
 
-		              			 List<Integer> DsiTrimList = new ArrayList<>();
+	              			 List<Integer> greencomdemnList = new ArrayList<>();
+	              	         
 
-		              	         
-		              	         
-			              	       new Thread(() -> {
-				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),breastSurplusField.getText(),false);
-				             			 try {
-											ppw.start();
-										} catch (Exception e1) {
-											// TODO Auto-generated catch block
-											e1.printStackTrace();
-										}
-			              	        }).start();
-              				} else {
-       	                       JOptionPane.showMessageDialog(frame, "Missing condemned weights", "Error", JOptionPane.ERROR_MESSAGE);
-              				}
+	              			 List<Integer> DsiTrimList = new ArrayList<>();
+
+	              	         
+	              	         
+		              	       new Thread(() -> {
+			             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),breastSurplusField.getText(),bloodcondemnedField.getText(),false);
+			             			 try {
+										ppw.start();
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+		              	        }).start();
                  		 } else {
   	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
                   		 }
@@ -236,6 +218,14 @@ public class paperwork1stDSIPanel extends JPanel{
              	   ex.printStackTrace();
                 }
                 // Create a Timer to re-enable the button after a delay
+                Timer timer = new Timer(300, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        button.setEnabled(true); // Re-enable the button
+                    }
+                });
+                timer.setRepeats(false); // Make sure the timer only runs once
+                timer.start(); // Start the timer
             }
         });
         

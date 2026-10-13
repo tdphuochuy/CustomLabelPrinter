@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,9 +16,43 @@ import config.Config;
 import paperwork.Product;
 
 public class carcass1stGen extends excelGen{
+	private int comboCount;
 	public carcass1stGen(int[] times)
 	{
 		this.times = times;
+		comboCount = 0;
+	}
+	
+	public void addProduct(Product product)
+	{
+		String productCode = product.getCode();
+		if(!productMap.containsKey(productCode))
+		{
+			productMap.put(productCode, new TreeMap<Integer,List<Product>>());
+		}
+		int hour = product.getHour();
+		if(!productMap.get(productCode).containsKey(hour))
+		{
+			productMap.get(productCode).put(hour, new ArrayList<Product>());
+		}
+		
+		if(product.isCombo())
+		{
+			comboCount = comboCount + 1;
+		}
+		
+		if(hour <= times[0])
+		{
+			Break1Weight += product.getWeight();
+		} else if (hour > times[0] && hour <= times[1])
+		{
+			Break2Weight += product.getWeight();
+		} else {
+			Break3Weight += product.getWeight();
+		}
+		
+		
+		productMap.get(productCode).get(hour).add(product);
 	}
 	
 	public void generateExcel()
@@ -60,6 +96,12 @@ public class carcass1stGen extends excelGen{
 		    	setCellValue(sheet, "K", 6, total);
 	    	}
 	    	
+	    	//set Total Combo
+	    	setCellValue(sheet, "K", 28, String.valueOf(getComboCount()));
+	    	
+	    	//set Total LBS
+	    	setCellValue(sheet, "K", 29, formatDouble(getTotalWeight()));
+	    	
             // Save changes
             try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
                 workbook.write(fos);
@@ -96,4 +138,10 @@ public class carcass1stGen extends excelGen{
             }
         }
     }
+    
+    public int getComboCount()
+    {
+    	return comboCount;
+    }
+    
 }

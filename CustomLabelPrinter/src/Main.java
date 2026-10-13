@@ -266,7 +266,7 @@ public class Main {
 			              				comdemnList.add(Integer.parseInt(s));
 			              			}
 									new Thread(() -> {
-				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,comdemnList,new ArrayList<>(),false,true,tenderCondemned,dsiEOSCondemned,true);
+				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,comdemnList,comdemnList,new ArrayList<>(),false,true,tenderCondemned,dsiEOSCondemned,"",true);
 				             			 try {
 											ppw.start();
 										} catch (ParseException | InterruptedException | IOException e1) {

@@ -422,4 +422,25 @@ public class breast1stGen extends excelGen{
 		
 		return weight;
 	}
+	
+	public double getDefatWeight()
+	{
+		return getTotalWeightByProduct("16396") + getTotalWeightByProduct("24486") + getTotalWeightByProduct("22578");
+	}
+	
+	public double getDefatTotalCase()
+	{
+		double totalCase = 0;
+		if(productMap.containsKey("16396"))
+		{
+			totalCase = totalCase + getTotalCaseByProduct(productMap.get("16396"));
+		}
+		
+		if(productMap.containsKey("24486"))
+		{
+			totalCase = totalCase + getTotalCaseByProduct(productMap.get("24486"));
+		}
+		
+		return totalCase;
+	}
 }
