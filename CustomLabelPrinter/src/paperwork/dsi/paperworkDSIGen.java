@@ -77,9 +77,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import paperwork.Product;
+import paperwork.gen.breast1stGen;
 import paperwork.gen.breastGen;
+import paperwork.gen.carcass1stGen;
 import paperwork.gen.carcassGen;
+import paperwork.gen.recap1stGen;
 import paperwork.gen.recapGen;
+import paperwork.gen.tender1stGen;
 import paperwork.gen.tenderGen;
 
 public class paperworkDSIGen{
@@ -93,8 +97,8 @@ public class paperworkDSIGen{
 	private Frame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
-	private boolean pdfOnly,sendEmail;
-	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal)
+	private boolean pdfOnly,sendEmail,secondshift;
+	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal,boolean secondshift)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -108,6 +112,7 @@ public class paperworkDSIGen{
 		this.DsiTrimList = DsiTrimList;
 		this.pdfOnly = pdfOnly;
 		this.sendEmail = sendEmail;
+		this.secondshift = secondshift;
 		this.tenderCondemnTotal = tenderCondemnTotal;
 		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
 		sessionId = getSessionId();
@@ -131,7 +136,12 @@ public class paperworkDSIGen{
 			getIssuedData(reworkOrderNum);
 		}
 		
-		evaluateData(productMap);
+		if(secondshift)
+		{
+			evaluateData(productMap);
+		} else {
+			evaluateData1st(productMap);
+		}
 	}
 	
 	public void getIssuedData(String orderNum)
@@ -474,6 +484,62 @@ public class paperworkDSIGen{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void evaluateData1st(Map<String,Product> map) throws InterruptedException, IOException
+	{
+		breast1stGen breastExcel = new breast1stGen(times);
+		tender1stGen tenderExcel = new tender1stGen(times);
+		carcass1stGen carcassExcel = new carcass1stGen(times);
+		
+		for(String key: map.keySet())
+		{
+			Product product = map.get(key);
+			if(product.getType().equals("breast"))
+			{
+				breastExcel.addProduct(product);
+			} else if (product.getType().equals("tender"))
+			{
+				tenderExcel.addProduct(product);
+			} else if (product.getType().equals("carcass"))
+			{
+				carcassExcel.addProduct(product);
+			} else if (product.getType().equals("trim"))
+			{
+				tenderExcel.addTrim(product);
+			} else if (product.getType().equals("keelbone"))
+			{
+				tenderExcel.addKeelBone(product);
+			} else if (product.getType().equals("kneebone"))
+			{
+				tenderExcel.addKneeBone(product);
+			} else if (product.getType().equals("skin"))
+			{
+				tenderExcel.addSkin(product);
+			}
+		}
+		
+		breastExcel.generateExcel();
+		tenderExcel.generateExcel();
+		//carcassExcel.generateExcel();
+		
+		//recap1stGen recapExcel = new recap1stGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal);
+		//recapExcel.generateExcel();
+		
+        File file = new File(Config.ppwExcelPath);
+        exportExceltoPDF(file.getAbsolutePath());
+        
+        if(sendEmail)
+        {
+        	sendEmail("tdphuochuy@gmail.com");
+        }
+        
+        if(pdfOnly)
+        {
+        	openPDFfile();
+        } else {
+        	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
+        }
 	}
 	
 	public void updateDSItrim(breastGen breastExcel)

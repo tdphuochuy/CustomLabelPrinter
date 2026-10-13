@@ -141,6 +141,18 @@ abstract class excelGen {
 	        return String.valueOf((char) ascii);
 	  } 
 	   
+	   public String hourToLetter1st(int number) {
+	    	// Convert number to letter using offset
+	        int ascii = number + 58;
+
+	        // Ensure result is a valid uppercase letter
+	        if (ascii < 'A' || ascii > 'Z') {
+	        	ascii = getHour() + 58;
+	        }
+
+	        return String.valueOf((char) ascii);
+	  } 
+	   
 	   
 		public int getHour()
 		{
