@@ -338,6 +338,13 @@ public class paperworkDSIGen{
 				double weight = Double.parseDouble(td.get(10).text().replace(",", ""));
 				boolean isCombo = (((JSONObject)productObj.get(itemPack)).get("Container Type").toString().toLowerCase()).contains("combo");
 				String type = getType(description);
+				if(!secondshift)
+				{
+					if(type.equals("breast") && isCombo)
+					{
+						weight = weight + Double.parseDouble(dsiEOSCondemnTotal);
+					}
+				}
 				map.put(trackingNum,new Product(productCode,trackingNum,hour,type,quantity,weight,isCombo));
 				
 				if(type.equals("breast") && isCombo && description.contains("NO/RIB") && !noRibProductCodeList.contains(productCode))

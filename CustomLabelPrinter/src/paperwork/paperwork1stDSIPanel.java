@@ -154,8 +154,19 @@ public class paperwork1stDSIPanel extends JPanel{
         JTextField tendercondemnedField = new JTextField(5);
         tenderCondenmnedPanel.add(tendercondemnedField);
         
+        JPanel breastSurplusPanel = new JPanel();
+        breastSurplusPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        breastSurplusPanel.add(new JLabel("Breast Combo Surplus:"));
+        JTextField breastSurplusField = new JTextField("30",5);
+        breastSurplusPanel.add(breastSurplusField);
         
         textareaPanel.add(tenderCondenmnedPanel);
+        textareaPanel.add(breastSurplusPanel);
+        
+        
+        
+        
         
         
         JPanel splitPanel = new JPanel(new GridLayout(1, 2, 15, 0));
@@ -200,7 +211,7 @@ public class paperwork1stDSIPanel extends JPanel{
 		              	         
 		              	         
 			              	       new Thread(() -> {
-				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),"",false);
+				             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),breastSurplusField.getText(),false);
 				             			 try {
 											ppw.start();
 										} catch (Exception e1) {
