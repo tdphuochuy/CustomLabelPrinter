@@ -39,7 +39,7 @@ public class recap1stGen extends excelGen{
 
 	@Override
 	public void setDate(Sheet sheet) {
-    	setCellValue(sheet, "B", 8, getDate("MM/dd/yyyy"));
+    	setCellValue(sheet, "H", 3, getDate("MM/dd/yyyy"));
 	}
 	
 	public void setName(Sheet sheet) {
@@ -63,75 +63,41 @@ public class recap1stGen extends excelGen{
 		try (FileInputStream fis = new FileInputStream(Config.ppwExcelPath);
 	             Workbook workbook = new XSSFWorkbook(fis)) {
 
-	            Sheet sheet = workbook.getSheetAt(4); 
+	            Sheet sheet = workbook.getSheetAt(3); 
+
+	            setDate(sheet);
+	            //clear(workbook,sheet);
+	            
+	            //Set breast values
+	        	setCellValue(sheet, "C", 4, formatDouble(breast.getTotalWeight()));
+
+	        	//set trim values
+	        	setCellValue(sheet, "C", 10, formatDouble(tender.getTotalTrimWeight()));
+	        	
+	        	//set tender values
+	        	setCellValue(sheet, "C", 14, formatDouble(tender.getTotalWeight()));
+	        	
+	        	//set carcass values
+	        	setCellValue(sheet, "C", 18, formatDouble(carcass.getTotalWeight()));
+	        	
+	        	//set skin values
+	        	setCellValue(sheet, "C", 22, formatDouble(tender.getTotalSkinWeight()));
+	        	
+	        	//set Bloody Condemn
+	        	setCellValue(sheet, "D", 26, formatDouble(getCondemnWeight()));
+	        	
+	        	//set Rework weight
+	        	setCellValue(sheet, "C", 30, formatDouble(breast.getReworkWeight()));
+
+	        	
+	        	//set green Tenders
+	        	setCellValue(sheet, "C", 42, tenderCondemnTotal);
+	        	
+	        	//set keel bones
+	        	setCellValue(sheet, "C", 46, formatDouble(tender.getKeelBoneWeight()));
+
 	        	
 	            // Save changes
-	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
-	                workbook.write(fos);
-	            }
-	            
-	        	setCellValue(sheet, "B", 6, formatDouble(breast.getTotalWeight()) + " lbs");
-	        	//setCellValue(sheet, "C", 8, formatDouble(breast.getTotalWeightwRW()) + " lbs");
-	        	setCellValue(sheet, "B", 11, formatDouble(tender.getTotalWeight()) + " lbs");
-	        	setCellValue(sheet, "B", 16, formatDouble(tender.getKeelBoneWeight()) + " lbs");
-	        	setCellValue(sheet, "B", 21, formatDouble(tender.getKneeBoneWeight()) + " lbs");
-	        	setCellValue(sheet, "B", 26, formatDouble(tender.getTotalTrimWeight()) + " lbs");
-	        	setCellValue(sheet, "B", 31, formatDouble(carcass.getTotalWeight()) + " lbs");
-	        	
-	        	String currentColumn = "B";
-	        	int currentRow = 36;
-	        	for(Product product: breast.getReworkList())
-	        	{
-	        		if(currentRow > 43)
-	        		{
-	        			currentColumn = "C";
-	        			currentRow = 36;
-	        		}
-	        		String weightString = formatDouble(product.getWeight());
-	        		if(!weightString.endsWith("40") && product.getWeight() >= 200)
-	        		{
-	        			setCellValue(sheet, currentColumn, currentRow, weightString + " lbs*");
-	        		} else {
-	        			setCellValue(sheet, currentColumn, currentRow, weightString + " lbs");
-	        		}
-		        	currentRow++;
-	        	}
-	        	
-	        	currentColumn = "G";
-	        	currentRow = 25;
-	        	for(int i = 1; i <= greencondemnList.size();i++)
-	        	{
-	        		int condemnWeight = greencondemnList.get(i - 1);
-	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
-		        	currentRow++;
-	        	}
-	        	
-	        	currentColumn = "I";
-	        	currentRow = 25;
-	        	for(int i = 1; i <= bloodcondemnList.size();i++)
-	        	{
-	        		int condemnWeight = bloodcondemnList.get(i - 1);
-	        		setCellValue(sheet, currentColumn, currentRow, i + ". " + String.valueOf(condemnWeight) + " lbs");
-		        	currentRow++;
-	        	}
-	        	
-        		setCellValue(sheet, "H", 35, String.valueOf(getCondemnWeight()) + " lbs");
-        		
-        		if(issuedList1.size() > 0)
-        		{
-            		setCellValue(sheet, "G", 6, "1st: " + formatDouble(getIssuedTotal(issuedList1)) + " lbs");
-        		}
-        		
-        		if(issuedList2.size() > 0)
-        		{
-            		setCellValue(sheet, "G", 7, "2nd: " + formatDouble(getIssuedTotal(issuedList2)) + " lbs");
-        		}
-        		
-        		
-        		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
-        		setCellValue(sheet, "G", 40, dsiEOSCondemnTotal + " lbs");
-
-	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {
 	                workbook.write(fos);
 	            }

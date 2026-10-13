@@ -76,7 +76,7 @@ public class carcass1stGen extends excelGen{
 	
     public void setDate(Sheet sheet)
     {
-    	setCellValue(sheet, "N", 2, getDate("MM/dd/yyyy"));
+    	setCellValue(sheet, "B", 3, getDate("MM/dd/yyyy"));
     }
     
     public void clear(Workbook workbook,Sheet sheet)

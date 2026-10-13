@@ -133,7 +133,10 @@ public class paperworkDSIGen{
 			{
 				extractData(productMap,dataTableRework);
 			}
-			getIssuedData(reworkOrderNum);
+			if(secondshift)
+			{
+				getIssuedData(reworkOrderNum);
+			}
 		}
 		
 		if(secondshift)
