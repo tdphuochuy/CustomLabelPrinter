@@ -225,16 +225,6 @@ public class paperwork1stDSIPanel extends JPanel{
              	   ex.printStackTrace();
                 }
                 // Create a Timer to re-enable the button after a delay
-                Timer timer = new Timer(300, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        button.setEnabled(true); // Re-enable the button
-                        userField.setText(Config.username);
-                        passField.setText(Config.password);
-                    }
-                });
-                timer.setRepeats(false); // Make sure the timer only runs once
-                timer.start(); // Start the timer
             }
         });
         

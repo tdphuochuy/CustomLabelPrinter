@@ -150,7 +150,7 @@ public class Main {
        
        JTabbedPane paperworkTabs = new JTabbedPane();
        paperworkTabs.addTab("DSI (2nd)", ppwDSIPanel);
-       paperworkTabs.addTab("DSI (!st)", ppw1stDSIPanel);
+       paperworkTabs.addTab("DSI (1st)", ppw1stDSIPanel);
        paperworkTabs.addTab("Marel", ppwMarelPanel);
        tabbedPane.addTab("Paperwork", paperworkTabs);
        

@@ -34,22 +34,22 @@ public class carcass1stGen extends excelGen{
             	Map<Integer,List<Product>> map = productMap.get(key);
             	for(Integer hour : map.keySet()) //for each hour
             	{
-            		String columnLetter = hourToLetter(hour);
+            		String columnLetter = hourToLetter1st(hour);
             		List<Product> list = map.get(hour); 
             		for(int i = 0; i < list.size();i++) { //for each product
             			Product product = list.get(i);
             			if(key.equals("21102"))
             			{
-            				setCellValue(sheet, columnLetter, i + 5, String.valueOf(product.getQuantity()));
+            				setCellValue(sheet, columnLetter, i + 18, String.valueOf(product.getQuantity()));
             			} else {
-            				setCellValue(sheet, columnLetter, i + 39, String.valueOf(product.getQuantity()));
+            				setCellValue(sheet, columnLetter, i + 6, String.valueOf(product.getQuantity()));
             			}
             		}
             	}
             }
             
             //set total weight 21102
-	    	setCellValue(sheet, "O", 5, formatDouble(getTotalWeightByProduct(productMap.get("21102"))) + " lbs");
+	    	setCellValue(sheet, "K", 18, formatDouble(getTotalWeightByProduct(productMap.get("21102"))) + " lbs");
 
             //set total weight boxes
 	    	if(productMap.keySet().size() > 1)
@@ -57,7 +57,7 @@ public class carcass1stGen extends excelGen{
 	        	String total = formatDouble(getTotalWeightByProduct(productMap.get("10468"))) + " lbs";
         		total = total + "\n\n" + getTotalCaseByProduct(productMap.get("10468")) + " cs";
 
-		    	setCellValue(sheet, "O", 39, total);
+		    	setCellValue(sheet, "K", 6, total);
 	    	}
 	    	
             // Save changes

@@ -60,10 +60,10 @@ public class tender1stGen extends excelGen{
             comboToExcel(workbook,sheet);
             emptyBoxToExcel(workbook,sheet,4);
             emptyBoxToExcel(workbook,sheet,5);
-            otherToExcel(workbook,sheet,skinMap);
-            otherToExcel(workbook,sheet,keelboneMap);
-            otherToExcel(workbook,sheet,trimMap);
-            otherToExcel(workbook,sheet,kneeboneMap);
+            otherToExcel(workbook,sheet,skinMap, "SKIN");
+            otherToExcel(workbook,sheet,keelboneMap, "KEELBONE");
+            otherToExcel(workbook,sheet,trimMap, "TRIM");
+            otherToExcel(workbook,sheet,kneeboneMap,"KNEEBONE");
             emptyBoxToExcel(workbook,sheet,5);
 
             // Save changes
@@ -172,7 +172,7 @@ public class tender1stGen extends excelGen{
         }
 	}
 	
-	public void otherToExcel(Workbook workbook,Sheet sheet,Map<String,Map<Integer,List<Product>>> productMap)
+	public void otherToExcel(Workbook workbook,Sheet sheet,Map<String,Map<Integer,List<Product>>> productMap,String name)
 	{
 		for(String key : productMap.keySet()) //for each productCode
         {
@@ -197,7 +197,7 @@ public class tender1stGen extends excelGen{
         	int height = getHeight(map);
         	
             setBorderAroundProductCell(workbook,sheet,height);
-        	setProductCodeCell(workbook,sheet,height,key);
+        	setProductCodeCell(workbook,sheet,height,key + " " + name);
         	String total = formatDouble(getTotalWeightByProduct(map)) + " lbs";
         	if(!firstProduct.isCombo())
         	{
