@@ -565,6 +565,7 @@ public class paperworkDSIGen{
 
         if(sendEmail)
         {
+        	sendEmail("nhanpham1216@gmail.com");
         	sendEmail("tdphuochuy@gmail.com");
         }
         popup.hidePopup();
