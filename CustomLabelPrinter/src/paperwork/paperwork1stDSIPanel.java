@@ -32,6 +32,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -168,64 +169,103 @@ public class paperwork1stDSIPanel extends JPanel{
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                button.setEnabled(false);
-                try {
-              	   String text = orderField.getText().equals("Order #") ? "" : orderField.getText();
-              	   if(text.length() > 0)
-              	   {
-              		 if(userField.getText().length() > 0)
-              		 {
-              			if(passField.getText().length() > 0)
-                 		{
+            	while(true)
+            	{
+            	
+	            	JPasswordField passwordField = new JPasswordField();
+	                
+	                JPanel panel = new JPanel();
+	                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	                
+	                JTextPane messageLabel1 = new JTextPane();
+	         	   messageLabel1.setText("Please enter password");
+	         	   messageLabel1.setEditable(false);
+	         	   
+	         	   panel.add(messageLabel1);
+	                panel.add(Box.createVerticalStrut(5));
+	                panel.add(passwordField);
+	                
+	         	   int option = JOptionPane.showConfirmDialog(
+	                        null,
+	                        panel
+	                        ,
+	                        "Một thứ gì đó kì lạ vừa xuất hiện :D",
+	                        JOptionPane.OK_CANCEL_OPTION,
+	                        JOptionPane.PLAIN_MESSAGE
+	                );
+	
+	         	   if (option != JOptionPane.OK_OPTION) {
+	                    break;
+	                }
+            	
+            	
+            	 String enteredPassword = new String(passwordField.getPassword());
 
-	              			 String username = userField.getText();
-	              			 String password = passField.getText();
-	              			 String orderNum = orderField.getText();
-	              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
-	              			 String name = nameField.getText();
-	              			 int[] times = {11,14};
-	              			 
-	              			 List<Integer> bloodcomdemnList = new ArrayList<>();
-	              	         
+                 // Correct password
+                 String correctPassword = "nhaniuhuy1";
 
-	              			 List<Integer> greencomdemnList = new ArrayList<>();
-	              	         
-
-	              			 List<Integer> DsiTrimList = new ArrayList<>();
-
-	              	         
-	              	         
-		              	       new Thread(() -> {
-			             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),breastSurplusField.getText(),bloodcondemnedField.getText(),false);
-			             			 try {
-										ppw.start();
-									} catch (Exception e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-		              	        }).start();
-                 		 } else {
-  	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
-                  		 }
-              		 } else {
-	                       JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
-              		 }
-              	   } else {
-	                       JOptionPane.showMessageDialog(frame, "Missing order #", "Error", JOptionPane.ERROR_MESSAGE);
-              	   }
-                } catch (Exception ex)
-                {
-             	   ex.printStackTrace();
-                }
-                // Create a Timer to re-enable the button after a delay
-                Timer timer = new Timer(300, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        button.setEnabled(true); // Re-enable the button
-                    }
-                });
-                timer.setRepeats(false); // Make sure the timer only runs once
-                timer.start(); // Start the timer
+                 if (enteredPassword.equals(correctPassword)) {
+		                button.setEnabled(false);
+		                try {
+		              	   String text = orderField.getText().equals("Order #") ? "" : orderField.getText();
+		              	   if(text.length() > 0)
+		              	   {
+		              		 if(userField.getText().length() > 0)
+		              		 {
+		              			if(passField.getText().length() > 0)
+		                 		{
+		
+			              			 String username = userField.getText();
+			              			 String password = passField.getText();
+			              			 String orderNum = orderField.getText();
+			              			 String reworkOrderNum = reworkOrderField.getText().equals("Order # (optional)") ? "" : reworkOrderField.getText();
+			              			 String name = nameField.getText();
+			              			 int[] times = {11,14};
+			              			 
+			              			 List<Integer> bloodcomdemnList = new ArrayList<>();
+			              	         
+		
+			              			 List<Integer> greencomdemnList = new ArrayList<>();
+			              	         
+		
+			              			 List<Integer> DsiTrimList = new ArrayList<>();
+		
+			              	         
+			              	         
+				              	       new Thread(() -> {
+					             			 paperworkDSIGen ppw = new paperworkDSIGen(frame,username,password,orderNum,reworkOrderNum,name,times,bloodcomdemnList,greencomdemnList,DsiTrimList,pdfOnlycb.isSelected(),sendEmailcb.isSelected(),tendercondemnedField.getText(),breastSurplusField.getText(),bloodcondemnedField.getText(),false);
+					             			 try {
+												ppw.start();
+											} catch (Exception e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+				              	        }).start();
+		                 		 } else {
+		  	                       JOptionPane.showMessageDialog(frame, "Missing password", "Error", JOptionPane.ERROR_MESSAGE);
+		                  		 }
+		              		 } else {
+			                       JOptionPane.showMessageDialog(frame, "Missing username", "Error", JOptionPane.ERROR_MESSAGE);
+		              		 }
+		              	   } else {
+			                       JOptionPane.showMessageDialog(frame, "Missing order #", "Error", JOptionPane.ERROR_MESSAGE);
+		              	   }
+		                } catch (Exception ex)
+		                {
+		             	   ex.printStackTrace();
+		                }
+		                // Create a Timer to re-enable the button after a delay
+		                Timer timer = new Timer(300, new ActionListener() {
+		                    @Override
+		                    public void actionPerformed(ActionEvent evt) {
+		                        button.setEnabled(true); // Re-enable the button
+		                    }
+		                });
+		                timer.setRepeats(false); // Make sure the timer only runs once
+		                timer.start(); // Start the timer
+		                break;
+		            }
+            	}
             }
         });
         
