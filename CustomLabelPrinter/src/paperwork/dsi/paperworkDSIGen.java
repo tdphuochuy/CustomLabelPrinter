@@ -51,6 +51,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -77,6 +78,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import paperwork.Product;
+import paperwork.ProgressPopup;
 import paperwork.gen.breast1stGen;
 import paperwork.gen.breastGen;
 import paperwork.gen.carcass1stGen;
@@ -95,11 +97,12 @@ public class paperworkDSIGen{
 	private String tenderCondemnTotal;
 	private String dsiEOSCondemnTotal;
 	private String bloodyCondemnTotal;
-	private Frame frame;
+	private JFrame frame;
 	private List<Double> issuedList1 = new ArrayList<>();
 	private List<Double> issuedList2 = new ArrayList<>();
 	private boolean pdfOnly,sendEmail,secondshift;
-	public paperworkDSIGen(Frame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal,String bloodyCondemnTotal,boolean secondshift)
+	private ProgressPopup popup;
+	public paperworkDSIGen(JFrame frame,String username,String password,String orderNum,String reworkOrderNum,String name,int[] times,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Integer> DsiTrimList, boolean pdfOnly,boolean sendEmail,String tenderCondemnTotal,String dsiEOSCondemnTotal,String bloodyCondemnTotal,boolean secondshift)
 	{
 		this.frame = frame;
 		this.username = username;
@@ -118,15 +121,19 @@ public class paperworkDSIGen{
 		this.tenderCondemnTotal = tenderCondemnTotal;
 		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
 		sessionId = getSessionId();
+		popup = new ProgressPopup(frame);
 	}
 	
 	public void start() throws ParseException, InterruptedException, IOException
 	{
+		popup.showPopup();
 		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
-
+		popup.updateProgress(10, "Initialized");
 		Element dataTable = getData(orderNum);
+		popup.updateProgress(20, "Data retrieved");
 		extractData(productMap,dataTable);
+		popup.updateProgress(40, "Data extracted");
 		if(reworkOrderNum.length() > 0)
 		{
 			System.out.println("Found rework!!");
@@ -465,6 +472,8 @@ public class paperworkDSIGen{
 			}
 		}
 		
+		popup.updateProgress(60, "Data analyzed");
+		
 		breastExcel.generateExcel();
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
@@ -472,9 +481,13 @@ public class paperworkDSIGen{
 		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal);
 		recapExcel.generateExcel();
 		
+		popup.updateProgress(80, "Excel generated");
+		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
+		popup.updateProgress(100, "PDF generated");
+
         if(sendEmail)
         {
         	sendEmail("tdphuochuy@gmail.com");
@@ -482,6 +495,8 @@ public class paperworkDSIGen{
         	sendEmail("phungngoctrang@gmail.com");
         }
         
+        popup.hidePopup();
+
         if(pdfOnly)
         {
         	openPDFfile();
@@ -532,6 +547,8 @@ public class paperworkDSIGen{
 			}
 		}
 		
+		popup.updateProgress(60, "Data analyzed");
+		
 		breastExcel.generateExcel();
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
@@ -539,20 +556,25 @@ public class paperworkDSIGen{
 		recap1stGen recapExcel = new recap1stGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal,bloodyCondemnTotal);
 		recapExcel.generateExcel();
 		
+		popup.updateProgress(80, "Excel generated");
+		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
+		popup.updateProgress(100, "PDF generated");
+
         if(sendEmail)
         {
         	sendEmail("tdphuochuy@gmail.com");
         }
-        
+        popup.hidePopup();
         if(pdfOnly)
         {
         	openPDFfile();
         } else {
         	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");
         }
+        
 	}
 	
 	public void updateDSItrim(breastGen breastExcel)
