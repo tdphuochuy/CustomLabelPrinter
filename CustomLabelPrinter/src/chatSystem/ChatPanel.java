@@ -269,7 +269,7 @@ public class ChatPanel extends JPanel{
   		        	  {
   	  		        	  trayIcon.displayMessage("Lêu Lêu 😝",message, MessageType.INFO);
   		        	  } else {
-  		        		  trayIcon.displayMessage("?? 😁","😁 😁", MessageType.INFO);
+  		        		  //trayIcon.displayMessage("?? 😁","😁 😁", MessageType.INFO);
   		        	  }
   		          } else {
   		        	  trayIcon.displayMessage("New Message",message, MessageType.INFO);
