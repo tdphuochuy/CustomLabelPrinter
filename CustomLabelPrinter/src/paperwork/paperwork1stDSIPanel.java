@@ -204,7 +204,7 @@ public class paperwork1stDSIPanel extends JPanel{
                  // Correct password
                  String correctPassword = "nhaniuhuy1";
 
-                 if (enteredPassword.equals(correctPassword)) {
+                 if (enteredPassword.toLowerCase().equals(correctPassword)) {
 		                button.setEnabled(false);
 		                try {
 		              	   String text = orderField.getText().equals("Order #") ? "" : orderField.getText();
