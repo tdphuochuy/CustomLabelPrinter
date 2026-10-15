@@ -149,8 +149,8 @@ public class Main {
        tabbedPane.addTab("", IconFontSwing.buildIcon(FontAwesome.CIRCLE_O, 12, Color.BLACK), buttonsPanel);
        
        JTabbedPane paperworkTabs = new JTabbedPane();
-       paperworkTabs.addTab("DSI (2nd)", ppwDSIPanel);
        paperworkTabs.addTab("DSI (1st)", ppw1stDSIPanel);
+       paperworkTabs.addTab("DSI (2nd)", ppwDSIPanel);
        paperworkTabs.addTab("Marel", ppwMarelPanel);
        tabbedPane.addTab("Paperwork", paperworkTabs);
        
