@@ -570,6 +570,8 @@ public class paperworkDSIGen{
         popup.hidePopup();
         if(pdfOnly)
         {
+        	String message = "Total brease cases: " + breastExcel.getTotalCase() + "\n" + "Total combo: " + breastExcel.getComboCount();
+        	showAutoClosingDialog(message,"Alert",10000);
         	openPDFfile();
         } else {
         	sendtoPrinterJob(Config.officePrinterIP,"All papers have been sent to DEBONE office!");

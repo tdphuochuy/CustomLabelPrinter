@@ -33,10 +33,12 @@ public class breast1stGen extends excelGen{
 	public double Break1CaseWeight = 0;
     public double Break2CaseWeight = 0;
     public double Break3CaseWeight = 0;
+    public int comboCount;
 	public breast1stGen(int[] times)
 	{
 		currentRow = 6;
 		this.times = times;
+		this.comboCount = 0;
 	}
 	
 	public void addProduct(Product product)
@@ -80,6 +82,11 @@ public class breast1stGen extends excelGen{
 			} else {
 				Break3CaseWeight += product.getWeight();
 			}
+		}
+		
+		if(product.isCombo())
+		{
+			comboCount = comboCount + 1;
 		}
 		
 		productMap.get(productCode).get(hour).add(product);
@@ -442,5 +449,10 @@ public class breast1stGen extends excelGen{
 		}
 		
 		return totalCase;
+	}
+	
+	public int getComboCount()
+	{
+		return comboCount;
 	}
 }
