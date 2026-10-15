@@ -23,7 +23,8 @@ public class recapGen extends excelGen{
 	private List<Double> issuedList2;
 	private String tenderCondemnTotal;
 	private String dsiEOSCondemnTotal;
-	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal,String dsiEOSCondemnTotal)
+	private List<Integer> DsiTrimList;
+	public recapGen(String name,breastGen breast,tenderGen tender,carcassGen carcass,List<Integer> bloodcondemnList,List<Integer> greencondemnList,List<Double> issuedList1,List<Double> issuedList2,String tenderCondemnTotal,String dsiEOSCondemnTotal,List<Integer> DsiTrimList)
 	{
 		this.name = name;
 		this.breast = breast;
@@ -35,6 +36,7 @@ public class recapGen extends excelGen{
 		this.issuedList2 = issuedList2;
 		this.tenderCondemnTotal = tenderCondemnTotal;
 		this.dsiEOSCondemnTotal = dsiEOSCondemnTotal;
+		this.DsiTrimList = DsiTrimList;
 	}
 
 	@Override
@@ -192,6 +194,18 @@ public class recapGen extends excelGen{
         		
         		setCellValue(sheet, "G", 17, tenderCondemnTotal + " lbs");
         		setCellValue(sheet, "G", 40, dsiEOSCondemnTotal + " lbs");
+        		
+        		double totalDSITrimWeight = 0;
+        		for(int weight : DsiTrimList)
+        		{
+        			totalDSITrimWeight += weight;
+        		}
+        		
+        		setCellValue(sheet, "G", 12, formatDouble(totalDSITrimWeight) + " lbs");
+        		
+        		double trimTableWeight = tender.getTotalTrimWeight() - totalDSITrimWeight;
+
+        		setCellValue(sheet, "I", 12, formatDouble(trimTableWeight) + " lbs");
 
 	        	// Save changes
 	            try (FileOutputStream fos = new FileOutputStream(Config.ppwExcelPath)) {

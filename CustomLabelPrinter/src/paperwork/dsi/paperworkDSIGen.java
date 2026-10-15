@@ -129,13 +129,13 @@ public class paperworkDSIGen{
 		popup.showPopup();
 		deleteOldRecap();
 		Map<String,Product> productMap = new TreeMap<>();
-		popup.updateProgress(10, "Initialized");
+		popup.updateProgress(10, "Getting Data");
 		Element dataTable = getData(orderNum);
-		popup.updateProgress(20, "Data retrieved");
+		popup.updateProgress(20, "Analyzing Data");
 		extractData(productMap,dataTable);
-		popup.updateProgress(40, "Data extracted");
 		if(reworkOrderNum.length() > 0)
 		{
+			popup.updateProgress(40, "Getting Rework Data");
 			System.out.println("Found rework!!");
 			Element dataTableRework = getData(reworkOrderNum);
 			if(dataTableRework != null)
@@ -472,21 +472,21 @@ public class paperworkDSIGen{
 			}
 		}
 		
-		popup.updateProgress(60, "Data analyzed");
+		popup.updateProgress(60, "Generating Excel");
 		
 		breastExcel.generateExcel();
 		tenderExcel.generateExcel();
 		carcassExcel.generateExcel();
 		
-		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal);
+		recapGen recapExcel = new recapGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal,DsiTrimList);
 		recapExcel.generateExcel();
 		
-		popup.updateProgress(80, "Excel generated");
+		popup.updateProgress(80, "Generating PDF");
 		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
-		popup.updateProgress(100, "PDF generated");
+		popup.updateProgress(100, "Finalizing");
 
         if(sendEmail)
         {
@@ -546,7 +546,7 @@ public class paperworkDSIGen{
 			}
 		}
 		
-		popup.updateProgress(60, "Data analyzed");
+		popup.updateProgress(60, "Generating Excel");
 		
 		breastExcel.generateExcel();
 		tenderExcel.generateExcel();
@@ -555,12 +555,12 @@ public class paperworkDSIGen{
 		recap1stGen recapExcel = new recap1stGen(name,breastExcel,tenderExcel,carcassExcel,bloodcondemnList,greencondemnList,issuedList1,issuedList2,tenderCondemnTotal,dsiEOSCondemnTotal,bloodyCondemnTotal);
 		recapExcel.generateExcel();
 		
-		popup.updateProgress(80, "Excel generated");
+		popup.updateProgress(80, "Generating PDF");
 		
         File file = new File(Config.ppwExcelPath);
         exportExceltoPDF(file.getAbsolutePath());
         
-		popup.updateProgress(100, "PDF generated");
+		popup.updateProgress(100, "Finalizing");
 
         if(sendEmail)
         {
