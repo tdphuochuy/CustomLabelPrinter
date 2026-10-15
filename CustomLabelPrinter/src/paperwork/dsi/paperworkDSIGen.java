@@ -349,7 +349,7 @@ public class paperworkDSIGen{
 				String type = getType(description);
 				if(!secondshift)
 				{
-					if(type.equals("breast") && isCombo && weight == 2000)
+					if(type.equals("breast") && isCombo && weight == 2000 && !productCode.equals("17261"))
 					{
 						weight = weight + Double.parseDouble(dsiEOSCondemnTotal);
 						quantity = quantity + Integer.parseInt(dsiEOSCondemnTotal);
